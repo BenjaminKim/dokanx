@@ -1,0 +1,35 @@
+
+
+AMD64_OBJECTS=\
+ $(OBJ_PATH)\$O\dokan.obj \
+ $(OBJ_PATH)\$O\init.obj \
+ $(OBJ_PATH)\$O\create.obj \
+ $(OBJ_PATH)\$O\close.obj \
+ $(OBJ_PATH)\$O\event.obj \
+ $(OBJ_PATH)\$O\directory.obj \
+ $(OBJ_PATH)\$O\fileinfo.obj \
+ $(OBJ_PATH)\$O\read.obj \
+ $(OBJ_PATH)\$O\write.obj \
+ $(OBJ_PATH)\$O\volume.obj \
+ $(OBJ_PATH)\$O\cleanup.obj \
+ $(OBJ_PATH)\$O\lock.obj \
+ $(OBJ_PATH)\$O\timeout.obj \
+ $(OBJ_PATH)\$O\flush.obj \
+ $(OBJ_PATH)\$O\device.obj \
+ $(OBJ_PATH)\$O\fscontrol.obj \
+ $(OBJ_PATH)\$O\notification.obj \
+ $(OBJ_PATH)\$O\security.obj \
+ $(OBJ_PATH)\$O\access.obj \
+
+
+_RES_FILE=$(OBJ_PATH)\$O\dokan.res
+
+
+
+# lowercased
+BASEDIR=c:\winddk\7600.16385.1
+OBJECT_ROOT=c:\winddk\7600.16385.1
+MAKEDIR_LOWERCASE=d:\code\oss\dokanx\trunk\src\sys
+OBJ_PATH=d:\code\oss\dokanx\trunk\src\sys
+CONCURRENT_MIDL=0
+CONCURRENT_MANIFEST_BUILD=0

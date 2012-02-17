@@ -1,0 +1,52 @@
+﻿Build started 2012-02-17 오후 7:43:19.
+     1>Project "D:\code\oss\dokanx\trunk\src\sys\sys.vcxproj" on node 2 (rebuild target(s)).
+     1>PrepareForBuild:
+         Creating directory "D:\code\oss\dokanx\trunk\src\x64\Debug\".
+       InitializeBuildStatus:
+         Creating "x64\Debug\sys.unsuccessfulbuild" because "AlwaysCreate" was specified.
+       ClCompile:
+         C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\x86_amd64\CL.exe /c /Zi /nologo /W1 /WX- /O2 /Gm- /EHsc /MD /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"x64\Debug\\" /Fd"x64\Debug\vc100.pdb" /Gd /TC /errorReport:prompt access.c cleanup.c close.c create.c device.c directory.c dokan.c event.c fileinfo.c flush.c fscontrol.c init.c lock.c notification.c read.c security.c timeout.c volume.c write.c
+         access.c
+     1>d:\code\oss\dokanx\trunk\src\sys\dokan.h(30): fatal error C1083: Cannot open include file: 'ntifs.h': No such file or directory
+         cleanup.c
+     1>d:\code\oss\dokanx\trunk\src\sys\dokan.h(30): fatal error C1083: Cannot open include file: 'ntifs.h': No such file or directory
+         close.c
+     1>d:\code\oss\dokanx\trunk\src\sys\dokan.h(30): fatal error C1083: Cannot open include file: 'ntifs.h': No such file or directory
+         create.c
+     1>d:\code\oss\dokanx\trunk\src\sys\dokan.h(30): fatal error C1083: Cannot open include file: 'ntifs.h': No such file or directory
+         device.c
+     1>d:\code\oss\dokanx\trunk\src\sys\dokan.h(30): fatal error C1083: Cannot open include file: 'ntifs.h': No such file or directory
+         directory.c
+     1>d:\code\oss\dokanx\trunk\src\sys\dokan.h(30): fatal error C1083: Cannot open include file: 'ntifs.h': No such file or directory
+         dokan.c
+     1>d:\code\oss\dokanx\trunk\src\sys\dokan.h(30): fatal error C1083: Cannot open include file: 'ntifs.h': No such file or directory
+         event.c
+     1>d:\code\oss\dokanx\trunk\src\sys\dokan.h(30): fatal error C1083: Cannot open include file: 'ntifs.h': No such file or directory
+         fileinfo.c
+     1>d:\code\oss\dokanx\trunk\src\sys\dokan.h(30): fatal error C1083: Cannot open include file: 'ntifs.h': No such file or directory
+         flush.c
+     1>d:\code\oss\dokanx\trunk\src\sys\dokan.h(30): fatal error C1083: Cannot open include file: 'ntifs.h': No such file or directory
+         fscontrol.c
+     1>d:\code\oss\dokanx\trunk\src\sys\dokan.h(30): fatal error C1083: Cannot open include file: 'ntifs.h': No such file or directory
+         init.c
+     1>d:\code\oss\dokanx\trunk\src\sys\dokan.h(30): fatal error C1083: Cannot open include file: 'ntifs.h': No such file or directory
+         lock.c
+     1>d:\code\oss\dokanx\trunk\src\sys\dokan.h(30): fatal error C1083: Cannot open include file: 'ntifs.h': No such file or directory
+         notification.c
+     1>d:\code\oss\dokanx\trunk\src\sys\dokan.h(30): fatal error C1083: Cannot open include file: 'ntifs.h': No such file or directory
+         read.c
+     1>d:\code\oss\dokanx\trunk\src\sys\dokan.h(30): fatal error C1083: Cannot open include file: 'ntifs.h': No such file or directory
+         security.c
+     1>d:\code\oss\dokanx\trunk\src\sys\dokan.h(30): fatal error C1083: Cannot open include file: 'ntifs.h': No such file or directory
+         timeout.c
+     1>d:\code\oss\dokanx\trunk\src\sys\dokan.h(30): fatal error C1083: Cannot open include file: 'ntifs.h': No such file or directory
+         volume.c
+     1>d:\code\oss\dokanx\trunk\src\sys\dokan.h(30): fatal error C1083: Cannot open include file: 'ntifs.h': No such file or directory
+         write.c
+     1>d:\code\oss\dokanx\trunk\src\sys\dokan.h(30): fatal error C1083: Cannot open include file: 'ntifs.h': No such file or directory
+         Generating Code...
+     1>Done Building Project "D:\code\oss\dokanx\trunk\src\sys\sys.vcxproj" (rebuild target(s)) -- FAILED.
+
+Build FAILED.
+
+Time Elapsed 00:00:00.27

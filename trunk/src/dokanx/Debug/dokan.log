@@ -1,0 +1,77 @@
+﻿Build started 2012-02-17 오후 6:50:50.
+     1>Project "D:\code\oss\dokanx\trunk\dokan\dokan.vcxproj" on node 2 (rebuild target(s)).
+     1>_PrepareForClean:
+         Deleting file "Debug\dokan.lastbuildstate".
+       InitializeBuildStatus:
+         Creating "Debug\dokan.unsuccessfulbuild" because "AlwaysCreate" was specified.
+       ClCompile:
+         C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\CL.exe /c /I../sys /Zi /nologo /W4 /WX- /Od /Oy- /D _WINDLL /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MTd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc100.pdb" /Gd /TP /analyze- /errorReport:prompt access.cpp cleanup.cpp close.cpp create.cpp directory.cpp dokan.cpp fileinfo.cpp flush.cpp lock.cpp mount.cpp read.cpp security.cpp setfile.cpp status.cpp timeout.cpp version.cpp volume.cpp write.cpp
+         write.cpp
+     1>d:\code\oss\dokanx\trunk\dokan\dokanc.h(92): warning C4505: 'DokanDbgPrintW' : unreferenced local function has been removed
+         volume.cpp
+     1>d:\code\oss\dokanx\trunk\dokan\dokanc.h(92): warning C4505: 'DokanDbgPrintW' : unreferenced local function has been removed
+         version.cpp
+     1>d:\code\oss\dokanx\trunk\dokan\dokanc.h(77): warning C4505: 'DokanDbgPrint' : unreferenced local function has been removed
+     1>d:\code\oss\dokanx\trunk\dokan\dokanc.h(92): warning C4505: 'DokanDbgPrintW' : unreferenced local function has been removed
+         timeout.cpp
+     1>d:\code\oss\dokanx\trunk\dokan\dokanc.h(77): warning C4505: 'DokanDbgPrint' : unreferenced local function has been removed
+     1>d:\code\oss\dokanx\trunk\dokan\dokanc.h(92): warning C4505: 'DokanDbgPrintW' : unreferenced local function has been removed
+         status.cpp
+     1>d:\code\oss\dokanx\trunk\dokan\dokanc.h(77): warning C4505: 'DokanDbgPrint' : unreferenced local function has been removed
+     1>d:\code\oss\dokanx\trunk\dokan\dokanc.h(92): warning C4505: 'DokanDbgPrintW' : unreferenced local function has been removed
+         setfile.cpp
+     1>d:\code\oss\dokanx\trunk\dokan\dokanc.h(92): warning C4505: 'DokanDbgPrintW' : unreferenced local function has been removed
+         security.cpp
+     1>d:\code\oss\dokanx\trunk\dokan\dokanc.h(77): warning C4505: 'DokanDbgPrint' : unreferenced local function has been removed
+     1>d:\code\oss\dokanx\trunk\dokan\dokanc.h(92): warning C4505: 'DokanDbgPrintW' : unreferenced local function has been removed
+         read.cpp
+     1>d:\code\oss\dokanx\trunk\dokan\dokanc.h(92): warning C4505: 'DokanDbgPrintW' : unreferenced local function has been removed
+         mount.cpp
+         lock.cpp
+     1>d:\code\oss\dokanx\trunk\dokan\dokanc.h(92): warning C4505: 'DokanDbgPrintW' : unreferenced local function has been removed
+         flush.cpp
+     1>d:\code\oss\dokanx\trunk\dokan\dokanc.h(92): warning C4505: 'DokanDbgPrintW' : unreferenced local function has been removed
+         fileinfo.cpp
+     1>d:\code\oss\dokanx\trunk\dokan\dokanc.h(92): warning C4505: 'DokanDbgPrintW' : unreferenced local function has been removed
+         dokan.cpp
+         directory.cpp
+         create.cpp
+     1>d:\code\oss\dokanx\trunk\dokan\dokanc.h(92): warning C4505: 'DokanDbgPrintW' : unreferenced local function has been removed
+         close.cpp
+     1>d:\code\oss\dokanx\trunk\dokan\dokanc.h(92): warning C4505: 'DokanDbgPrintW' : unreferenced local function has been removed
+         cleanup.cpp
+     1>d:\code\oss\dokanx\trunk\dokan\dokanc.h(92): warning C4505: 'DokanDbgPrintW' : unreferenced local function has been removed
+         access.cpp
+     1>d:\code\oss\dokanx\trunk\dokan\dokanc.h(77): warning C4505: 'DokanDbgPrint' : unreferenced local function has been removed
+         Generating Code...
+       Link:
+         C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"D:\code\oss\dokanx\trunk\Debug\dokan.dll" /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /ManifestFile:"Debug\dokan.dll.intermediate.manifest" /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /PDB:"D:\code\oss\dokanx\trunk\Debug\dokan.pdb" /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"D:\code\oss\dokanx\trunk\Debug\dokan.lib" /MACHINE:X86 /DLL Debug\access.obj
+         Debug\cleanup.obj
+         Debug\close.obj
+         Debug\create.obj
+         Debug\directory.obj
+         Debug\dokan.obj
+         Debug\fileinfo.obj
+         Debug\flush.obj
+         Debug\lock.obj
+         Debug\mount.obj
+         Debug\read.obj
+         Debug\security.obj
+         Debug\setfile.obj
+         Debug\status.obj
+         Debug\timeout.obj
+         Debug\version.obj
+         Debug\volume.obj
+         Debug\write.obj
+            Creating library D:\code\oss\dokanx\trunk\Debug\dokan.lib and object D:\code\oss\dokanx\trunk\Debug\dokan.exp
+         dokan.vcxproj -> D:\code\oss\dokanx\trunk\Debug\dokan.dll
+       Manifest:
+         C:\Program Files (x86)\Microsoft SDKs\Windows\v7.0A\bin\mt.exe /nologo /verbose /outputresource:"D:\code\oss\dokanx\trunk\Debug\dokan.dll;#2" /manifest Debug\dokan.dll.intermediate.manifest
+       FinalizeBuildStatus:
+         Deleting file "Debug\dokan.unsuccessfulbuild".
+         Touching "Debug\dokan.lastbuildstate".
+     1>Done Building Project "D:\code\oss\dokanx\trunk\dokan\dokan.vcxproj" (rebuild target(s)).
+
+Build succeeded.
+
+Time Elapsed 00:00:12.55

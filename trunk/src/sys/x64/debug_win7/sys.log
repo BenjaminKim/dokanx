@@ -1,0 +1,104 @@
+﻿Build started 2012-02-17 오후 7:54:08.
+     1>Project "D:\code\oss\dokanx\trunk\src\sys\sys.vcxproj" on node 2 (rebuild target(s)).
+     1>C:\Program Files (x86)\MSBuild\Microsoft.Cpp\v4.0\Microsoft.MakeFile.Targets(32,5): warning MSB8005: The property 'NMakeCleanCommandLine' doesn't exist.  Skipping...
+     1>Rebuild:
+         C:\Windows\System32\cmd.exe /k "D:\code\oss\dokanx\trunk\src\sys\ddkbuild.bat" -WIN7A64 -prefast checked D:\code\oss\dokanx\trunk\src\sys\ -cZ
+         mkdir "D:\code\oss\dokanx\trunk\bin\x64\debug"
+         copy "D:\code\oss\dokanx\trunk\src\sys\objchk_win7_amd64\amd64\dokanx.pdb" "D:\code\oss\dokanx\trunk\bin\x64\debug\dokanx_win7.pdb"
+         copy "D:\code\oss\dokanx\trunk\src\sys\objchk_win7_amd64\amd64\dokanx.sys" "D:\code\oss\dokanx\trunk\bin\x64\debug\dokanx_win7.sys"
+         copy "D:\code\oss\dokanx\trunk\src\sys\objchk_win7_amd64\amd64\dokanx.map" "D:\code\oss\dokanx\trunk\bin\x64\debug\dokanx_win7.map"
+         DDKBUILD VERSION 3.15.38 FREEWARE FROM HOLLIS TECHNOLOGY SOLUTIONS
+         Comments? Suggestions? info@hollistech.com
+         
+         DDKBUILD using WIN7 DDK in directory D:\code\oss\dokanx\trunk\src\sys\ 
+          for chk version basedir C:\WinDDK\7600.16385.1 extension chk_win7_AMD64
+          commandline: "prefast /log=.\prefast.xml /StackHogThreshold=512 build -e -MI  -cZ " 
+         
+         -----------------------------------------------------------------------------
+         Microsoft (R) PREfast Version 9.0.21022.100208.
+         Copyright (C) Microsoft Corporation. All rights reserved.
+         -----------------------------------------------------------------------------
+         path contains nonexistant c:\program files (x86)\microsoft visual studio 10.0\common7\tools\bin, removing
+         path contains nonexistant c:\program files (x86)\microsoft sdks\windows\v7.0a\\lib\win64, removing
+         BUILD: Compile and Link for AMD64
+         
+         BUILD: Start time: Fri Feb 17 19:54:09 2012
+         BUILD: Examining d:\code\oss\dokanx\trunk\src\sys directory for files to compile.
+         
+             d:\code\oss\dokanx\trunk\src\sys 
+         
+         BUILD: Compiling and Linking d:\code\oss\dokanx\trunk\src\sys directory
+         
+         Compiling resources - dokan.rc
+         Compiling - dokan.c
+         Compiling - init.c
+         Compiling - create.c
+         Compiling - close.c
+         Compiling - event.c
+         Compiling - directory.c
+         Compiling - fileinfo.c
+         Compiling - read.c
+         Compiling - write.c
+         Compiling - volume.c
+         Compiling - cleanup.c
+         Compiling - lock.c
+         Compiling - timeout.c
+         Compiling - flush.c
+         Compiling - device.c
+         Compiling - fscontrol.c
+         Compiling - notification.c
+         Compiling - security.c
+         Compiling - access.c
+         Compiling - dokan.c
+         Compiling - init.c
+         Compiling - create.c
+         Compiling - close.c
+         Compiling - event.c
+         Compiling - directory.c
+         Compiling - fileinfo.c
+         Compiling - read.c
+         Compiling - write.c
+         Compiling - volume.c
+         Compiling - cleanup.c
+         Compiling - lock.c
+         Compiling - timeout.c
+         Compiling - flush.c
+         Compiling - device.c
+         Compiling - fscontrol.c
+         Compiling - notification.c
+         Compiling - security.c
+         Compiling - access.c
+         Linking Executable - objchk_win7_amd64\amd64\dokanx.sys
+         BUILD: Finish time: Fri Feb 17 19:54:56 2012
+         BUILD: Done
+         
+         
+         
+             41 files compiled - 2 Warnings
+         
+             1 executable built
+         
+         -----------------------------------------------------------------------------
+         Removing duplicate defects from the log...
+         -----------------------------------------------------------------------------
+         PREfast reported 133 defects during execution of the command.
+         -----------------------------------------------------------------------------
+         Enter PREFAST LIST to list the defect log as text within the console.
+         Enter PREFAST VIEW to display the defect log user interface.
+         =============== build warnings ======================
+          
+          
+         build complete status 0
+         -----------------------------------------------------------------------------
+         Microsoft (R) PREfast Version 9.0.21022.100208.
+         Copyright (C) Microsoft Corporation. All rights reserved.
+         -----------------------------------------------------------------------------
+         
+         D:\code\oss\dokanx\trunk\src\sys>        1 file(s) copied.
+                 1 file(s) copied.
+                 1 file(s) copied.
+     1>Done Building Project "D:\code\oss\dokanx\trunk\src\sys\sys.vcxproj" (rebuild target(s)).
+
+Build succeeded.
+
+Time Elapsed 00:00:47.91

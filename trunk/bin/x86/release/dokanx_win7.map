@@ -1,0 +1,363 @@
+ dokanx
+
+ Timestamp is 4f3e3309 (Fri Feb 17 19:59:21 2012)
+
+ Preferred load address is 00010000
+
+ Start         Length     Name                   Class
+ 0001:00000000 00004d1cH .text                   CODE
+ 0001:00004d1c 0000014eH .text$s                 CODE
+ 0002:00000000 00000190H .idata$5                DATA
+ 0002:00000190 00000560H .rdata                  DATA
+ 0002:000006f0 00000059H .rdata$debug            DATA
+ 0002:00000750 00000008H .rdata$sxdata           DATA
+ 0002:00000758 0000025cH .xdata$x                DATA
+ 0003:00000000 00000198H .data                   DATA
+ 0003:000001a0 00000070H .bss                    DATA
+ 0004:00000000 00001823H PAGE                    CODE
+ 0004:00001824 00000032H PAGE$s                  CODE
+ 0005:00000000 000001caH INIT                    CODE
+ 0005:000001cc 00000028H .idata$2                CODE
+ 0005:000001f4 00000014H .idata$3                CODE
+ 0005:00000208 00000190H .idata$4                CODE
+ 0005:00000398 000008c2H .idata$6                CODE
+ 0006:00000000 00000058H .rsrc$01                DATA
+ 0006:00000060 00000388H .rsrc$02                DATA
+
+  Address         Publics by Value              Rva+Base       Lib:Object
+
+ 0000:00000002       ___safe_se_handler_count   00000002     <absolute>
+ 0001:00000006       _DokanFastIoCheckIfPossible@32 00011006 f   dokan.obj
+ 0001:00000010       _DokanAcquireForCreateSection@4 00011010 f   dokan.obj
+ 0001:00000038       _DokanReleaseForCreateSection@4 00011038 f   dokan.obj
+ 0001:00000060       _DokanFilterCallbackAcquireForCreateSection@8 00011060 f   dokan.obj
+ 0001:0000009e       _DokanNoOpAcquire@8        0001109e f   dokan.obj
+ 0001:000000b0       _DokanNoOpRelease@4        000110b0 f   dokan.obj
+ 0001:000000c0       _DokanNotifyReportChange0@16 000110c0 f   dokan.obj
+ 0001:00000120       _DokanNotifyReportChange@12 00011120 f   dokan.obj
+ 0001:00000144       _DokanPrintNTStatus@4      00011144 f   dokan.obj
+ 0001:00000144       _PrintIdType@4             00011144 f   dokan.obj
+ 0001:0000014c       _DokanCheckCCB@8           0001114c f   dokan.obj
+ 0001:00000186       _DokanAllocateMdl@8        00011186 f   dokan.obj
+ 0001:00000200       _DokanFreeMdl@4            00011200 f   dokan.obj
+ 0001:000002f2       _DokanInitIrpList@4        000112f2 f   init.obj
+ 0001:0000031a       _DokanCreateGlobalDiskDevice@8 0001131a f   init.obj
+ 0001:0000040a       _DokanRegisterUncProvider@4 0001140a f   init.obj
+ 0001:00000442       _AllocateUnicodeString@4   00011442 f   init.obj
+ 0001:000004bc       _FreeUnicodeString@4       000114bc f   init.obj
+ 0001:000004e8       _DokanDeleteDeviceObject@4 000114e8 f   init.obj
+ 0001:0000058a       _RtlStringCchCopyW@12      0001158a f i init.obj
+ 0001:000005c4       _RtlStringCchCatW@12       000115c4 f i init.obj
+ 0001:00000606       _DokanCreateDiskDevice@28  00011606 f   init.obj
+ 0001:00000ae8       _DokanAllocateFCB@4        00011ae8 f   create.obj
+ 0001:00000bfe       _DokanGetFCB@12            00011bfe f   create.obj
+ 0001:00000d08       _DokanFreeFCB@4            00011d08 f   create.obj
+ 0001:00000dcc       _DokanAllocateCCB@8        00011dcc f   create.obj
+ 0001:00000e82       _DokanFreeCCB@4            00011e82 f   create.obj
+ 0001:00000f00       _DokanUnicodeStringChar@8  00011f00 f   create.obj
+ 0001:00000f32       _SetFileObjectForVCB@8     00011f32 f   create.obj
+ 0001:00000f52       _DokanCompleteCreate@8     00011f52 f   create.obj
+ 0001:0000103c       _DokanDispatchClose@8      0001203c f   close.obj
+ 0001:00001178       _ExAllocateFromNPagedLookasideList@4 00012178 f i event.obj
+ 0001:000011aa       _ExFreeToNPagedLookasideList@8 000121aa f i event.obj
+ 0001:000011dc       _DokanIrpCancelRoutine@8   000121dc f   event.obj
+ 0001:0000128a       _RegisterPendingIrpMain@24 0001228a f   event.obj
+ 0001:000013ac       _DokanRegisterPendingIrp@16 000123ac f   event.obj
+ 0001:00001424       _DokanRegisterPendingIrpForEvent@8 00012424 f   event.obj
+ 0001:00001562       _DokanRegisterPendingIrpForService@8 00012562 f   event.obj
+ 0001:00001598       _DokanCompleteIrp@8        00012598 f   event.obj
+ 0001:0000172c       _DokanEventWrite@8         0001272c f   event.obj
+ 0001:00001864       _DokanEventStart@8         00012864 f   event.obj
+ 0001:00001b8a       _DokanQueryDirectory@8     00012b8a f   directory.obj
+ 0001:00001d1e       _DokanNotifyChangeDirectory@8 00012d1e f   directory.obj
+ 0001:00001d98       _DokanCompleteDirectoryControl@8 00012d98 f   directory.obj
+ 0001:00001e74       _DokanDispatchDirectoryControl@8 00012e74 f   directory.obj
+ 0001:00001f2c       _DokanDispatchQueryInformation@8 00012f2c f   fileinfo.obj
+ 0001:00002118       _DokanCompleteQueryInformation@8 00013118 f   fileinfo.obj
+ 0001:000021be       _DokanDispatchSetInformation@8 000131be f   fileinfo.obj
+ 0001:000023c4       _DokanCompleteSetInformation@8 000133c4 f   fileinfo.obj
+ 0001:000025fa       _DokanDispatchRead@8       000135fa f   read.obj
+ 0001:000027c0       _DokanCompleteRead@8       000137c0 f   read.obj
+ 0001:00002890       _DokanDispatchWrite@8      00013890 f   write.obj
+ 0001:00002af8       _DokanCompleteWrite@8      00013af8 f   write.obj
+ 0001:00002b62       _DokanDispatchQueryVolumeInformation@8 00013b62 f   volume.obj
+ 0001:00002cfa       _DokanCompleteQueryVolumeInformation@8 00013cfa f   volume.obj
+ 0001:00002d6c       _DokanDispatchSetVolumeInformation@8 00013d6c f   volume.obj
+ 0001:00002d96       _DokanDispatchCleanup@8    00013d96 f   cleanup.obj
+ 0001:00002eee       _DokanCompleteCleanup@8    00013eee f   cleanup.obj
+ 0001:00002f58       _DokanDispatchLock@8       00013f58 f   lock.obj
+ 0001:00003098       _DokanCompleteFlush@8      00014098 f   flush.obj
+ 0001:00003098       _DokanCompleteLock@8       00014098 f   lock.obj
+ 0001:000030de       _ReleaseTimeoutPendingIrp@4 000140de f   timeout.obj
+ 0001:00003204       _DokanStopCheckThread@4    00014204 f   timeout.obj
+ 0001:00003252       _DokanUpdateTimeout@8      00014252 f   timeout.obj
+ 0001:0000329c       _DokanUnmount@4            0001429c f   timeout.obj
+ 0001:00003370       _DokanCheckKeepAlive@4     00014370 f   timeout.obj
+ 0001:000033f2       _DokanResetPendingIrpTimeout@8 000143f2 f   timeout.obj
+ 0001:0000347e       _DokanTimeoutThread@4      0001447e f   timeout.obj
+ 0001:00003514       _DokanStartCheckThread@4   00014514 f   timeout.obj
+ 0001:0000356a       _DokanDispatchFlush@8      0001456a f   flush.obj
+ 0001:0000368c       _GlobalDeviceControl@8     0001468c f   device.obj
+ 0001:00003708       _DiskDeviceControl@8       00014708 f   device.obj
+ 0001:00003976       _DokanDispatchDeviceControl@8 00014976 f   device.obj
+ 0001:00003afa       _DokanUserFsRequest@8      00014afa f   fscontrol.obj
+ 0001:00003cdc       _DokanDispatchFileSystemControl@8 00014cdc f   fscontrol.obj
+ 0001:00003de2       _SetCommonEventContext@16  00014de2 f   notification.obj
+ 0001:00003e30       _AllocateEventContextRaw@4 00014e30 f   notification.obj
+ 0001:00003e74       _AllocateEventContext@16   00014e74 f   notification.obj
+ 0001:00003eb8       _DokanFreeEventContext@4   00014eb8 f   notification.obj
+ 0001:00003ed6       _DokanEventNotification@8  00014ed6 f   notification.obj
+ 0001:00003f0e       _ReleasePendingIrp@4       00014f0e f   notification.obj
+ 0001:00003fd0       _NotificationLoop@8        00014fd0 f   notification.obj
+ 0001:00004160       _NotificationThread@4      00015160 f   notification.obj
+ 0001:00004206       _DokanStartEventNotificationThread@4 00015206 f   notification.obj
+ 0001:00004268       _DokanStopEventNotificationThread@4 00015268 f   notification.obj
+ 0001:000042b6       _DokanEventRelease@4       000152b6 f   notification.obj
+ 0001:0000439c       _DokanDispatchQuerySecurity@8 0001539c f   security.obj
+ 0001:00004502       _DokanCompleteQuerySecurity@8 00015502 f   security.obj
+ 0001:000045d6       _DokanDispatchSetSecurity@8 000155d6 f   security.obj
+ 0001:00004732       _DokanCompleteSetSecurity@8 00015732 f   security.obj
+ 0001:0000477a       _DokanGetAccessToken@8     0001577a f   access.obj
+ 0001:000048bf       @__security_check_cookie@4 000158bf f   BufferOverflowK:secchk.obj
+ 0001:000048d4       ___report_gsfailure        000158d4 f   BufferOverflowK:gs_report.obj
+ 0001:00004900       __SEH_prolog4              00015900 f   ntoskrnl:sehprolg4.obj
+ 0001:00004945       __SEH_epilog4              00015945 f   ntoskrnl:sehprolg4.obj
+ 0001:00004960       __except_handler4          00015960 f   ntoskrnl:chandler4.obj
+ 0001:00004aba       _memset                    00015aba f   ntoskrnl:ntoskrnl.exe
+ 0001:00004ac6       _memcpy                    00015ac6 f   ntoskrnl:ntoskrnl.exe
+ 0001:00004ad2       _DbgPrint                  00015ad2 f   ntoskrnl:ntoskrnl.exe
+ 0001:00004ae0       __local_unwind4            00015ae0 f   ntoskrnl:exsup4.obj
+ 0001:00004bb6       __seh_longjmp_unwind4@4    00015bb6 f   ntoskrnl:exsup4.obj
+ 0001:00004bd2       @_EH4_CallFilterFunc@8     00015bd2 f   ntoskrnl:exsup4.obj
+ 0001:00004be9       @_EH4_TransferToHandler@8  00015be9 f   ntoskrnl:exsup4.obj
+ 0001:00004c02       @_EH4_GlobalUnwind@4       00015c02 f   ntoskrnl:exsup4.obj
+ 0001:00004c1c       @_EH4_LocalUnwind@16       00015c1c f   ntoskrnl:exsup4.obj
+ 0001:00004c38       __NLG_Notify1              00015c38 f   ntoskrnl:_nlgsupp.obj
+ 0001:00004c41       __NLG_Notify               00015c41 f   ntoskrnl:_nlgsupp.obj
+ 0001:00004c58       __NLG_Dispatch2            00015c58     ntoskrnl:_nlgsupp.obj
+ 0001:00004c58       __NLG_Dispatch             00015c58     ntoskrnl:_nlgsupp.obj
+ 0001:00004c60       __NLG_Call                 00015c60 f   ntoskrnl:_nlgsupp.obj
+ 0001:00004c62       __NLG_Return2              00015c62     ntoskrnl:_nlgsupp.obj
+ 0001:00004c68       _RtlUnwind@16              00015c68 f   ntoskrnl:ntoskrnl.exe
+ 0001:00004c73       _WdmlibRtlInitUnicodeStringEx@8 00015c73 f   wdmsec:wlwrap.obj
+ 0001:00004cd0       _RtlULongAdd@12            00015cd0 f i wdmsec:cmregutil.obj
+ 0001:00004cfe       __snwprintf                00015cfe f   wdmsec:ntoskrnl.exe
+ 0001:00004d0a       __wcsnicmp                 00015d0a f   wdmsec:ntoskrnl.exe
+ 0001:00004d16       _wcschr                    00015d16 f   wdmsec:ntoskrnl.exe
+ 0001:00004d1c       ??_C@_1DC@JJHBEEBC@?$AA?2?$AAD?$AAo?$AAs?$AAD?$AAe?$AAv?$AAi?$AAc?$AAe?$AAs?$AA?2?$AAG?$AAl?$AAo?$AAb?$AAa?$AAl?$AA?2?$AAD?$AAo?$AAk?$AAa?$AAn?$AA?$AA@FNODOBFM@ 00015d1c     init.obj
+ 0001:00004d4e       ??_C@_1BM@FHCNJMDP@?$AA?2?$AAD?$AAe?$AAv?$AAi?$AAc?$AAe?$AA?2?$AAD?$AAo?$AAk?$AAa?$AAn?$AA?$AA@FNODOBFM@ 00015d4e     init.obj
+ 0001:00004d6a       ??_C@_1M@BDMGMBEO@?$AAD?$AAO?$AAK?$AAA?$AAN?$AA?$AA@FNODOBFM@ 00015d6a     init.obj
+ 0001:00004d76       ??_C@_1DE@BONIMFNN@?$AA?2?$AAD?$AAo?$AAs?$AAD?$AAe?$AAv?$AAi?$AAc?$AAe?$AAs?$AA?2?$AAG?$AAl?$AAo?$AAb?$AAa?$AAl?$AA?2?$AAV?$AAo?$AAl?$AAu?$AAm?$AAe?$AA?$AA@FNODOBFM@ 00015d76     init.obj
+ 0001:00004daa       ??_C@_1BO@LGPKALII@?$AA?2?$AAD?$AAe?$AAv?$AAi?$AAc?$AAe?$AA?2?$AAV?$AAo?$AAl?$AAu?$AAm?$AAe?$AA?$AA@FNODOBFM@ 00015daa     init.obj
+ 0001:00004dc8       ??_C@_1EG@LEKJENPI@?$AA?2?$AAD?$AAo?$AAs?$AAD?$AAe?$AAv?$AAi?$AAc?$AAe?$AAs?$AA?2?$AAG?$AAl?$AAo?$AAb?$AAa?$AAl?$AA?2?$AAD?$AAo?$AAk?$AAa?$AAn?$AAR?$AAe?$AAd?$AAi?$AAr?$AAe?$AAc?$AAt@FNODOBFM@ 00015dc8     init.obj
+ 0001:00004e0e       ??_C@_1DA@PLMHAKFB@?$AA?2?$AAD?$AAe?$AAv?$AAi?$AAc?$AAe?$AA?2?$AAD?$AAo?$AAk?$AAa?$AAn?$AAR?$AAe?$AAd?$AAi?$AAr?$AAe?$AAc?$AAt?$AAo?$AAr?$AA?$AA@FNODOBFM@ 00015e0e     init.obj
+ 0001:00004e3e       ??_C@_0P@BKIHJMEI@?5?5Type?5?$CB?$DN?5VCB?6?$AA@FNODOBFM@ 00015e3e     event.obj
+ 0001:00004e4e       ??_C@_0BM@BNAPFDKJ@?5?5?5?5DeviceExtension?5?$CB?$DN?5VCB?6?$AA@FNODOBFM@ 00015e4e     security.obj
+ 0002:00000000       __imp_@KfReleaseSpinLock@8 00016000     hal:HAL.dll
+ 0002:00000004       __imp_@KfAcquireSpinLock@4 00016004     hal:HAL.dll
+ 0002:00000008       \177HAL_NULL_THUNK_DATA    00016008     hal:HAL.dll
+ 0002:0000000c       __imp__IoDeleteDevice@4    0001600c     ntoskrnl:ntoskrnl.exe
+ 0002:00000010       __imp__IoDeleteSymbolicLink@4 00016010     ntoskrnl:ntoskrnl.exe
+ 0002:00000014       __imp__RtlInitUnicodeString@8 00016014     ntoskrnl:ntoskrnl.exe
+ 0002:00000018       __imp_@IofCompleteRequest@8 00016018     ntoskrnl:ntoskrnl.exe
+ 0002:0000001c       __imp__IoSetTopLevelIrp@4  0001601c     ntoskrnl:ntoskrnl.exe
+ 0002:00000020       __imp__FsRtlNotifyFullReportChange@36 00016020     ntoskrnl:ntoskrnl.exe
+ 0002:00000024       __imp__IoFreeMdl@4         00016024     ntoskrnl:ntoskrnl.exe
+ 0002:00000028       __imp__MmProbeAndLockPages@12 00016028     ntoskrnl:ntoskrnl.exe
+ 0002:0000002c       __imp__IoAllocateMdl@20    0001602c     ntoskrnl:ntoskrnl.exe
+ 0002:00000030       __imp__MmUnlockPages@4     00016030     ntoskrnl:ntoskrnl.exe
+ 0002:00000034       __imp__FsRtlRegisterFileSystemFilterCallbacks@8 00016034     ntoskrnl:ntoskrnl.exe
+ 0002:00000038       __imp__ExInitializeNPagedLookasideList@28 00016038     ntoskrnl:ntoskrnl.exe
+ 0002:0000003c       __imp__FsRtlMdlWriteCompleteDev@16 0001603c     ntoskrnl:ntoskrnl.exe
+ 0002:00000040       __imp__FsRtlPrepareMdlWriteDev@28 00016040     ntoskrnl:ntoskrnl.exe
+ 0002:00000044       __imp__FsRtlMdlReadCompleteDev@12 00016044     ntoskrnl:ntoskrnl.exe
+ 0002:00000048       __imp__FsRtlMdlReadDev@28  00016048     ntoskrnl:ntoskrnl.exe
+ 0002:0000004c       __imp__FsRtlCopyWrite@32   0001604c     ntoskrnl:ntoskrnl.exe
+ 0002:00000050       __imp__FsRtlCopyRead@32    00016050     ntoskrnl:ntoskrnl.exe
+ 0002:00000054       __imp__ExAllocatePoolWithTag@12 00016054     ntoskrnl:ntoskrnl.exe
+ 0002:00000058       __imp__memset              00016058     ntoskrnl:ntoskrnl.exe
+ 0002:0000005c       __imp__KeInitializeEvent@12 0001605c     ntoskrnl:ntoskrnl.exe
+ 0002:00000060       __imp_@ObfDereferenceObject@4 00016060     ntoskrnl:ntoskrnl.exe
+ 0002:00000064       __imp__KeWaitForSingleObject@20 00016064     ntoskrnl:ntoskrnl.exe
+ 0002:00000068       __imp__ExFreePoolWithTag@8 00016068     ntoskrnl:ntoskrnl.exe
+ 0002:0000006c       __imp__memcpy              0001606c     ntoskrnl:ntoskrnl.exe
+ 0002:00000070       __imp__RtlFreeUnicodeString@4 00016070     ntoskrnl:ntoskrnl.exe
+ 0002:00000074       __imp__IoCreateSymbolicLink@8 00016074     ntoskrnl:ntoskrnl.exe
+ 0002:00000078       __imp_@ObfReferenceObject@4 00016078     ntoskrnl:ntoskrnl.exe
+ 0002:0000007c       __imp__PsTerminateSystemThread@4 0001607c     ntoskrnl:ntoskrnl.exe
+ 0002:00000080       __imp__FsRtlRegisterUncProvider@12 00016080     ntoskrnl:ntoskrnl.exe
+ 0002:00000084       __imp__FsRtlDeregisterUncProvider@4 00016084     ntoskrnl:ntoskrnl.exe
+ 0002:00000088       __imp__ZwClose@4           00016088     ntoskrnl:ntoskrnl.exe
+ 0002:0000008c       __imp__ExDeleteNPagedLookasideList@4 0001608c     ntoskrnl:ntoskrnl.exe
+ 0002:00000090       __imp__PsCreateSystemThread@28 00016090     ntoskrnl:ntoskrnl.exe
+ 0002:00000094       __imp__FsRtlNotifyInitializeSync@4 00016094     ntoskrnl:ntoskrnl.exe
+ 0002:00000098       __imp__ExInitializeResourceLite@4 00016098     ntoskrnl:ntoskrnl.exe
+ 0002:0000009c       __imp__IoCreateDevice@28   0001609c     ntoskrnl:ntoskrnl.exe
+ 0002:000000a0       __imp__KeLeaveCriticalRegion@0 000160a0     ntoskrnl:ntoskrnl.exe
+ 0002:000000a4       __imp__KeEnterCriticalRegion@0 000160a4     ntoskrnl:ntoskrnl.exe
+ 0002:000000a8       __imp__ExDeleteResourceLite@4 000160a8     ntoskrnl:ntoskrnl.exe
+ 0002:000000ac       __imp__FsRtlTeardownPerStreamContexts@4 000160ac     ntoskrnl:ntoskrnl.exe
+ 0002:000000b0       __imp__memmove             000160b0     ntoskrnl:ntoskrnl.exe
+ 0002:000000b4       __imp_@InterlockedPopEntrySList@4 000160b4     ntoskrnl:ntoskrnl.exe
+ 0002:000000b8       __imp_@InterlockedPushEntrySList@8 000160b8     ntoskrnl:ntoskrnl.exe
+ 0002:000000bc       __imp__KeClearEvent@4      000160bc     ntoskrnl:ntoskrnl.exe
+ 0002:000000c0       __imp__IoReleaseCancelSpinLock@4 000160c0     ntoskrnl:ntoskrnl.exe
+ 0002:000000c4       __imp__KeSetEvent@12       000160c4     ntoskrnl:ntoskrnl.exe
+ 0002:000000c8       __imp__DbgPrint            000160c8     ntoskrnl:ntoskrnl.exe
+ 0002:000000cc       __imp__MmMapLockedPagesSpecifyCache@24 000160cc     ntoskrnl:ntoskrnl.exe
+ 0002:000000d0       __imp__RtlStringFromGUID@8 000160d0     ntoskrnl:ntoskrnl.exe
+ 0002:000000d4       __imp__FsRtlNotifyFullChangeDirectory@40 000160d4     ntoskrnl:ntoskrnl.exe
+ 0002:000000d8       __imp__MmFlushImageSection@8 000160d8     ntoskrnl:ntoskrnl.exe
+ 0002:000000dc       __imp__CcUninitializeCacheMap@12 000160dc     ntoskrnl:ntoskrnl.exe
+ 0002:000000e0       __imp__CcPurgeCacheSection@16 000160e0     ntoskrnl:ntoskrnl.exe
+ 0002:000000e4       __imp__CcFlushCache@16     000160e4     ntoskrnl:ntoskrnl.exe
+ 0002:000000e8       __imp__FsRtlNotifyCleanup@12 000160e8     ntoskrnl:ntoskrnl.exe
+ 0002:000000ec       _KeTickCount               000160ec     ntoskrnl:ntoskrnl.exe
+ 0002:000000ec       __imp__KeTickCount         000160ec     ntoskrnl:ntoskrnl.exe
+ 0002:000000f0       __imp__KeQueryTimeIncrement@0 000160f0     ntoskrnl:ntoskrnl.exe
+ 0002:000000f4       __imp__ExAcquireResourceSharedLite@8 000160f4     ntoskrnl:ntoskrnl.exe
+ 0002:000000f8       __imp__KeCancelTimer@4     000160f8     ntoskrnl:ntoskrnl.exe
+ 0002:000000fc       __imp__KeWaitForMultipleObjects@32 000160fc     ntoskrnl:ntoskrnl.exe
+ 0002:00000100       __imp__KeSetTimerEx@20     00016100     ntoskrnl:ntoskrnl.exe
+ 0002:00000104       __imp__KeInitializeTimerEx@8 00016104     ntoskrnl:ntoskrnl.exe
+ 0002:00000108       __imp__IoGetRequestorProcessId@4 00016108     ntoskrnl:ntoskrnl.exe
+ 0002:0000010c       __imp_@ExfInterlockedInsertTailList@12 0001610c     ntoskrnl:ntoskrnl.exe
+ 0002:00000110       __imp__KeResetEvent@4      00016110     ntoskrnl:ntoskrnl.exe
+ 0002:00000114       __imp__RtlLengthSecurityDescriptor@4 00016114     ntoskrnl:ntoskrnl.exe
+ 0002:00000118       __imp__ObOpenObjectByPointer@28 00016118     ntoskrnl:ntoskrnl.exe
+ 0002:0000011c       __imp__SeTokenObjectType   0001611c     ntoskrnl:ntoskrnl.exe
+ 0002:0000011c       _SeTokenObjectType         0001611c     ntoskrnl:ntoskrnl.exe
+ 0002:00000120       __imp__KeBugCheckEx@20     00016120     ntoskrnl:ntoskrnl.exe
+ 0002:00000124       __imp__RtlUnwind@16        00016124     ntoskrnl:ntoskrnl.exe
+ 0002:00000128       __imp_@ExReleaseResourceLite@4 00016128     ntoskrnl:ntoskrnl.exe
+ 0002:0000012c       __imp__ObReferenceObjectByHandle@24 0001612c     ntoskrnl:ntoskrnl.exe
+ 0002:00000130       __imp__ExAcquireResourceExclusiveLite@8 00016130     ntoskrnl:ntoskrnl.exe
+ 0002:00000134       __imp__MmGetSystemRoutineAddress@4 00016134     wdmsec:ntoskrnl.exe
+ 0002:00000138       __imp__ZwSetSecurityObject@12 00016138     wdmsec:ntoskrnl.exe
+ 0002:0000013c       __imp__IoDeviceObjectType  0001613c     wdmsec:ntoskrnl.exe
+ 0002:0000013c       _IoDeviceObjectType        0001613c     wdmsec:ntoskrnl.exe
+ 0002:00000140       __imp__RtlGetDaclSecurityDescriptor@16 00016140     wdmsec:ntoskrnl.exe
+ 0002:00000144       __imp__RtlGetSaclSecurityDescriptor@16 00016144     wdmsec:ntoskrnl.exe
+ 0002:00000148       __imp__RtlGetGroupSecurityDescriptor@12 00016148     wdmsec:ntoskrnl.exe
+ 0002:0000014c       __imp__RtlGetOwnerSecurityDescriptor@12 0001614c     wdmsec:ntoskrnl.exe
+ 0002:00000150       __imp___snwprintf          00016150     wdmsec:ntoskrnl.exe
+ 0002:00000154       __imp__SeCaptureSecurityDescriptor@20 00016154     wdmsec:ntoskrnl.exe
+ 0002:00000158       __imp__SeExports           00016158     wdmsec:ntoskrnl.exe
+ 0002:0000015c       __imp__IoIsWdmVersionAvailable@8 0001615c     wdmsec:ntoskrnl.exe
+ 0002:00000160       __imp___wcsnicmp           00016160     wdmsec:ntoskrnl.exe
+ 0002:00000164       __imp__RtlAddAccessAllowedAce@16 00016164     wdmsec:ntoskrnl.exe
+ 0002:00000168       __imp__RtlLengthSid@4      00016168     wdmsec:ntoskrnl.exe
+ 0002:0000016c       __imp__wcschr              0001616c     wdmsec:ntoskrnl.exe
+ 0002:00000170       __imp__RtlAbsoluteToSelfRelativeSD@12 00016170     wdmsec:ntoskrnl.exe
+ 0002:00000174       __imp__RtlSetDaclSecurityDescriptor@16 00016174     wdmsec:ntoskrnl.exe
+ 0002:00000178       __imp__RtlCreateSecurityDescriptor@8 00016178     wdmsec:ntoskrnl.exe
+ 0002:0000017c       __imp__ZwOpenKey@12        0001617c     wdmsec:ntoskrnl.exe
+ 0002:00000180       __imp__ZwCreateKey@28      00016180     wdmsec:ntoskrnl.exe
+ 0002:00000184       __imp__ZwQueryValueKey@24  00016184     wdmsec:ntoskrnl.exe
+ 0002:00000188       __imp__ZwSetValueKey@24    00016188     wdmsec:ntoskrnl.exe
+ 0002:0000018c       \177ntoskrnl_NULL_THUNK_DATA 0001618c     ntoskrnl:ntoskrnl.exe
+ 0002:000001b0       ??_C@_1EA@BAHCLPHE@?$AAI?$AAo?$AAV?$AAa?$AAl?$AAi?$AAd?$AAa?$AAt?$AAe?$AAD?$AAe?$AAv?$AAi?$AAc?$AAe?$AAI?$AAo?$AAC?$AAo?$AAn?$AAt?$AAr?$AAo?$AAl?$AAA?$AAc?$AAc?$AAe?$AAs?$AAs?$AA?$AA@ 000161b0     wdmsec:wlwrap.obj
+ 0002:000001f0       ??_C@_1CK@LEEDIGFP@?$AAI?$AAo?$AAC?$AAr?$AAe?$AAa?$AAt?$AAe?$AAD?$AAe?$AAv?$AAi?$AAc?$AAe?$AAS?$AAe?$AAc?$AAu?$AAr?$AAe?$AA?$AA@ 000161f0     wdmsec:wlwrap.obj
+ 0002:00000220       _SDDL_DEVOBJ_KERNEL_ONLY_buffer 00016220     wdmsec:iosddl.obj
+ 0002:00000228       _SDDL_DEVOBJ_KERNEL_ONLY   00016228     wdmsec:iosddl.obj
+ 0002:00000230       _SDDL_DEVOBJ_SYS_ALL_buffer 00016230     wdmsec:iosddl.obj
+ 0002:00000250       _SDDL_DEVOBJ_SYS_ALL       00016250     wdmsec:iosddl.obj
+ 0002:00000258       _SDDL_DEVOBJ_SYS_ALL_ADM_ALL_buffer 00016258     wdmsec:iosddl.obj
+ 0002:00000290       _SDDL_DEVOBJ_SYS_ALL_ADM_ALL 00016290     wdmsec:iosddl.obj
+ 0002:00000298       _SDDL_DEVOBJ_SYS_ALL_ADM_RX_buffer 00016298     wdmsec:iosddl.obj
+ 0002:000002d4       _SDDL_DEVOBJ_SYS_ALL_ADM_RX 000162d4     wdmsec:iosddl.obj
+ 0002:000002e0       _SDDL_DEVOBJ_SYS_ALL_ADM_RWX_WORLD_R_buffer 000162e0     wdmsec:iosddl.obj
+ 0002:00000338       _SDDL_DEVOBJ_SYS_ALL_ADM_RWX_WORLD_R 00016338     wdmsec:iosddl.obj
+ 0002:00000340       _SDDL_DEVOBJ_SYS_ALL_ADM_RWX_WORLD_R_RES_R_buffer 00016340     wdmsec:iosddl.obj
+ 0002:000003b0       _SDDL_DEVOBJ_SYS_ALL_ADM_RWX_WORLD_R_RES_R 000163b0     wdmsec:iosddl.obj
+ 0002:000003b8       _SDDL_DEVOBJ_SYS_ALL_ADM_RWX_WORLD_RW_RES_R_buffer 000163b8     wdmsec:iosddl.obj
+ 0002:0000042c       _SDDL_DEVOBJ_SYS_ALL_ADM_RWX_WORLD_RW_RES_R 0001642c     wdmsec:iosddl.obj
+ 0002:00000438       _SDDL_DEVOBJ_SYS_ALL_ADM_RWX_WORLD_RWX_RES_RWX_buffer 00016438     wdmsec:iosddl.obj
+ 0002:000004b8       _SDDL_DEVOBJ_SYS_ALL_ADM_RWX_WORLD_RWX_RES_RWX 000164b8     wdmsec:iosddl.obj
+ 0002:000004c0       ??_C@_1GG@FCALANDO@?$AA?$HL?$AA?$CF?$AA0?$AA8?$AAX?$AA?9?$AA?$CF?$AA0?$AA4?$AAX?$AA?9?$AA?$CF?$AA0?$AA4?$AAX?$AA?9?$AA?$CF?$AA0?$AA2?$AAX?$AA?$CF?$AA0?$AA2?$AAX?$AA?9?$AA?$CF?$AA0?$AA2?$AAX?$AA?$CF?$AA0?$AA2@ 000164c0     wdmsec:ppregstate.obj
+ 0002:00000528       ??_C@_1HC@DKINPPAJ@?$AA?2?$AAR?$AAe?$AAg?$AAi?$AAs?$AAt?$AAr?$AAy?$AA?2?$AAM?$AAa?$AAc?$AAh?$AAi?$AAn?$AAe?$AA?2?$AAS?$AAy?$AAs?$AAt?$AAe?$AAm?$AA?2?$AAC?$AAu?$AAr?$AAr?$AAe?$AAn?$AAt@ 00016528     wdmsec:ppregstate.obj
+ 0002:0000059c       ??_C@_1BC@FCJNIDNL@?$AAS?$AAe?$AAc?$AAu?$AAr?$AAi?$AAt?$AAy?$AA?$AA@ 0001659c     wdmsec:ppregstate.obj
+ 0002:000005b0       ??_C@_1BG@COALCEMK@?$AAP?$AAr?$AAo?$AAp?$AAe?$AAr?$AAt?$AAi?$AAe?$AAs?$AA?$AA@ 000165b0     wdmsec:ppregstate.obj
+ 0002:000005c8       ??_C@_1BE@DJHAJDEM@?$AAE?$AAx?$AAc?$AAl?$AAu?$AAs?$AAi?$AAv?$AAe?$AA?$AA@ 000165c8     wdmsec:ppregstate.obj
+ 0002:000005dc       ??_C@_1CM@DIJFBEC@?$AAD?$AAe?$AAv?$AAi?$AAc?$AAe?$AAC?$AAh?$AAa?$AAr?$AAa?$AAc?$AAt?$AAe?$AAr?$AAi?$AAs?$AAt?$AAi?$AAc?$AAs?$AA?$AA@ 000165dc     wdmsec:ppregstate.obj
+ 0002:00000608       ??_C@_1BG@KCOOGCNN@?$AAD?$AAe?$AAv?$AAi?$AAc?$AAe?$AAT?$AAy?$AAp?$AAe?$AA?$AA@ 00016608     wdmsec:ppregstate.obj
+ 0002:00000620       ??_C@_1BG@OPOOGLJC@?$AAN?$AAo?$AAU?$AAs?$AAe?$AAC?$AAl?$AAa?$AAs?$AAs?$AA?$AA@ 00016620     wdmsec:ppregstate.obj
+ 0002:00000638       ??_C@_1BO@DAOBINHA@?$AAN?$AAo?$AAD?$AAi?$AAs?$AAp?$AAl?$AAa?$AAy?$AAC?$AAl?$AAa?$AAs?$AAs?$AA?$AA@ 00016638     wdmsec:ppregstate.obj
+ 0002:00000658       ??_C@_1M@OAHBGIFG@?$AAC?$AAl?$AAa?$AAs?$AAs?$AA?$AA@ 00016658     wdmsec:ppregstate.obj
+ 0002:00000664       ??_C@_15FCNJEDMF@?$AAG?$AAX?$AA?$AA@ 00016664     wdmsec:sesddl.obj
+ 0002:0000066c       ??_C@_15KLKFDJD@?$AAG?$AAW?$AA?$AA@ 0001666c     wdmsec:sesddl.obj
+ 0002:00000674       ??_C@_15DNGEKDKB@?$AAG?$AAR?$AA?$AA@ 00016674     wdmsec:sesddl.obj
+ 0002:0000067c       ??_C@_15HPMIFLNA@?$AAG?$AAA?$AA?$AA@ 0001667c     wdmsec:sesddl.obj
+ 0002:00000684       ??_C@_15NAFBOLGP@?$AAS?$AAD?$AA?$AA@ 00016684     wdmsec:sesddl.obj
+ 0002:0000068c       ??_C@_15JMMBCOHI@?$AAW?$AAO?$AA?$AA@ 0001668c     wdmsec:sesddl.obj
+ 0002:00000694       ??_C@_15ELMAKJHJ@?$AAW?$AAD?$AA?$AA@ 00016694     wdmsec:sesddl.obj
+ 0002:0000069c       ??_C@_15IGNKAAHD@?$AAR?$AAC?$AA?$AA@ 0001669c     wdmsec:sesddl.obj
+ 0002:000006a4       ??_C@_13PNBDBPLL@?$AAA?$AA?$AA@ 000166a4     wdmsec:sesddl.obj
+ 0002:000006a8       __load_config_used         000166a8     ntoskrnl:loadcfg.obj
+ 0002:00000750       ___safe_se_handler_table   00016750     <linker-defined>
+ 0003:00000000       ___security_cookie         00017000     BufferOverflowK:gs_support.obj
+ 0003:00000004       ___security_cookie_complement 00017004     BufferOverflowK:gs_support.obj
+ 0003:00000008       __NLG_Destination          00017008     ntoskrnl:_nlgsupp.obj
+ 0003:00000018       _PiRegStateSysAllInherittedSecurityDescriptor 00017018     wdmsec:ppregstate.obj
+ 0003:000001a0       _g_Debug                   000171a0     dokan.obj
+ 0003:000001a4       _WdmlibInitialized         000171a4     wdmsec:wlwrap.obj
+ 0003:000001a8       _PfnIoCreateDeviceSecure   000171a8     wdmsec:wlwrap.obj
+ 0003:000001ac       _PfnIoValidateDeviceIoControlAccess 000171ac     wdmsec:wlwrap.obj
+ 0003:000001b0       _PiRegStateDiscriptor      000171b0     wdmsec:ppregstate.obj
+ 0003:000001c0       _DokanIrpEntryLookasideList 000171c0     <common>
+ 0004:00000006       _DokanUnload@4             00018006 f   dokan.obj
+ 0004:0000007c       _DokanDispatchShutdown@8   0001807c f   dokan.obj
+ 0004:000000a0       _DokanDispatchPnp@8        000180a0 f   dokan.obj
+ 0004:00000104       _DokanDispatchCreate@8     00018104 f   create.obj
+ 0004:00000446       _WdmlibInit@0              00018446 f   wdmsec:wlwrap.obj
+ 0004:000004a5       _WdmlibIoCreateDeviceSecure@36 000184a5 f   wdmsec:wlwrap.obj
+ 0004:000004c4       _IopDevObjAdjustNewDeviceParameters@16 000184c4 f   wdmsec:iodevobj.obj
+ 0004:00000506       _IopDevObjApplyPostCreationSettings@8 00018506 f   wdmsec:iodevobj.obj
+ 0004:00000585       _IoDevObjCreateDeviceSecure@36 00018585 f   wdmsec:iodevobj.obj
+ 0004:000006a7       _SeUtilSecurityInfoFromSecurityDescriptor@12 000186a7 f   wdmsec:seutil.obj
+ 0004:0000075b       _SeSetSecurityAccessMask@8 0001875b f   wdmsec:seutil.obj
+ 0004:00000793       _PpRegStateInitEmptyCreationSettings@4 00018793 f   wdmsec:ppregstate.obj
+ 0004:000007b4       _PiRegStateOpenClassKey@20 000187b4 f   wdmsec:ppregstate.obj
+ 0004:000008b4       _PpRegStateUpdateStackCreationSettings@8 000188b4 f   wdmsec:ppregstate.obj
+ 0004:00000987       _PpRegStateFreeStackCreationSettings@4 00018987 f   wdmsec:ppregstate.obj
+ 0004:000009a8       _PpRegStateLoadSecurityDescriptor@8 000189a8 f   wdmsec:ppregstate.obj
+ 0004:000009c5       _PiRegStateReadStackCreationSettingsFromKey@8 000189c5 f   wdmsec:ppregstate.obj
+ 0004:00000b07       _PpRegStateReadCreateClassCreationSettings@12 00018b07 f   wdmsec:ppregstate.obj
+ 0004:00000bf4       _SepSddlGetSidForString@12 00018bf4 f   wdmsec:sesddl.obj
+ 0004:00000c8d       _SepSddlLookupAccessMaskInTable@12 00018c8d f   wdmsec:sesddl.obj
+ 0004:00000cfa       _SepSddlAddAceToAcl@28     00018cfa f   wdmsec:sesddl.obj
+ 0004:00000d9d       _SepSddlParseWideStringUlong@12 00018d9d f   wdmsec:sesddl.obj
+ 0004:00000e6d       _SepSddlGetAclForString@12 00018e6d f   wdmsec:sesddl.obj
+ 0004:0000116c       _SepSddlDaclFromSDDLString@16 0001916c f   wdmsec:sesddl.obj
+ 0004:00001213       _SepSddlSecurityDescriptorFromSDDLString@12 00019213 f   wdmsec:sesddl.obj
+ 0004:000012e6       _SeSddlSecurityDescriptorFromSDDL@12 000192e6 f   wdmsec:sesddl.obj
+ 0004:00001377       _CmRegUtilOpenExistingUcKey@16 00019377 f   wdmsec:cmregutil.obj
+ 0004:000013cc       _CmRegUtilCreateUcKey@28   000193cc f   wdmsec:cmregutil.obj
+ 0004:0000143d       _CmRegUtilUcValueGetDword@16 0001943d f   wdmsec:cmregutil.obj
+ 0004:0000149c       _CmRegUtilUcValueGetFullBuffer@20 0001949c f   wdmsec:cmregutil.obj
+ 0004:00001596       _CmRegUtilUcValueSetFullBuffer@20 00019596 f   wdmsec:cmregutil.obj
+ 0004:000015bb       _CmRegUtilOpenExistingWstrKey@16 000195bb f   wdmsec:cmregutil.obj
+ 0004:000015ed       _CmRegUtilCreateWstrKey@28 000195ed f   wdmsec:cmregutil.obj
+ 0004:00001628       _CmRegUtilWstrValueGetDword@16 00019628 f   wdmsec:cmregutil.obj
+ 0004:0000165a       _CmRegUtilWstrValueGetFullBuffer@20 0001965a f   wdmsec:cmregutil.obj
+ 0004:0000168f       _CmRegUtilWstrValueSetFullBuffer@20 0001968f f   wdmsec:cmregutil.obj
+ 0004:000016c4       _CmpRegUtilAllocateUnicodeString@8 000196c4 f   wdmsec:cmregutil.obj
+ 0004:0000170a       _CmRegUtilUcValueSetUcString@12 0001970a f   wdmsec:cmregutil.obj
+ 0004:000017b8       _CmRegUtilWstrValueSetUcString@12 000197b8 f   wdmsec:cmregutil.obj
+ 0004:000017e7       _CmRegUtilWstrValueSetWstrString@12 000197e7 f   wdmsec:cmregutil.obj
+ 0004:00001824       ??_C@_1DC@JJHBEEBC@?$AA?2?$AAD?$AAo?$AAs?$AAD?$AAe?$AAv?$AAi?$AAc?$AAe?$AAs?$AA?2?$AAG?$AAl?$AAo?$AAb?$AAa?$AAl?$AA?2?$AAD?$AAo?$AAk?$AAa?$AAn?$AA?$AA@NNGAKEGL@ 00019824     dokan.obj
+ 0005:00000006       _DriverEntry@8             0001a006 f   dokan.obj
+ 0005:00000181       ___security_init_cookie    0001a181 f   BufferOverflowK:gs_support.obj
+ 0005:000001ba       _GsDriverEntry@8           0001a1ba f   BufferOverflowK:gs_support.obj
+ 0005:000001cc       __IMPORT_DESCRIPTOR_ntoskrnl 0001a1cc     ntoskrnl:ntoskrnl.exe
+ 0005:000001e0       __IMPORT_DESCRIPTOR_HAL    0001a1e0     hal:HAL.dll
+ 0005:000001f4       __NULL_IMPORT_DESCRIPTOR   0001a1f4     ntoskrnl:ntoskrnl.exe
+
+ entry point at        0005:000001ba
+
+ Static symbols
+
+ 0001:0000022e       _RtlStringLengthWorkerW@12 0001122e f   init.obj
+ 0001:00000266       _RtlStringValidateDestAndLengthW@16 00011266 f   init.obj
+ 0001:0000029a       _RtlStringCopyWorkerW@20   0001129a f   init.obj
+ 0001:00004b70       __unwind_handler4          00015b70 f   ntoskrnl:exsup4.obj

@@ -1,0 +1,22 @@
+#include <windows.h>
+#include <ntverp.h>
+
+#define VER_FILETYPE    VFT_DRV
+#define VER_FILESUBTYPE VFT2_DRV_SYSTEM
+#define VER_FILEDESCRIPTION_STR     "DokanX Filesystem Driver"
+#define VER_INTERNALNAME_STR        "dokanx.sys"
+#define VER_ORIGINALFILENAME_STR    "dokanx.sys"
+
+#define VER_FILEVERSION_STR 		"1.0.0.0"
+
+//#define VER_COMPANYNAME_STR "DokanX" 
+//#define VER_FILEDESCRIPTION_STR "DokanX"
+//#define VER_LEGALCOPYRIGHT_STR ""
+//#define VER_PRODUCTNAME_STR "dokanx"
+//#define VER_PRODUCTVERSION_STR VER_FILEVERSION_STR
+
+#ifdef VER_PRODUCTVERSION
+#undef VER_PRODUCTVERSION
+#endif
+#define VER_PRODUCTVERSION          1, 0, 0,0
+#include "common.ver"
