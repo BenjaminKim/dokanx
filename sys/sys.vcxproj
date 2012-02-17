@@ -56,12 +56,12 @@
     <_ProjectFileVersion>10.0.40219.1</_ProjectFileVersion>
     <OutDir Condition="'$(Configuration)|$(Platform)'=='debug_win7|Win32'">$(Configuration)\</OutDir>
     <IntDir Condition="'$(Configuration)|$(Platform)'=='debug_win7|Win32'">$(Configuration)\</IntDir>
-    <NMakeBuildCommandLine Condition="'$(Configuration)|$(Platform)'=='debug_win7|Win32'">C:\Windows\System32\cmd.exe /k "$(DOKANX_TRUNK)\src\sys\ddkbuild.bat" -WIN7 -prefast checked $(ProjectDir)
+    <NMakeBuildCommandLine Condition="'$(Configuration)|$(Platform)'=='debug_win7|Win32'">C:\Windows\System32\cmd.exe /k "$(DOKANX_TRUNK)\sys\ddkbuild.bat" -WIN7 -prefast checked $(ProjectDir)
 mkdir "$(DOKANX_TRUNK)\bin\x86\debug"
 copy "$(ProjectDir)objchk_win7_x86\i386\dokanx.pdb" "$(DOKANX_TRUNK)\bin\x86\debug\dokanx_win7.pdb"
 copy "$(ProjectDir)objchk_win7_x86\i386\dokanx.sys" "$(DOKANX_TRUNK)\bin\x86\debug\dokanx_win7.sys"
 copy "$(ProjectDir)objchk_win7_x86\i386\dokanx.map" "$(DOKANX_TRUNK)\bin\x86\debug\dokanx_win7.map"</NMakeBuildCommandLine>
-    <NMakeReBuildCommandLine Condition="'$(Configuration)|$(Platform)'=='debug_win7|Win32'">C:\Windows\System32\cmd.exe /k "$(DOKANX_TRUNK)\src\sys\ddkbuild.bat" -WIN7 -prefast checked $(ProjectDir) -cZ
+    <NMakeReBuildCommandLine Condition="'$(Configuration)|$(Platform)'=='debug_win7|Win32'">C:\Windows\System32\cmd.exe /k "$(DOKANX_TRUNK)\sys\ddkbuild.bat" -WIN7 -prefast checked $(ProjectDir) -cZ
 mkdir "$(DOKANX_TRUNK)\bin\x86\debug"
 copy "$(ProjectDir)objchk_win7_x86\i386\dokanx.pdb" "$(DOKANX_TRUNK)\bin\x86\debug\dokanx_win7.pdb"
 copy "$(ProjectDir)objchk_win7_x86\i386\dokanx.sys" "$(DOKANX_TRUNK)\bin\x86\debug\dokanx_win7.sys"
