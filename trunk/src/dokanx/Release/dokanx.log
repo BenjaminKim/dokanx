@@ -1,54 +1,9 @@
-﻿Build started 2012-02-17 오후 7:58:34.
-     1>Project "D:\code\oss\dokanx\trunk\src\dokanx\dokanx.vcxproj" on node 3 (rebuild target(s)).
+﻿Build started 2012-02-17 오후 8:19:07.
+     1>Project "C:\Users\benjamin\dokanx\trunk\src\dokanx\dokanx.vcxproj" on node 2 (clean target(s)).
      1>_PrepareForClean:
          Deleting file "Release\dokanx.lastbuildstate".
-       InitializeBuildStatus:
-         Creating "Release\dokanx.unsuccessfulbuild" because "AlwaysCreate" was specified.
-       ClCompile:
-         C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\CL.exe /c /I../sys /Zi /nologo /W4 /WX- /O2 /Oi /Oy- /GL /D _UNICODE /D UNICODE /Gm- /EHsc /MD /GS /Gy /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Release\\" /Fd"Release\vc100.pdb" /Gd /TP /analyze- /errorReport:prompt access.cpp cleanup.cpp close.cpp create.cpp directory.cpp dokan.cpp fileinfo.cpp flush.cpp lock.cpp mount.cpp read.cpp security.cpp setfile.cpp status.cpp timeout.cpp version.cpp volume.cpp write.cpp
-         access.cpp
-         cleanup.cpp
-         close.cpp
-         create.cpp
-         directory.cpp
-         dokan.cpp
-         fileinfo.cpp
-         flush.cpp
-         lock.cpp
-         mount.cpp
-         read.cpp
-         security.cpp
-         setfile.cpp
-         status.cpp
-         timeout.cpp
-         version.cpp
-         volume.cpp
-         write.cpp
-       Lib:
-         C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\Lib.exe /OUT:"D:\code\oss\dokanx\trunk\src\Release\dokanx.lib" /NOLOGO /LTCG Release\access.obj
-         Release\cleanup.obj
-         Release\close.obj
-         Release\create.obj
-         Release\directory.obj
-         Release\dokan.obj
-         Release\fileinfo.obj
-         Release\flush.obj
-         Release\lock.obj
-         Release\mount.obj
-         Release\read.obj
-         Release\security.obj
-         Release\setfile.obj
-         Release\status.obj
-         Release\timeout.obj
-         Release\version.obj
-         Release\volume.obj
-         Release\write.obj
-         dokanx.vcxproj -> D:\code\oss\dokanx\trunk\src\Release\dokanx.lib
-       FinalizeBuildStatus:
-         Deleting file "Release\dokanx.unsuccessfulbuild".
-         Touching "Release\dokanx.lastbuildstate".
-     1>Done Building Project "D:\code\oss\dokanx\trunk\src\dokanx\dokanx.vcxproj" (rebuild target(s)).
+     1>Done Building Project "C:\Users\benjamin\dokanx\trunk\src\dokanx\dokanx.vcxproj" (clean target(s)).
 
 Build succeeded.
 
-Time Elapsed 00:00:05.24
+Time Elapsed 00:00:00.02
