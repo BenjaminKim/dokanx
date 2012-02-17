@@ -1,8 +1,0 @@
-﻿Build started 2012-02-17 오후 8:19:20.
-     1>Project "C:\Users\benjamin\dokanx\trunk\src\sys\sys.vcxproj" on node 2 (clean target(s)).
-     1>C:\Program Files (x86)\MSBuild\Microsoft.Cpp\v4.0\Microsoft.MakeFile.Targets(32,5): warning MSB8005: The property 'NMakeCleanCommandLine' doesn't exist.  Skipping...
-     1>Done Building Project "C:\Users\benjamin\dokanx\trunk\src\sys\sys.vcxproj" (clean target(s)).
-
-Build succeeded.
-
-Time Elapsed 00:00:00.00

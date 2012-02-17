@@ -1,5 +1,0 @@
-1>warnings in directory d:\clue\ndrive\ndrive_client\trunk\src\dokan\sys
-1>d:\clue\ndrive\ndrive_client\trunk\src\dokan\sys\dokan.rc(17) : warning RC4005: 'VER_COMPANYNAME_STR' : redefinition
-1>d:\clue\ndrive\ndrive_client\trunk\src\dokan\sys\dokan.rc(18) : warning RC4005: 'VER_FILEDESCRIPTION_STR' : redefinition
-1>d:\clue\ndrive\ndrive_client\trunk\src\dokan\sys\dokan.rc(20) : warning RC4005: 'VER_PRODUCTNAME_STR' : redefinition
-1>d:\clue\ndrive\ndrive_client\trunk\src\dokan\sys\dokan.rc(21) : warning RC4005: 'VER_PRODUCTVERSION_STR' : redefinition
