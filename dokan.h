@@ -91,6 +91,9 @@ typedef struct _DOKAN_OPERATIONS {
 	// Usually you should return GetLastError() * -1.
 
 
+	// TODO
+	// std::function¿∏∑Œ πŸ≤‹ ∞Õ
+
 	// CreateFile
 	//   If file is a directory, CreateFile (not OpenDirectory) may be called.
 	//   In this case, CreateFile should return 0 when that directory can be opened.

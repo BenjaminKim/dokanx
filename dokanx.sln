@@ -10,6 +10,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		README.htm = README.htm
 	EndProjectSection
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "mirrorfs", "mirrorfs\mirrorfs.vcxproj", "{DADCBCAD-4429-422E-9FA9-D8E538D0EF94}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		debug_win7|Win32 = debug_win7|Win32
@@ -27,7 +29,6 @@ Global
 		{6A6C3D11-9740-4A70-AB15-96CA3B47DE10}.debug_win7|x64.ActiveCfg = debug_win7|x64
 		{6A6C3D11-9740-4A70-AB15-96CA3B47DE10}.debug_win7|x64.Build.0 = debug_win7|x64
 		{6A6C3D11-9740-4A70-AB15-96CA3B47DE10}.Debug|Win32.ActiveCfg = debug_win7|Win32
-		{6A6C3D11-9740-4A70-AB15-96CA3B47DE10}.Debug|Win32.Build.0 = debug_win7|Win32
 		{6A6C3D11-9740-4A70-AB15-96CA3B47DE10}.Debug|x64.ActiveCfg = debug_win7|x64
 		{6A6C3D11-9740-4A70-AB15-96CA3B47DE10}.Debug|x64.Build.0 = debug_win7|x64
 		{6A6C3D11-9740-4A70-AB15-96CA3B47DE10}.release_win7|Win32.ActiveCfg = release_win7|Win32
@@ -50,6 +51,18 @@ Global
 		{F25BA22F-2AB8-4859-9B89-8FE1E774B472}.Release|Win32.ActiveCfg = Release|Win32
 		{F25BA22F-2AB8-4859-9B89-8FE1E774B472}.Release|Win32.Build.0 = Release|Win32
 		{F25BA22F-2AB8-4859-9B89-8FE1E774B472}.Release|x64.ActiveCfg = Release|Win32
+		{DADCBCAD-4429-422E-9FA9-D8E538D0EF94}.debug_win7|Win32.ActiveCfg = Debug|Win32
+		{DADCBCAD-4429-422E-9FA9-D8E538D0EF94}.debug_win7|Win32.Build.0 = Debug|Win32
+		{DADCBCAD-4429-422E-9FA9-D8E538D0EF94}.debug_win7|x64.ActiveCfg = Debug|Win32
+		{DADCBCAD-4429-422E-9FA9-D8E538D0EF94}.Debug|Win32.ActiveCfg = Debug|Win32
+		{DADCBCAD-4429-422E-9FA9-D8E538D0EF94}.Debug|Win32.Build.0 = Debug|Win32
+		{DADCBCAD-4429-422E-9FA9-D8E538D0EF94}.Debug|x64.ActiveCfg = Debug|Win32
+		{DADCBCAD-4429-422E-9FA9-D8E538D0EF94}.release_win7|Win32.ActiveCfg = Release|Win32
+		{DADCBCAD-4429-422E-9FA9-D8E538D0EF94}.release_win7|Win32.Build.0 = Release|Win32
+		{DADCBCAD-4429-422E-9FA9-D8E538D0EF94}.release_win7|x64.ActiveCfg = Release|Win32
+		{DADCBCAD-4429-422E-9FA9-D8E538D0EF94}.Release|Win32.ActiveCfg = Release|Win32
+		{DADCBCAD-4429-422E-9FA9-D8E538D0EF94}.Release|Win32.Build.0 = Release|Win32
+		{DADCBCAD-4429-422E-9FA9-D8E538D0EF94}.Release|x64.ActiveCfg = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
