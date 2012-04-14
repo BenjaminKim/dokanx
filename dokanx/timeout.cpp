@@ -19,7 +19,7 @@ with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
 #include <process.h>
-#include "dokani.h"
+#include "../dokani.h"
 
 BOOL DOKANAPI
 DokanResetTimeout(ULONG Timeout, PDOKAN_FILE_INFO FileInfo)

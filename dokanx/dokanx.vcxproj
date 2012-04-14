@@ -90,10 +90,11 @@
     <ClCompile Include="write.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="dokanc.h" />
+    <ClInclude Include="..\dokan.h" />
+    <ClInclude Include="..\dokanc.h" />
+    <ClInclude Include="..\dokani.h" />
+    <ClInclude Include="..\DokanStatus.h" />
     <ClInclude Include="list.h" />
-    <ClInclude Include="dokan.h" />
-    <ClInclude Include="dokani.h" />
     <ClInclude Include="fileinfo.h" />
   </ItemGroup>
   <ItemGroup>

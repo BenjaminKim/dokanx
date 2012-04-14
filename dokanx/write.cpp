@@ -20,7 +20,7 @@ with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-#include "dokani.h"
+#include "../dokani.h"
 #include "fileinfo.h"
 #include <winioctl.h>
 

@@ -17,8 +17,8 @@ FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
 You should have received a copy of the GNU Lesser General Public License along
 with this program. If not, see <http://www.gnu.org/licenses/>.
 */
-
-#include "dokan.h"
+#include "precomp.h"
+#pragma hdrstop
 
 NTSTATUS
 DokanDispatchQuerySecurity(
@@ -75,6 +75,10 @@ DokanDispatchQuerySecurity(
 			__leave;
 		}
 		fcb = ccb->Fcb;
+		if (fcb == NULL) {
+			status = STATUS_INSUFFICIENT_RESOURCES;
+			__leave;
+		}
 
 		bufferLength = irpSp->Parameters.QuerySecurity.Length;
 		securityInfo = &irpSp->Parameters.QuerySecurity.SecurityInformation;
@@ -263,6 +267,11 @@ DokanDispatchSetSecurity(
 			__leave;
 		}
 		fcb = ccb->Fcb;
+
+		if (fcb == NULL) {
+			status = STATUS_INSUFFICIENT_RESOURCES;
+			__leave;
+		}
 
 		securityInfo = &irpSp->Parameters.SetSecurity.SecurityInformation;
 

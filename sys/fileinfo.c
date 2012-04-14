@@ -17,9 +17,8 @@ FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
 You should have received a copy of the GNU Lesser General Public License along
 with this program. If not, see <http://www.gnu.org/licenses/>.
 */
-
-
-#include "dokan.h"
+#include "precomp.h"
+#pragma hdrstop
 
 NTSTATUS
 DokanDispatchQueryInformation(
@@ -41,7 +40,7 @@ DokanDispatchQueryInformation(
 	PEVENT_CONTEXT			eventContext;
 
 
-	PAGED_CODE();
+	//PAGED_CODE();
 	
 	__try {
 		FsRtlEnterFileSystem();
@@ -55,7 +54,7 @@ DokanDispatchQueryInformation(
 		DDbgPrint("  ProcessId %lu\n", IoGetRequestorProcessId(Irp));
 
 		if (fileObject == NULL) {
-			DDbgPrint("  fileObject == NULL\n");
+			DDbgPrint("  Failed. fileObject == NULL\n");
 			status = STATUS_INVALID_PARAMETER;
 			__leave;
 		}
@@ -136,12 +135,15 @@ DokanDispatchQueryInformation(
 			break;
 		case FilePositionInformation:
 			{
+				//
+				// http://msdn.microsoft.com/en-us/library/ff469718(v=prot.10).aspx
+				//
 				PFILE_POSITION_INFORMATION posInfo;
 			
 				DDbgPrint("  FilePositionInformation\n");
 
 				if (irpSp->Parameters.QueryFile.Length < sizeof(FILE_POSITION_INFORMATION)) {
-					status = STATUS_INSUFFICIENT_RESOURCES;
+					status = STATUS_INFO_LENGTH_MISMATCH;
 			
 				} else {
 					posInfo = (PFILE_POSITION_INFORMATION)Irp->AssociatedIrp.SystemBuffer;
@@ -149,11 +151,18 @@ DokanDispatchQueryInformation(
 
 					RtlZeroMemory(posInfo, sizeof(FILE_POSITION_INFORMATION));
 				
-					// set the current file offset
-					posInfo->CurrentByteOffset = fileObject->CurrentByteOffset;
-				
-					info = sizeof(FILE_POSITION_INFORMATION);
-					status = STATUS_SUCCESS;
+					if (fileObject->CurrentByteOffset.QuadPart < 0)
+					{
+						status = STATUS_INVALID_PARAMETER;
+					}
+					else
+					{
+						// set the current file offset
+						posInfo->CurrentByteOffset = fileObject->CurrentByteOffset;
+
+						info = sizeof(FILE_POSITION_INFORMATION);
+						status = STATUS_SUCCESS;
+					}
 				}
 				__leave;
 			}
@@ -312,7 +321,7 @@ DokanDispatchSetInformation(
 	PFILE_OBJECT		targetFileObject;
 	PEVENT_CONTEXT		eventContext;
 
-	PAGED_CODE();
+	//PAGED_CODE();
 
 	__try {
 		FsRtlEnterFileSystem();
@@ -423,7 +432,7 @@ DokanDispatchSetInformation(
 		// the size of FileInformation
 		eventContext->SetFile.BufferLength = irpSp->Parameters.SetFile.Length;
 
-		// the offset from begining of structure to fill FileInfo
+		// the offset from beginning of structure to fill FileInfo
 		eventContext->SetFile.BufferOffset = FIELD_OFFSET(EVENT_CONTEXT, SetFile.FileName[0]) +
 												fcb->FileName.Length + sizeof(WCHAR); // the last null char
 	
@@ -434,7 +443,7 @@ DokanDispatchSetInformation(
 
 		if (irpSp->Parameters.SetFile.FileInformationClass == FileRenameInformation ||
 			irpSp->Parameters.SetFile.FileInformationClass == FileLinkInformation) {
-			// We need to hanle FileRenameInformation separetly because the structure of FILE_RENAME_INFORMATION
+			// We need to handle FileRenameInformation seperatly because the structure of FILE_RENAME_INFORMATION
 			// has HANDLE type field, which size is different in 32 bit and 64 bit environment.
 			// This cases problems when driver is 64 bit and user mode library is 32 bit.
 			PFILE_RENAME_INFORMATION renameInfo = (PFILE_RENAME_INFORMATION)Irp->AssociatedIrp.SystemBuffer;			
@@ -442,7 +451,7 @@ DokanDispatchSetInformation(
 				(PDOKAN_RENAME_INFORMATION)((PCHAR)eventContext + eventContext->SetFile.BufferOffset);
 
 			// This code assumes FILE_RENAME_INFORMATION and FILE_LINK_INFORMATION have
-			// the same typse and fields.
+			// the same types and fields.
 			ASSERT(sizeof(FILE_RENAME_INFORMATION) == sizeof(FILE_LINK_INFORMATION));
 
 			renameContext->ReplaceIfExists = renameInfo->ReplaceIfExists;
@@ -516,6 +525,7 @@ DokanCompleteSetInformation(
 		ccb = IrpEntry->FileObject->FsContext2;
 		ASSERT(ccb != NULL);
 
+		KeEnterCriticalRegion();
 		ExAcquireResourceExclusiveLite(&ccb->Resource, TRUE);
 
 		fcb = ccb->Fcb;
@@ -574,6 +584,7 @@ DokanCompleteSetInformation(
 					status = STATUS_INSUFFICIENT_RESOURCES;
 					ExReleaseResourceLite(&fcb->Resource);
 					ExReleaseResourceLite(&ccb->Resource);
+					KeLeaveCriticalRegion();
 					__leave;
 				}
 
@@ -592,6 +603,7 @@ DokanCompleteSetInformation(
 		}
 
 		ExReleaseResourceLite(&ccb->Resource);
+		KeLeaveCriticalRegion();
 
 		if (NT_SUCCESS(status)) {
 			switch (irpSp->Parameters.SetFile.FileInformationClass) {
@@ -647,7 +659,6 @@ DokanCompleteSetInformation(
 		}
 
 	} __finally {
-
 		irp->IoStatus.Status = status;
 		irp->IoStatus.Information = info;
 		IoCompleteRequest(irp, IO_NO_INCREMENT);

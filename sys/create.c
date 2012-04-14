@@ -17,9 +17,8 @@ FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
 You should have received a copy of the GNU Lesser General Public License along
 with this program. If not, see <http://www.gnu.org/licenses/>.
 */
-
-
-#include "dokan.h"
+#include "precomp.h"
+#pragma hdrstop
 
 #ifdef ALLOC_PRAGMA
 #pragma alloc_text (PAGE, DokanDispatchCreate)
@@ -608,6 +607,7 @@ DokanCompleteCreate(
 		break;
 	}
 
+	KeEnterCriticalRegion();
 	ExAcquireResourceExclusiveLite(&fcb->Resource, TRUE);
 	if (NT_SUCCESS(status) &&
 		(irpSp->Parameters.Create.Options & FILE_DIRECTORY_FILE ||
@@ -620,12 +620,15 @@ DokanCompleteCreate(
 		fcb->Flags |= DOKAN_FILE_DIRECTORY;
 	}
 	ExReleaseResourceLite(&fcb->Resource);
+	KeLeaveCriticalRegion();
 
+	KeEnterCriticalRegion();
 	ExAcquireResourceExclusiveLite(&ccb->Resource, TRUE);
 	if (NT_SUCCESS(status)) {
 		ccb->Flags |= DOKAN_FILE_OPENED;
 	}
 	ExReleaseResourceLite(&ccb->Resource);
+	KeLeaveCriticalRegion();
 
 	if (NT_SUCCESS(status)) {
 		if (info == FILE_CREATED) {
@@ -636,7 +639,7 @@ DokanCompleteCreate(
 			}
 		}
 	} else {
-		DDbgPrint("   IRP_MJ_CREATE failed. Free CCB:%X\n", ccb);
+		//DDbgPrint("   IRP_MJ_CREATE failed. Free CCB:%X\n", ccb);
 		DokanFreeCCB(ccb);
 		DokanFreeFCB(fcb);
 	}

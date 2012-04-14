@@ -17,7 +17,8 @@ FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
 You should have received a copy of the GNU Lesser General Public License along
 with this program. If not, see <http://www.gnu.org/licenses/>.
 */
-
+#include "precomp.h"
+#pragma hdrstop
 
 #include "dokan.h"
 
@@ -199,6 +200,12 @@ Return Value:
 	DriverObject->MajorFunction[IRP_MJ_SET_SECURITY]		= DokanDispatchSetSecurity;
 
 	fastIoDispatch = ExAllocatePool(sizeof(FAST_IO_DISPATCH));
+	if (!fastIoDispatch)
+	{
+		IoDeleteDevice(dokanGlobal->DeviceObject);
+		DDbgPrint("  ExAllocatePool failed");
+		return STATUS_INSUFFICIENT_RESOURCES;
+	}
 	// TODO: check fastIoDispatch
 
 	RtlZeroMemory(fastIoDispatch, sizeof(FAST_IO_DISPATCH));

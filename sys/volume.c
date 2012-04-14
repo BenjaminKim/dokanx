@@ -17,7 +17,8 @@ FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
 You should have received a copy of the GNU Lesser General Public License along
 with this program. If not, see <http://www.gnu.org/licenses/>.
 */
-
+#include "precomp.h"
+#pragma hdrstop
 
 #include "dokan.h"
 
@@ -37,7 +38,7 @@ DokanDispatchQueryVolumeInformation(
 	PDokanCCB			ccb;
 	ULONG               info = 0;
 
-	PAGED_CODE();
+	//PAGED_CODE();
 
 	__try {
 
@@ -93,7 +94,7 @@ DokanDispatchQueryVolumeInformation(
 					info = sizeof(FILE_FS_DEVICE_INFORMATION);
 					__leave;
 				}
-				device->DeviceType = dcb->DeviceType;
+				device->DeviceType = FILE_DEVICE_DISK;//dcb->DeviceType;
 				device->Characteristics = dcb->DeviceCharacteristics;
 				status = STATUS_SUCCESS;
 				info = sizeof(FILE_FS_DEVICE_INFORMATION);
@@ -256,7 +257,7 @@ DokanDispatchSetVolumeInformation(
 {
 	NTSTATUS status = STATUS_INVALID_PARAMETER;
 
-	PAGED_CODE();
+	//PAGED_CODE();
 
 	//FsRtlEnterFileSystem();
 

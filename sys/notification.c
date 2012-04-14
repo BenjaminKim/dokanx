@@ -55,7 +55,8 @@ IOCTL_EVENT_INFO:
     DokanCompleteRead
 
 */
-
+#include "precomp.h"
+#pragma hdrstop
 
 #include "dokan.h"
 
@@ -328,7 +329,7 @@ NotificationLoop(
 			ExFreePool(driverEventContext);
 		}
 		InsertTailList(&completeList, &irpEntry->ListEntry);
-	}
+	} // end of while
 
 	KeClearEvent(&NotifyEvent->NotEmpty);
 	KeClearEvent(&PendingIrp->NotEmpty);

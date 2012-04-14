@@ -17,9 +17,8 @@ FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
 You should have received a copy of the GNU Lesser General Public License along
 with this program. If not, see <http://www.gnu.org/licenses/>.
 */
-
-
-#include "dokan.h"
+#include "precomp.h"
+#pragma hdrstop
 
 NTSTATUS
 DokanQueryDirectory(
@@ -45,7 +44,7 @@ DokanDispatchDirectoryControl(
 	PDokanCCB			ccb;
 	PDokanVCB			vcb;
 
-	PAGED_CODE();
+	//PAGED_CODE();
 
 	__try {
 		FsRtlEnterFileSystem();
@@ -56,7 +55,7 @@ DokanDispatchDirectoryControl(
 		fileObject	= irpSp->FileObject;
 
 		if (fileObject == NULL) {
-			DDbgPrint("   fileObject is NULL\n");
+			DDbgPrint(" failed  fileObject is NULL\n");
 			status = STATUS_INVALID_PARAMETER;
 			__leave;
 		}

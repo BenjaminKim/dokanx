@@ -17,9 +17,8 @@ FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
 You should have received a copy of the GNU Lesser General Public License along
 with this program. If not, see <http://www.gnu.org/licenses/>.
 */
-
-
-#include "dokan.h"
+#include "precomp.h"
+#pragma hdrstop
 
 
 NTSTATUS
@@ -54,7 +53,7 @@ Return Value:
 	PEVENT_CONTEXT		eventContext;
 	ULONG				eventLength;
 
-	PAGED_CODE();
+	//PAGED_CODE();
 
 	__try {
 
