@@ -25,7 +25,7 @@ with this program. If not, see <http://www.gnu.org/licenses/>.
 #include "fileinfo.h"
 
 
-ULONG
+NTSTATUS
 DokanFillFileBasicInfo(
     PFILE_BASIC_INFORMATION		BasicInfo,
     PBY_HANDLE_FILE_INFORMATION FileInfo,
@@ -51,7 +51,7 @@ DokanFillFileBasicInfo(
 }
 
 
-ULONG
+NTSTATUS
 DokanFillFileStandardInfo(
     PFILE_STANDARD_INFORMATION	StandardInfo,
     PBY_HANDLE_FILE_INFORMATION	FileInfo,
@@ -79,7 +79,7 @@ DokanFillFileStandardInfo(
 }
 
 
-ULONG
+NTSTATUS
 DokanFillFilePositionInfo(
     PFILE_POSITION_INFORMATION	PosInfo,
     PBY_HANDLE_FILE_INFORMATION	FileInfo,
@@ -99,7 +99,7 @@ DokanFillFilePositionInfo(
 }
 
 
-ULONG
+NTSTATUS
 DokanFillFileAllInfo(
     PFILE_ALL_INFORMATION		AllInfo,
     PBY_HANDLE_FILE_INFORMATION	FileInfo,
@@ -151,7 +151,7 @@ DokanFillFileAllInfo(
 }
 
 
-ULONG
+NTSTATUS
 DokanFillFileNameInfo(
     PFILE_NAME_INFORMATION		NameInfo,
     PBY_HANDLE_FILE_INFORMATION	FileInfo,
@@ -175,7 +175,7 @@ DokanFillFileNameInfo(
 }
 
 
-ULONG
+NTSTATUS
 DokanFillFileAttributeTagInfo(
     PFILE_ATTRIBUTE_TAG_INFORMATION		AttrTagInfo,
     PBY_HANDLE_FILE_INFORMATION			FileInfo,
@@ -194,7 +194,7 @@ DokanFillFileAttributeTagInfo(
 }
 
 
-ULONG
+NTSTATUS
 DokanFillNetworkOpenInfo(
     PFILE_NETWORK_OPEN_INFORMATION	NetInfo,
     PBY_HANDLE_FILE_INFORMATION		FileInfo,
@@ -224,7 +224,7 @@ DokanFillNetworkOpenInfo(
 }
 
 
-ULONG
+NTSTATUS
 DokanFillInternalInfo(
     PFILE_INTERNAL_INFORMATION	InternalInfo,
     PBY_HANDLE_FILE_INFORMATION	FileInfo,
@@ -253,7 +253,7 @@ DispatchQueryInformation(
     DOKAN_FILE_INFO				fileInfo;
     BY_HANDLE_FILE_INFORMATION	byHandleFileInfo;
     ULONG				remainingLength;
-    ULONG				status = STATUS_INVALID_PARAMETER;
+    NTSTATUS			status = STATUS_INVALID_PARAMETER;
     int					result;
     PDOKAN_OPEN_INFO	openInfo;
     ULONG				sizeOfEventInfo;

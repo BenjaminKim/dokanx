@@ -21,10 +21,8 @@ with this program. If not, see <http://www.gnu.org/licenses/>.
 
 #include <windows.h>
 #include "../dokani.h"
-#include "fileinfo.h"
 
-
-ULONG GetNTStatus(DWORD ErrorCode)
+NTSTATUS GetNTStatus(DWORD ErrorCode)
 {
 	switch (ErrorCode) {
 	case ERROR_DIR_NOT_EMPTY:

@@ -275,7 +275,7 @@ UINT WINAPI
 	PVOID pDokanInstance);
 
 
-ULONG
+NTSTATUS
 GetNTStatus(DWORD ErrorCode);
 
 PDOKAN_OPEN_INFO

@@ -64,7 +64,7 @@ int DOKAN_CALLBACK DokanGetVolumeInformation(
 
 
 
-ULONG
+NTSTATUS
 DokanFsVolumeInformation(
 	PEVENT_INFORMATION	EventInfo,
 	PEVENT_CONTEXT		EventContext,
@@ -136,7 +136,7 @@ DokanFsVolumeInformation(
 }
 
 
-ULONG
+NTSTATUS
 DokanFsSizeInformation(
 	PEVENT_INFORMATION	EventInfo,
 	PEVENT_CONTEXT		EventContext,
@@ -182,7 +182,7 @@ DokanFsSizeInformation(
 }
 
 
-ULONG
+NTSTATUS
 DokanFsAttributeInformation(
 	PEVENT_INFORMATION	EventInfo,
 	PEVENT_CONTEXT		EventContext,
@@ -252,7 +252,7 @@ DokanFsAttributeInformation(
 }
 
 
-ULONG
+NTSTATUS
 DokanFsFullSizeInformation(
 	PEVENT_INFORMATION	EventInfo,
 	PEVENT_CONTEXT		EventContext,

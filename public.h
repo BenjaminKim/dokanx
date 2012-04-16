@@ -243,7 +243,7 @@ typedef struct _EVENT_CONTEXT {
 
 typedef struct _EVENT_INFORMATION {
 	ULONG		SerialNumber;
-	ULONG		Status;
+	LONG		Status;
 	ULONG		Flags;
 	union {
 		struct {
