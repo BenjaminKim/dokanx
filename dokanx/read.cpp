@@ -25,53 +25,62 @@ with this program. If not, see <http://www.gnu.org/licenses/>.
 
 VOID
 DispatchRead(
-	HANDLE				Handle,
-	PEVENT_CONTEXT		EventContext,
-	PDOKAN_INSTANCE		DokanInstance)
+    HANDLE				Handle,
+    PEVENT_CONTEXT		EventContext,
+    PDOKAN_INSTANCE		DokanInstance)
 {
-	PEVENT_INFORMATION		eventInfo;
-	PDOKAN_OPEN_INFO		openInfo;
-	ULONG					readLength = 0;
-	int						status;
-	DOKAN_FILE_INFO			fileInfo;
-	ULONG					sizeOfEventInfo;
-	
-	sizeOfEventInfo = sizeof(EVENT_INFORMATION) - 8 + EventContext->Read.BufferLength;
+    PEVENT_INFORMATION		eventInfo;
+    PDOKAN_OPEN_INFO		openInfo;
+    ULONG					readLength = 0;
+    int						status = -1;
+    DOKAN_FILE_INFO			fileInfo;
+    ULONG					sizeOfEventInfo;
+    
+    sizeOfEventInfo = sizeof(EVENT_INFORMATION) - 8 + EventContext->Read.BufferLength;
 
-	CheckFileName(EventContext->Read.FileName);
+    CheckFileName(EventContext->Read.FileName);
 
-	eventInfo = DispatchCommon(
-		EventContext, sizeOfEventInfo, DokanInstance, &fileInfo, &openInfo);
+    eventInfo = DispatchCommon(
+        EventContext, sizeOfEventInfo, DokanInstance, &fileInfo, &openInfo);
 
-	DbgPrint("###Read %04d\n", openInfo != NULL ? openInfo->EventId : -1);
+    DbgPrint("###Read %04d\n", openInfo != NULL ? openInfo->EventId : -1);
 
-	if (DokanInstance->DokanOperations->ReadFile) {
-		status = DokanInstance->DokanOperations->ReadFile(
-						EventContext->Read.FileName,
-						eventInfo->Buffer,
-						EventContext->Read.BufferLength,
-						&readLength,
-						EventContext->Read.ByteOffset.QuadPart,
-						&fileInfo);
-	} else {
-		status = -1;
-	}
+    if (DokanInstance->DokanOperations->ReadFile) {
+        status = DokanInstance->DokanOperations->ReadFile(
+                        EventContext->Read.FileName,
+                        eventInfo->Buffer,
+                        EventContext->Read.BufferLength,
+                        &readLength,
+                        EventContext->Read.ByteOffset.QuadPart,
+                        &fileInfo);
+    } else {
+        status = -1;
+    }
 
-	openInfo->UserContext = fileInfo.Context;
-	eventInfo->BufferLength = 0;
+    openInfo->UserContext = fileInfo.Context;
+    eventInfo->BufferLength = 0;
 
-	if (status < 0) {
-		eventInfo->Status = STATUS_INVALID_PARAMETER;
-	} else if(readLength == 0) {
-		eventInfo->Status = STATUS_END_OF_FILE;
-	} else {
-		eventInfo->Status = STATUS_SUCCESS;
-		eventInfo->BufferLength = readLength;
-		eventInfo->Read.CurrentByteOffset.QuadPart =
-			EventContext->Read.ByteOffset.QuadPart + readLength;
-	}
+    eventInfo->Status = status;
 
-	SendEventInformation(Handle, eventInfo, sizeOfEventInfo, DokanInstance);
-	free(eventInfo);
-	return;
+    if (status == STATUS_SUCCESS)
+    {
+        eventInfo->BufferLength = readLength;
+        eventInfo->Read.CurrentByteOffset.QuadPart =
+            EventContext->Read.ByteOffset.QuadPart + readLength;
+    }
+
+    /*if (status < 0) {
+        eventInfo->Status = STATUS_INVALID_PARAMETER;
+    } else if(readLength == 0) {
+        eventInfo->Status = STATUS_END_OF_FILE;
+    } else {
+        eventInfo->Status = STATUS_SUCCESS;
+        eventInfo->BufferLength = readLength;
+        eventInfo->Read.CurrentByteOffset.QuadPart =
+            EventContext->Read.ByteOffset.QuadPart + readLength;
+    }*/
+
+    SendEventInformation(Handle, eventInfo, sizeOfEventInfo, DokanInstance);
+    free(eventInfo);
+    return;
 }

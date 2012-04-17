@@ -83,7 +83,6 @@
     <ClCompile Include="read.cpp" />
     <ClCompile Include="security.cpp" />
     <ClCompile Include="setfile.cpp" />
-    <ClCompile Include="status.cpp" />
     <ClCompile Include="timeout.cpp" />
     <ClCompile Include="version.cpp" />
     <ClCompile Include="volume.cpp" />

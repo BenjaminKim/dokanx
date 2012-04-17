@@ -52,6 +52,7 @@ DispatchQuerySecurity(
 					&fileInfo);
 	}
 
+    // fixlater;
 	if (status < 0) {
 		int error = status * -1;
 		if (error == ERROR_INSUFFICIENT_BUFFER && lengthNeeded > 0) {

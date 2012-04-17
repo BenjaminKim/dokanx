@@ -92,28 +92,13 @@ typedef int (WINAPI *PFillFindData) (PWIN32_FIND_DATAW, PDOKAN_FILE_INFO);
 
 typedef struct _DOKAN_OPERATIONS {
 
-    // When an error occurs, return negative value.
-    // Usually you should return GetLastError() * -1.
-
-
-    // TODO
-    // std::functionÀ¸·Î ¹Ù²Ü °Í
-
     // CreateFile
     //   If file is a directory, CreateFile (not OpenDirectory) may be called.
     //   In this case, CreateFile should return 0 when that directory can be opened.
     //   You should set TRUE on DokanFileInfo->IsDirectory when file is a directory.
     //   When CreationDisposition is CREATE_ALWAYS or OPEN_ALWAYS and a file already exists,
     //   you should return ERROR_ALREADY_EXISTS(183) (not negative value)
-    //int (DOKAN_CALLBACK *CreateFile) (
-    //	LPCWSTR,      // FileName
-    //	DWORD,        // DesiredAccess
-    //	DWORD,        // ShareMode
-    //	DWORD,        // CreationDisposition
-    //	DWORD,        // FlagsAndAttributes
-    //	PDOKAN_FILE_INFO);
-
-    std::function<int(
+    std::function<NTSTATUS(
         LPCWSTR,      // FileName
         DWORD,        // DesiredAccess
         DWORD,        // ShareMode
@@ -122,78 +107,84 @@ typedef struct _DOKAN_OPERATIONS {
         PDOKAN_FILE_INFO
         )> CreateFile;
 
-    int (DOKAN_CALLBACK *OpenDirectory) (
+    std::function<NTSTATUS(
         LPCWSTR,				// FileName
-        PDOKAN_FILE_INFO);
+        PDOKAN_FILE_INFO
+        )> OpenDirectory;
 
-    int (DOKAN_CALLBACK *CreateDirectory) (
+    std::function<NTSTATUS(
         LPCWSTR,				// FileName
-        PDOKAN_FILE_INFO);
+        PDOKAN_FILE_INFO
+        )> CreateDirectory;
 
     // When FileInfo->DeleteOnClose is true, you must delete the file in Cleanup.
-    int (DOKAN_CALLBACK *Cleanup) (
+    std::function<void(
         LPCWSTR,      // FileName
-        PDOKAN_FILE_INFO);
+        PDOKAN_FILE_INFO
+        )> Cleanup;
 
-    int (DOKAN_CALLBACK *CloseFile) (
+    std::function<void(
         LPCWSTR,      // FileName
-        PDOKAN_FILE_INFO);
+        PDOKAN_FILE_INFO
+        )> CloseFile;
 
-    int (DOKAN_CALLBACK *ReadFile) (
+    std::function<NTSTATUS(
         LPCWSTR,  // FileName
         LPVOID,   // Buffer
         DWORD,    // NumberOfBytesToRead
         LPDWORD,  // NumberOfBytesRead
         LONGLONG, // Offset
-        PDOKAN_FILE_INFO);
+        PDOKAN_FILE_INFO
+        )> ReadFile;
     
-
-    int (DOKAN_CALLBACK *WriteFile) (
+    std::function<NTSTATUS(
         LPCWSTR,  // FileName
         LPCVOID,  // Buffer
         DWORD,    // NumberOfBytesToWrite
         LPDWORD,  // NumberOfBytesWritten
         LONGLONG, // Offset
-        PDOKAN_FILE_INFO);
+        PDOKAN_FILE_INFO
+        )> WriteFile;
 
-
-    int (DOKAN_CALLBACK *FlushFileBuffers) (
+    std::function<NTSTATUS(
         LPCWSTR, // FileName
-        PDOKAN_FILE_INFO);
+        PDOKAN_FILE_INFO
+        )> FlushFileBuffers;
 
-
-    int (DOKAN_CALLBACK *GetFileInformation) (
+    std::function<NTSTATUS(
         LPCWSTR,          // FileName
         LPBY_HANDLE_FILE_INFORMATION, // Buffer
-        PDOKAN_FILE_INFO);
+        PDOKAN_FILE_INFO
+        )> GetFileInformation;
     
-
-    int (DOKAN_CALLBACK *FindFiles) (
+    std::function<NTSTATUS(
         LPCWSTR,			// PathName
         PFillFindData,		// call this function with PWIN32_FIND_DATAW
-        PDOKAN_FILE_INFO);  //  (see PFillFindData definition)
+        PDOKAN_FILE_INFO
+        )> FindFiles;  //  (see PFillFindData definition)
 
 
     // You should implement either FindFiles or FindFilesWithPattern
-    int (DOKAN_CALLBACK *FindFilesWithPattern) (
+    std::function<NTSTATUS(
         LPCWSTR,			// PathName
         LPCWSTR,			// SearchPattern
         PFillFindData,		// call this function with PWIN32_FIND_DATAW
-        PDOKAN_FILE_INFO);
+        PDOKAN_FILE_INFO
+        )> FindFilesWithPattern;
 
-
-    int (DOKAN_CALLBACK *SetFileAttributes) (
+    std::function<NTSTATUS(
         LPCWSTR, // FileName
         DWORD,   // FileAttributes
-        PDOKAN_FILE_INFO);
+        PDOKAN_FILE_INFO
+        )> SetFileAttributes;
 
-
-    int (DOKAN_CALLBACK *SetFileTime) (
+    std::function<NTSTATUS(
         LPCWSTR,		// FileName
         CONST FILETIME*, // CreationTime
         CONST FILETIME*, // LastAccessTime
         CONST FILETIME*, // LastWriteTime
-        PDOKAN_FILE_INFO);
+        PDOKAN_FILE_INFO
+        )> SetFileTime;
 
 
     // You should not delete file on DeleteFile or DeleteDirectory.
@@ -204,47 +195,48 @@ typedef struct _DOKAN_OPERATIONS {
     // When you return 0 (ERROR_SUCCESS), you get Cleanup with
     // FileInfo->DeleteOnClose set TRUE and you have to delete the
     // file in Close.
-    int (DOKAN_CALLBACK *DeleteFile) (
+    std::function<NTSTATUS(
         LPCWSTR, // FileName
-        PDOKAN_FILE_INFO);
+        PDOKAN_FILE_INFO
+        )> DeleteFile;
 
-    int (DOKAN_CALLBACK *DeleteDirectory) ( 
+    std::function<NTSTATUS(
         LPCWSTR, // FileName
-        PDOKAN_FILE_INFO);
+        PDOKAN_FILE_INFO
+        )> DeleteDirectory;
 
-
-    int (DOKAN_CALLBACK *MoveFile) (
+    std::function<NTSTATUS(
         LPCWSTR, // ExistingFileName
         LPCWSTR, // NewFileName
         BOOL,	// ReplaceExisiting
-        PDOKAN_FILE_INFO);
+        PDOKAN_FILE_INFO
+        )> MoveFile;
 
-
-    int (DOKAN_CALLBACK *SetEndOfFile) (
+    std::function<NTSTATUS(
         LPCWSTR,  // FileName
         LONGLONG, // Length
-        PDOKAN_FILE_INFO);
+        PDOKAN_FILE_INFO
+        )> SetEndOfFile;
 
-
-    int (DOKAN_CALLBACK *SetAllocationSize) (
+    std::function<NTSTATUS(
         LPCWSTR,  // FileName
         LONGLONG, // Length
-        PDOKAN_FILE_INFO);
+        PDOKAN_FILE_INFO
+        )> SetAllocationSize;
 
-
-    int (DOKAN_CALLBACK *LockFile) (
+    std::function<NTSTATUS(
         LPCWSTR, // FileName
         LONGLONG, // ByteOffset
         LONGLONG, // Length
-        PDOKAN_FILE_INFO);
+        PDOKAN_FILE_INFO
+        )> LockFile;
 
-
-    int (DOKAN_CALLBACK *UnlockFile) (
+    std::function<NTSTATUS(
         LPCWSTR, // FileName
         LONGLONG,// ByteOffset
         LONGLONG,// Length
-        PDOKAN_FILE_INFO);
-
+        PDOKAN_FILE_INFO
+        )> UnlockFile;
 
     // Neither GetDiskFreeSpace nor GetVolumeInformation
     // save the DokanFileContext->Context.
@@ -252,15 +244,16 @@ typedef struct _DOKAN_OPERATIONS {
     // (ditto CloseFile and Cleanup)
 
     // see Win32 API GetDiskFreeSpaceEx
-    int (DOKAN_CALLBACK *GetDiskFreeSpace) (
+    std::function<NTSTATUS(
         PULONGLONG, // FreeBytesAvailable
         PULONGLONG, // TotalNumberOfBytes
         PULONGLONG, // TotalNumberOfFreeBytes
-        PDOKAN_FILE_INFO);
+        PDOKAN_FILE_INFO
+        )> GetDiskFreeSpace;
 
 
     // see Win32 API GetVolumeInformation
-    int (DOKAN_CALLBACK *GetVolumeInformation) (
+    std::function<NTSTATUS(
         LPWSTR, // VolumeNameBuffer
         DWORD,	// VolumeNameSize in num of chars
         LPDWORD,// VolumeSerialNumber
@@ -268,29 +261,30 @@ typedef struct _DOKAN_OPERATIONS {
         LPDWORD,// FileSystemFlags
         LPWSTR,	// FileSystemNameBuffer
         DWORD,	// FileSystemNameSize in num of chars
-        PDOKAN_FILE_INFO);
+        PDOKAN_FILE_INFO
+        )> GetVolumeInformation;
 
-
-    int (DOKAN_CALLBACK *Unmount) (
-        PDOKAN_FILE_INFO);
-
+    std::function<NTSTATUS(
+        PDOKAN_FILE_INFO
+        )> Unmount;
 
     // Suported since 0.6.0. You must specify the version at DOKAN_OPTIONS.Version.
-    int (DOKAN_CALLBACK *GetFileSecurity) (
+    std::function<NTSTATUS(
         LPCWSTR, // FileName
         PSECURITY_INFORMATION, // A pointer to SECURITY_INFORMATION value being requested
         PSECURITY_DESCRIPTOR, // A pointer to SECURITY_DESCRIPTOR buffer to be filled
         ULONG, // length of Security descriptor buffer
         PULONG, // LengthNeeded
-        PDOKAN_FILE_INFO);
+        PDOKAN_FILE_INFO
+        )> GetFileSecurity;
 
-    int (DOKAN_CALLBACK *SetFileSecurity) (
+    std::function<NTSTATUS(
         LPCWSTR, // FileName
         PSECURITY_INFORMATION,
         PSECURITY_DESCRIPTOR, // SecurityDescriptor
         ULONG, // SecurityDescriptor length
-        PDOKAN_FILE_INFO);
-
+        PDOKAN_FILE_INFO
+        )> SetFileSecurity;
 
 } DOKAN_OPERATIONS, *PDOKAN_OPERATIONS;
 

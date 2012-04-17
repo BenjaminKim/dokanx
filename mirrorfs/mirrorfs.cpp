@@ -75,8 +75,8 @@ PrintUserName(PDOKAN_FILE_INFO	DokanFileInfo)
     DWORD returnLength;
     WCHAR accountName[256];
     WCHAR domainName[256];
-    DWORD accountLength = sizeof(accountName) / sizeof(WCHAR);
-    DWORD domainLength = sizeof(domainName) / sizeof(WCHAR);
+    DWORD accountLength = _countof(accountName);
+    DWORD domainLength = _countof(domainName);
     PTOKEN_USER tokenUser;
     SID_NAME_USE snu;
 
@@ -106,8 +106,7 @@ PrintUserName(PDOKAN_FILE_INFO	DokanFileInfo)
 
 #define MirrorCheckFlag(val, flag) if (val&flag) { DbgPrint(L"\t" L#flag L"\n"); }
 
-static int __stdcall
-MirrorCreateFile(
+NTSTATUS MirrorCreateFile(
     LPCWSTR					FileName,
     DWORD					AccessMode,
     DWORD					ShareMode,
@@ -219,19 +218,19 @@ MirrorCreateFile(
     if (handle == INVALID_HANDLE_VALUE) {
         DWORD error = GetLastError();
         DbgPrint(L"\terror code = %d\n\n", error);
-        return error * -1; // error codes are negated value of Windows System Error codes
+        // fixlater;
+        return STATUS_ACCESS_DENIED;
     }
 
     DbgPrint(L"\n");
 
     // save the file handle in Context
     DokanFileInfo->Context = (ULONG64)handle;
-    return 0;
+    return STATUS_SUCCESS;
 }
 
 
-static int __stdcall
-MirrorCreateDirectory(
+NTSTATUS MirrorCreateDirectory(
     LPCWSTR					FileName,
     PDOKAN_FILE_INFO		DokanFileInfo)
 {
@@ -242,14 +241,15 @@ MirrorCreateDirectory(
     if (!CreateDirectory(filePath, NULL)) {
         DWORD error = GetLastError();
         DbgPrint(L"\terror code = %d\n\n", error);
-        return error * -1; // error codes are negated value of Windows System Error codes
+        // fixlater;
+        return STATUS_ACCESS_DENIED;
+        //return error * -1; // error codes are negated value of Windows System Error codes
     }
-    return 0;
+    return STATUS_SUCCESS;
 }
 
 
-static int __stdcall
-MirrorOpenDirectory(
+NTSTATUS MirrorOpenDirectory(
     LPCWSTR					FileName,
     PDOKAN_FILE_INFO		DokanFileInfo)
 {
@@ -265,10 +265,12 @@ MirrorOpenDirectory(
     if (attr == INVALID_FILE_ATTRIBUTES) {
         DWORD error = GetLastError();
         DbgPrint(L"\terror code = %d\n\n", error);
-        return error * -1;
+        // fixlater;
+        return STATUS_ACCESS_DENIED;
+        //return error * -1;
     }
     if (!(attr & FILE_ATTRIBUTE_DIRECTORY)) {
-        return -1;
+        return STATUS_NOT_A_DIRECTORY;
     }
 
     handle = CreateFile(
@@ -283,19 +285,20 @@ MirrorOpenDirectory(
     if (handle == INVALID_HANDLE_VALUE) {
         DWORD error = GetLastError();
         DbgPrint(L"\terror code = %d\n\n", error);
-        return error * -1;
+        // fixlater;
+        return STATUS_ACCESS_DENIED;
+        //return error * -1;
     }
 
     DbgPrint(L"\n");
 
     DokanFileInfo->Context = (ULONG64)handle;
 
-    return 0;
+    return STATUS_SUCCESS;
 }
 
 
-static int __stdcall
-MirrorCloseFile(
+void MirrorCloseFile(
     LPCWSTR					FileName,
     PDOKAN_FILE_INFO		DokanFileInfo)
 {
@@ -310,16 +313,12 @@ MirrorCloseFile(
     } else {
         //DbgPrint(L"Close: %s\n\tinvalid handle\n\n", filePath);
         DbgPrint(L"Close: %s\n\n", filePath);
-        return 0;
     }
 
     //DbgPrint(L"\n");
-    return 0;
 }
 
-
-static int __stdcall
-MirrorCleanup(
+void MirrorCleanup(
     LPCWSTR					FileName,
     PDOKAN_FILE_INFO		DokanFileInfo)
 {
@@ -352,15 +351,11 @@ MirrorCleanup(
 
     } else {
         DbgPrint(L"Cleanup: %s\n\tinvalid handle\n\n", filePath);
-        return -1;
     }
-
-    return 0;
 }
 
 
-static int __stdcall
-MirrorReadFile(
+NTSTATUS MirrorReadFile(
     LPCWSTR				FileName,
     LPVOID				Buffer,
     DWORD				BufferLength,
@@ -389,7 +384,8 @@ MirrorReadFile(
             NULL);
         if (handle == INVALID_HANDLE_VALUE) {
             DbgPrint(L"\tCreateFile error : %d\n\n", GetLastError());
-            return -1;
+            // fixlater;
+            return STATUS_ACCESS_DENIED;
         }
         opened = TRUE;
     }
@@ -398,16 +394,17 @@ MirrorReadFile(
         DbgPrint(L"\tseek error, offset = %d\n\n", offset);
         if (opened)
             CloseHandle(handle);
-        return -1;
+        // fixlater;
+        return STATUS_ACCESS_DENIED;
     }
-
         
     if (!ReadFile(handle, Buffer, BufferLength, ReadLength,NULL)) {
         DbgPrint(L"\tread error = %u, buffer length = %d, read length = %d\n\n",
             GetLastError(), BufferLength, *ReadLength);
         if (opened)
             CloseHandle(handle);
-        return -1;
+        // fixlater;
+        return STATUS_ACCESS_DENIED;
 
     } else {
         DbgPrint(L"\tread %d, offset %d\n\n", *ReadLength, offset);
@@ -416,12 +413,11 @@ MirrorReadFile(
     if (opened)
         CloseHandle(handle);
 
-    return 0;
+    return STATUS_SUCCESS;
 }
 
 
-static int __stdcall
-MirrorWriteFile(
+NTSTATUS MirrorWriteFile(
     LPCWSTR		FileName,
     LPCVOID		Buffer,
     DWORD		NumberOfBytesToWrite,
@@ -451,7 +447,8 @@ MirrorWriteFile(
             NULL);
         if (handle == INVALID_HANDLE_VALUE) {
             DbgPrint(L"\tCreateFile error : %d\n\n", GetLastError());
-            return -1;
+            // fixlater;
+            return STATUS_ACCESS_DENIED;
         }
         opened = TRUE;
     }
@@ -459,18 +456,20 @@ MirrorWriteFile(
     if (DokanFileInfo->WriteToEndOfFile) {
         if (SetFilePointer(handle, 0, NULL, FILE_END) == INVALID_SET_FILE_POINTER) {
             DbgPrint(L"\tseek error, offset = EOF, error = %d\n", GetLastError());
-            return -1;
+            // fixlater;
+            return STATUS_ACCESS_DENIED;
         }
     } else if (SetFilePointer(handle, offset, NULL, FILE_BEGIN) == INVALID_SET_FILE_POINTER) {
         DbgPrint(L"\tseek error, offset = %d, error = %d\n", offset, GetLastError());
-        return -1;
+        // fixlater;
+        return STATUS_ACCESS_DENIED;
     }
-
         
     if (!WriteFile(handle, Buffer, NumberOfBytesToWrite, NumberOfBytesWritten, NULL)) {
         DbgPrint(L"\twrite error = %u, buffer length = %d, write length = %d\n",
             GetLastError(), NumberOfBytesToWrite, *NumberOfBytesWritten);
-        return -1;
+        // fixlater;
+        return STATUS_ACCESS_DENIED;
 
     } else {
         DbgPrint(L"\twrite %d, offset %d\n\n", *NumberOfBytesWritten, offset);
@@ -480,12 +479,10 @@ MirrorWriteFile(
     if (opened)
         CloseHandle(handle);
 
-    return 0;
+    return STATUS_SUCCESS;
 }
 
-
-static int __stdcall
-MirrorFlushFileBuffers(
+NTSTATUS MirrorFlushFileBuffers(
     LPCWSTR		FileName,
     PDOKAN_FILE_INFO	DokanFileInfo)
 {
@@ -498,21 +495,22 @@ MirrorFlushFileBuffers(
 
     if (!handle || handle == INVALID_HANDLE_VALUE) {
         DbgPrint(L"\tinvalid handle\n\n");
-        return 0;
+        // fixlater;
+        // should return success? why?
+        return STATUS_INVALID_HANDLE;
     }
 
     if (FlushFileBuffers(handle)) {
-        return 0;
+        return STATUS_SUCCESS;
     } else {
         DbgPrint(L"\tflush error code = %d\n", GetLastError());
-        return -1;
+        // fixlater;
+        return STATUS_ACCESS_DENIED;
     }
-
 }
 
 
-static int __stdcall
-MirrorGetFileInformation(
+NTSTATUS MirrorGetFileInformation(
     LPCWSTR							FileName,
     LPBY_HANDLE_FILE_INFORMATION	HandleFileInformation,
     PDOKAN_FILE_INFO				DokanFileInfo)
@@ -533,7 +531,10 @@ MirrorGetFileInformation(
         handle = CreateFile(filePath, 0, FILE_SHARE_READ, NULL, OPEN_EXISTING,
             FILE_FLAG_BACKUP_SEMANTICS, NULL);
         if (handle == INVALID_HANDLE_VALUE)
-            return -1;
+        {
+            // fixlater;
+            return STATUS_ACCESS_DENIED;
+        }
         opened = TRUE;
     }
 
@@ -552,7 +553,8 @@ MirrorGetFileInformation(
             handle = FindFirstFile(filePath, &find);
             if (handle == INVALID_HANDLE_VALUE) {
                 DbgPrint(L"\tFindFirstFile error code = %d\n\n", GetLastError());
-                return -1;
+                // fixlater;
+                return STATUS_ACCESS_DENIED;
             }
             HandleFileInformation->dwFileAttributes = find.dwFileAttributes;
             HandleFileInformation->ftCreationTime = find.ftCreationTime;
@@ -574,12 +576,10 @@ MirrorGetFileInformation(
         CloseHandle(handle);
     }
 
-    return 0;
+    return STATUS_SUCCESS;
 }
 
-
-static int __stdcall
-MirrorFindFiles(
+NTSTATUS MirrorFindFiles(
     LPCWSTR				FileName,
     PFillFindData		FillFindData, // function pointer
     PDOKAN_FILE_INFO	DokanFileInfo)
@@ -600,7 +600,8 @@ MirrorFindFiles(
 
     if (hFind == INVALID_HANDLE_VALUE) {
         DbgPrint(L"\tinvalid file handle. Error is %u\n\n", GetLastError());
-        return -1;
+        // fixlater;
+        return STATUS_ACCESS_DENIED;
     }
 
     FillFindData(&findData, DokanFileInfo);
@@ -616,17 +617,17 @@ MirrorFindFiles(
 
     if (error != ERROR_NO_MORE_FILES) {
         DbgPrint(L"\tFindNextFile error. Error is %u\n\n", error);
-        return -1;
+        // fixlater;
+        return STATUS_ACCESS_DENIED;
     }
 
     DbgPrint(L"\tFindFiles return %d entries in %s\n\n", count, filePath);
 
-    return 0;
+    return STATUS_SUCCESS;
 }
 
 
-static int __stdcall
-MirrorDeleteFile(
+NTSTATUS MirrorDeleteFile(
     LPCWSTR				FileName,
     PDOKAN_FILE_INFO	DokanFileInfo)
 {
@@ -637,12 +638,10 @@ MirrorDeleteFile(
 
     DbgPrint(L"DeleteFile %s\n", filePath);
 
-    return 0;
+    return STATUS_SUCCESS;
 }
 
-
-static int __stdcall
-MirrorDeleteDirectory(
+NTSTATUS MirrorDeleteDirectory(
     LPCWSTR				FileName,
     PDOKAN_FILE_INFO	DokanFileInfo)
 {
@@ -678,15 +677,15 @@ MirrorDeleteDirectory(
     FindClose(hFind);
 
     if (GetLastError() == ERROR_NO_MORE_FILES) {
-        return 0;
+        return STATUS_SUCCESS;
     } else {
-        return -1;
+        // fixlater;
+        return STATUS_ACCESS_DENIED;
     }
 }
 
 
-static int __stdcall
-MirrorMoveFile(
+NTSTATUS MirrorMoveFile(
     LPCWSTR				FileName, // existing file name
     LPCWSTR				NewFileName,
     BOOL				ReplaceIfExisting,
@@ -717,13 +716,11 @@ MirrorMoveFile(
         DbgPrint(L"\tMoveFile failed status = %d, code = %d\n", status, error);
         return -(int)error;
     } else {
-        return 0;
+        return STATUS_SUCCESS;
     }
 }
 
-
-static int __stdcall
-MirrorLockFile(
+NTSTATUS MirrorLockFile(
     LPCWSTR				FileName,
     LONGLONG			ByteOffset,
     LONGLONG			Length,
@@ -741,7 +738,8 @@ MirrorLockFile(
     handle = (HANDLE)DokanFileInfo->Context;
     if (!handle || handle == INVALID_HANDLE_VALUE) {
         DbgPrint(L"\tinvalid handle\n\n");
-        return -1;
+        // fixlater;
+        return STATUS_ACCESS_DENIED;
     }
 
     length.QuadPart = Length;
@@ -749,16 +747,15 @@ MirrorLockFile(
 
     if (LockFile(handle, offset.HighPart, offset.LowPart, length.HighPart, length.LowPart)) {
         DbgPrint(L"\tsuccess\n\n");
-        return 0;
+        return STATUS_SUCCESS;
     } else {
         DbgPrint(L"\tfail\n\n");
-        return -1;
+        // fixlater;
+        return STATUS_ACCESS_DENIED;
     }
 }
 
-
-static int __stdcall
-MirrorSetEndOfFile(
+NTSTATUS MirrorSetEndOfFile(
     LPCWSTR				FileName,
     LONGLONG			ByteOffset,
     PDOKAN_FILE_INFO	DokanFileInfo)
@@ -774,28 +771,30 @@ MirrorSetEndOfFile(
     handle = (HANDLE)DokanFileInfo->Context;
     if (!handle || handle == INVALID_HANDLE_VALUE) {
         DbgPrint(L"\tinvalid handle\n\n");
-        return -1;
+        // fixlater;
+        return STATUS_ACCESS_DENIED;
     }
 
     offset.QuadPart = ByteOffset;
     if (!SetFilePointerEx(handle, offset, NULL, FILE_BEGIN)) {
         DbgPrint(L"\tSetFilePointer error: %d, offset = %I64d\n\n",
                 GetLastError(), ByteOffset);
-        return GetLastError() * -1;
+        // fixlater;
+        return STATUS_ACCESS_DENIED;
     }
 
     if (!SetEndOfFile(handle)) {
         DWORD error = GetLastError();
         DbgPrint(L"\terror code = %d\n\n", error);
-        return error * -1;
+        // fixlater;
+        return STATUS_ACCESS_DENIED;
     }
 
-    return 0;
+    return STATUS_SUCCESS;
 }
 
 
-static int __stdcall
-MirrorSetAllocationSize(
+NTSTATUS MirrorSetAllocationSize(
     LPCWSTR				FileName,
     LONGLONG			AllocSize,
     PDOKAN_FILE_INFO	DokanFileInfo)
@@ -811,7 +810,8 @@ MirrorSetAllocationSize(
     handle = (HANDLE)DokanFileInfo->Context;
     if (!handle || handle == INVALID_HANDLE_VALUE) {
         DbgPrint(L"\tinvalid handle\n\n");
-        return -1;
+        // fixlater;
+        return STATUS_ACCESS_DENIED;
     }
 
     if (GetFileSizeEx(handle, &fileSize)) {
@@ -820,25 +820,26 @@ MirrorSetAllocationSize(
             if (!SetFilePointerEx(handle, fileSize, NULL, FILE_BEGIN)) {
                 DbgPrint(L"\tSetAllocationSize: SetFilePointer eror: %d, "
                     L"offset = %I64d\n\n", GetLastError(), AllocSize);
-                return GetLastError() * -1;
+                // fixlater;
+                return STATUS_ACCESS_DENIED;
             }
             if (!SetEndOfFile(handle)) {
                 DWORD error = GetLastError();
                 DbgPrint(L"\terror code = %d\n\n", error);
-                return error * -1;
+                // fixlater;
+                return STATUS_ACCESS_DENIED;
             }
         }
     } else {
         DWORD error = GetLastError();
         DbgPrint(L"\terror code = %d\n\n", error);
-        return error * -1;
+        // fixlater;
+        return STATUS_ACCESS_DENIED;
     }
-    return 0;
+    return STATUS_SUCCESS;
 }
 
-
-static int __stdcall
-MirrorSetFileAttributes(
+NTSTATUS MirrorSetFileAttributes(
     LPCWSTR				FileName,
     DWORD				FileAttributes,
     PDOKAN_FILE_INFO	DokanFileInfo)
@@ -852,16 +853,15 @@ MirrorSetFileAttributes(
     if (!SetFileAttributes(filePath, FileAttributes)) {
         DWORD error = GetLastError();
         DbgPrint(L"\terror code = %d\n\n", error);
-        return error * -1;
+        // fixlater;
+        return STATUS_ACCESS_DENIED;
     }
 
     DbgPrint(L"\n");
-    return 0;
+    return STATUS_SUCCESS;
 }
 
-
-static int __stdcall
-MirrorSetFileTime(
+NTSTATUS MirrorSetFileTime(
     LPCWSTR				FileName,
     CONST FILETIME*		CreationTime,
     CONST FILETIME*		LastAccessTime,
@@ -879,22 +879,22 @@ MirrorSetFileTime(
 
     if (!handle || handle == INVALID_HANDLE_VALUE) {
         DbgPrint(L"\tinvalid handle\n\n");
-        return -1;
+        // fixlater;
+        return STATUS_ACCESS_DENIED;
     }
 
     if (!SetFileTime(handle, CreationTime, LastAccessTime, LastWriteTime)) {
         DWORD error = GetLastError();
         DbgPrint(L"\terror code = %d\n\n", error);
-        return error * -1;
+        // fixlater;
+        return STATUS_ACCESS_DENIED;
     }
 
     DbgPrint(L"\n");
-    return 0;
+    return STATUS_SUCCESS;
 }
 
-
-static int __stdcall
-MirrorUnlockFile(
+NTSTATUS MirrorUnlockFile(
     LPCWSTR				FileName,
     LONGLONG			ByteOffset,
     LONGLONG			Length,
@@ -912,7 +912,8 @@ MirrorUnlockFile(
     handle = (HANDLE)DokanFileInfo->Context;
     if (!handle || handle == INVALID_HANDLE_VALUE) {
         DbgPrint(L"\tinvalid handle\n\n");
-        return -1;
+        // fixlater;
+        return STATUS_ACCESS_DENIED;
     }
 
     length.QuadPart = Length;
@@ -920,16 +921,15 @@ MirrorUnlockFile(
 
     if (UnlockFile(handle, offset.HighPart, offset.LowPart, length.HighPart, length.LowPart)) {
         DbgPrint(L"\tsuccess\n\n");
-        return 0;
+        return STATUS_SUCCESS;
     } else {
         DbgPrint(L"\tfail\n\n");
-        return -1;
+        // fixlater;
+        return STATUS_ACCESS_DENIED;
     }
 }
 
-
-static int __stdcall
-MirrorGetFileSecurity(
+NTSTATUS MirrorGetFileSecurity(
     LPCWSTR					FileName,
     PSECURITY_INFORMATION	SecurityInformation,
     PSECURITY_DESCRIPTOR	SecurityDescriptor,
@@ -947,7 +947,8 @@ MirrorGetFileSecurity(
     handle = (HANDLE)DokanFileInfo->Context;
     if (!handle || handle == INVALID_HANDLE_VALUE) {
         DbgPrint(L"\tinvalid handle\n\n");
-        return -1;
+        // fixlater;
+        return STATUS_ACCESS_DENIED;
     }
 
     if (!GetUserObjectSecurity(handle, SecurityInformation, SecurityDescriptor,
@@ -955,18 +956,18 @@ MirrorGetFileSecurity(
         int error = GetLastError();
         if (error == ERROR_INSUFFICIENT_BUFFER) {
             DbgPrint(L"  GetUserObjectSecurity failed: ERROR_INSUFFICIENT_BUFFER\n");
-            return error * -1;
+            // fixlater;
+            return STATUS_ACCESS_DENIED;
         } else {
             DbgPrint(L"  GetUserObjectSecurity failed: %d\n", error);
-            return -1;
+            // fixlater;
+            return STATUS_ACCESS_DENIED;
         }
     }
-    return 0;
+    return STATUS_SUCCESS;
 }
 
-
-static int __stdcall
-MirrorSetFileSecurity(
+NTSTATUS MirrorSetFileSecurity(
     LPCWSTR					FileName,
     PSECURITY_INFORMATION	SecurityInformation,
     PSECURITY_DESCRIPTOR	SecurityDescriptor,
@@ -983,19 +984,20 @@ MirrorSetFileSecurity(
     handle = (HANDLE)DokanFileInfo->Context;
     if (!handle || handle == INVALID_HANDLE_VALUE) {
         DbgPrint(L"\tinvalid handle\n\n");
-        return -1;
+        // fixlater;
+        return STATUS_ACCESS_DENIED;
     }
 
     if (!SetUserObjectSecurity(handle, SecurityInformation, SecurityDescriptor)) {
         int error = GetLastError();
         DbgPrint(L"  SetUserObjectSecurity failed: %d\n", error);
-        return -1;
+        // fixlater;
+        return STATUS_ACCESS_DENIED;
     }
-    return 0;
+    return STATUS_SUCCESS;
 }
 
-static int __stdcall
-MirrorGetVolumeInformation(
+NTSTATUS MirrorGetVolumeInformation(
     LPWSTR		VolumeNameBuffer,
     DWORD		VolumeNameSize,
     LPDWORD		VolumeSerialNumber,
@@ -1016,26 +1018,22 @@ MirrorGetVolumeInformation(
 
     wcscpy_s(FileSystemNameBuffer, FileSystemNameSize / sizeof(WCHAR), L"Dokan");
 
-    return 0;
+    return STATUS_SUCCESS;
 }
 
-
-static int __stdcall
-MirrorUnmount(
+NTSTATUS MirrorUnmount(
     PDOKAN_FILE_INFO	DokanFileInfo)
 {
     DbgPrint(L"Unmount\n");
-    return 0;
+    return STATUS_SUCCESS;
 }
 
 int _tmain(int argc, _TCHAR* argv[])
 {
     int status;
     int command;
-    PDOKAN_OPERATIONS dokanOperations =
-        (PDOKAN_OPERATIONS)malloc(sizeof(DOKAN_OPERATIONS));
-    PDOKAN_OPTIONS dokanOptions =
-        (PDOKAN_OPTIONS)malloc(sizeof(DOKAN_OPTIONS));
+    PDOKAN_OPERATIONS dokanOperations = (PDOKAN_OPERATIONS)malloc(sizeof(DOKAN_OPERATIONS));
+    PDOKAN_OPTIONS dokanOptions = (PDOKAN_OPTIONS)malloc(sizeof(DOKAN_OPTIONS));
 
     if (argc < 5) {
         fprintf(stderr, "mirror.exe\n"
@@ -1159,4 +1157,3 @@ int _tmain(int argc, _TCHAR* argv[])
 
     return 0;
 }
-

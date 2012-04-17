@@ -26,7 +26,7 @@ with this program. If not, see <http://www.gnu.org/licenses/>.
 #include "fileinfo.h"
 
 
-int
+NTSTATUS
 DokanSetAllocationInformation(
      PEVENT_CONTEXT		EventContext,
      PDOKAN_FILE_INFO	FileInfo,
@@ -62,7 +62,7 @@ DokanSetAllocationInformation(
 }
 
 
-int
+NTSTATUS
 DokanSetBasicInformation(
      PEVENT_CONTEXT		EventContext,
      PDOKAN_FILE_INFO	FileInfo,
@@ -85,8 +85,10 @@ DokanSetBasicInformation(
         basicInfo->FileAttributes,
         FileInfo);
 
-    if (status < 0)
+    if (status != STATUS_SUCCESS)
+    {
         return status;
+    }
 
     creation.dwLowDateTime = basicInfo->CreationTime.LowPart;
     creation.dwHighDateTime = basicInfo->CreationTime.HighPart;
@@ -105,7 +107,7 @@ DokanSetBasicInformation(
 }
 
 
-int
+NTSTATUS
 DokanSetDispositionInformation(
      PEVENT_CONTEXT		EventContext,
      PDOKAN_FILE_INFO	FileInfo,
@@ -133,7 +135,7 @@ DokanSetDispositionInformation(
 }
 
 
-int
+NTSTATUS
 DokanSetEndOfFileInformation(
      PEVENT_CONTEXT		EventContext,
      PDOKAN_FILE_INFO	FileInfo,
@@ -152,7 +154,7 @@ DokanSetEndOfFileInformation(
 }
 
 
-int
+NTSTATUS
 DokanSetLinkInformation(
     PEVENT_CONTEXT		EventContext,
     PDOKAN_FILE_INFO	FileInfo,
@@ -168,7 +170,7 @@ DokanSetLinkInformation(
 
 
 
-int
+NTSTATUS
 DokanSetRenameInformation(
 PEVENT_CONTEXT		EventContext,
      PDOKAN_FILE_INFO	FileInfo,
@@ -204,7 +206,7 @@ PEVENT_CONTEXT		EventContext,
 }
 
 
-int
+NTSTATUS
 DokanSetValidDataLengthInformation(
     PEVENT_CONTEXT		EventContext,
     PDOKAN_FILE_INFO	FileInfo,
@@ -294,37 +296,27 @@ DispatchSetInformation(
     openInfo->UserContext = fileInfo.Context;
 
     eventInfo->BufferLength = 0;
+    eventInfo->Status = status;
 
     if (EventContext->SetFile.FileInformationClass == FileDispositionInformation) {
-        if (status == 0) {
+        
+        if (status == STATUS_SUCCESS)
+        {
             PFILE_DISPOSITION_INFORMATION dispositionInfo =
                 (PFILE_DISPOSITION_INFORMATION)((PCHAR)EventContext + EventContext->SetFile.BufferOffset);
             eventInfo->Delete.DeleteOnClose = dispositionInfo->DeleteFile ? TRUE : FALSE;
             DbgPrint("  dispositionInfo->DeleteFile = %d\n", dispositionInfo->DeleteFile);
-            eventInfo->Status = STATUS_SUCCESS;
-        } else if (status == -ERROR_DIR_NOT_EMPTY) {
-            DbgPrint("  DispositionInfo status = STATUS_DIRECTORY_NOT_EMPTY\n");
-            eventInfo->Status = STATUS_DIRECTORY_NOT_EMPTY;
-        } else if (status < 0) {
-            DbgPrint("  DispositionInfo status = STATUS_CANNOT_DELETE\n");
-            eventInfo->Status = STATUS_CANNOT_DELETE;
         }
-
-    } else {
-        if (status < 0) {
-            int error = status * -1;
-            eventInfo->Status = GetNTStatus(error);
-        
-        } else {
-            eventInfo->Status = STATUS_SUCCESS;
-
-            // notice new file name to driver
-            if (EventContext->SetFile.FileInformationClass == FileRenameInformation) {
-                PDOKAN_RENAME_INFORMATION renameInfo =
-                    (PDOKAN_RENAME_INFORMATION)((PCHAR)EventContext + EventContext->SetFile.BufferOffset);
-                eventInfo->BufferLength = renameInfo->FileNameLength;
-                CopyMemory(eventInfo->Buffer, renameInfo->FileName, renameInfo->FileNameLength);
-            }
+    }
+    else
+    {
+        // notice new file name to driver
+        if (status == STATUS_SUCCESS && EventContext->SetFile.FileInformationClass == FileRenameInformation)
+        {
+            PDOKAN_RENAME_INFORMATION renameInfo =
+                (PDOKAN_RENAME_INFORMATION)((PCHAR)EventContext + EventContext->SetFile.BufferOffset);
+            eventInfo->BufferLength = renameInfo->FileNameLength;
+            CopyMemory(eventInfo->Buffer, renameInfo->FileName, renameInfo->FileNameLength);
         }
     }
 
@@ -334,5 +326,3 @@ DispatchSetInformation(
     free(eventInfo);
     return;
 }
-
-

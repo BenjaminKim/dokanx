@@ -7,10 +7,13 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "dokanx", "dokanx\dokanx.vcx
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{FC9EAEC7-D411-4F22-85EF-DCB79ACD4175}"
 	ProjectSection(SolutionItems) = preProject
-		README.htm = README.htm
+		README.md = README.md
 	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "mirrorfs", "mirrorfs\mirrorfs.vcxproj", "{DADCBCAD-4429-422E-9FA9-D8E538D0EF94}"
+	ProjectSection(ProjectDependencies) = postProject
+		{F25BA22F-2AB8-4859-9B89-8FE1E774B472} = {F25BA22F-2AB8-4859-9B89-8FE1E774B472}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
