@@ -69,16 +69,16 @@ DokanSetBasicInformation(
      PDOKAN_OPERATIONS	DokanOperations)
 {
     FILETIME creation, lastAccess, lastWrite;
-    int status = -1;
+    NTSTATUS status = STATUS_NOT_IMPLEMENTED;
 
     PFILE_BASIC_INFORMATION basicInfo =
         (PFILE_BASIC_INFORMATION)((PCHAR)EventContext + EventContext->SetFile.BufferOffset);
 
     if (!DokanOperations->SetFileAttributes)
-        return -1;
+        return STATUS_NOT_IMPLEMENTED;
     
     if (!DokanOperations->SetFileTime)
-        return -1;
+        return STATUS_NOT_IMPLEMENTED;
 
     status = DokanOperations->SetFileAttributes(
         EventContext->SetFile.FileName,
@@ -117,11 +117,12 @@ DokanSetDispositionInformation(
         (PFILE_DISPOSITION_INFORMATION)((PCHAR)EventContext + EventContext->SetFile.BufferOffset);
 
     if (!DokanOperations->DeleteFile || !DokanOperations->DeleteDirectory)
-        return -1;
+        return STATUS_NOT_IMPLEMENTED;
 
-    if (!dispositionInfo->DeleteFile) {
-        return 0;
-    }
+    //if (!dispositionInfo->DeleteFile) {
+    //    
+    //    return 0;
+    //}
 
     if (FileInfo->IsDirectory) {
         return DokanOperations->DeleteDirectory(
@@ -145,7 +146,7 @@ DokanSetEndOfFileInformation(
         (PFILE_END_OF_FILE_INFORMATION)((PCHAR)EventContext + EventContext->SetFile.BufferOffset);
 
     if (!DokanOperations->SetEndOfFile)
-        return -1;
+        return STATUS_NOT_IMPLEMENTED;
 
     return DokanOperations->SetEndOfFile(
         EventContext->SetFile.FileName,
@@ -165,7 +166,7 @@ DokanSetLinkInformation(
     UNREFERENCED_PARAMETER(DokanOperations);
     //PDOKAN_LINK_INFORMATION linkInfo =
     //	(PDOKAN_LINK_INFORMATION)((PCHAR)EventContext + EventContext->SetFile.BufferOffset);
-    return -1;
+    return STATUS_NOT_IMPLEMENTED;
 }
 
 
@@ -196,7 +197,7 @@ PEVENT_CONTEXT		EventContext,
     }
 
     if (!DokanOperations->MoveFile)
-        return -1;
+        return STATUS_NOT_IMPLEMENTED;
 
     return DokanOperations->MoveFile(
         EventContext->SetFile.FileName,
@@ -216,7 +217,7 @@ DokanSetValidDataLengthInformation(
         (PFILE_VALID_DATA_LENGTH_INFORMATION)((PCHAR)EventContext + EventContext->SetFile.BufferOffset);
 
     if (!DokanOperations->SetEndOfFile)
-        return -1;
+        return STATUS_NOT_IMPLEMENTED;
 
     return DokanOperations->SetEndOfFile(
         EventContext->SetFile.FileName,

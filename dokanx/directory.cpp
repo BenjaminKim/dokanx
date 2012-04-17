@@ -418,7 +418,9 @@ MatchFiles(
 
 	// NO_MORE_FILES
 	if (index <= EventContext->Directory.FileIndex)
+    {
 		return -1;
+    }
 
 	return index;
 }

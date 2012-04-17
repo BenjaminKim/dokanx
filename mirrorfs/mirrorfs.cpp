@@ -106,79 +106,9 @@ PrintUserName(PDOKAN_FILE_INFO	DokanFileInfo)
 
 #define MirrorCheckFlag(val, flag) if (val&flag) { DbgPrint(L"\t" L#flag L"\n"); }
 
-NTSTATUS MirrorCreateFile(
-    LPCWSTR					FileName,
-    DWORD					AccessMode,
-    DWORD					ShareMode,
-    DWORD					CreationDisposition,
-    DWORD					FlagsAndAttributes,
-    PDOKAN_FILE_INFO		DokanFileInfo)
+
+void CheckFileAttributeFlags(DWORD FlagsAndAttributes)
 {
-    WCHAR filePath[MAX_PATH];
-    HANDLE handle;
-    DWORD fileAttr;
-
-    GetFilePath(filePath, MAX_PATH, FileName);
-
-    DbgPrint(L"CreateFile : %s\n", filePath);
-
-    PrintUserName(DokanFileInfo);
-
-    if (CreationDisposition == CREATE_NEW)
-        DbgPrint(L"\tCREATE_NEW\n");
-    if (CreationDisposition == OPEN_ALWAYS)
-        DbgPrint(L"\tOPEN_ALWAYS\n");
-    if (CreationDisposition == CREATE_ALWAYS)
-        DbgPrint(L"\tCREATE_ALWAYS\n");
-    if (CreationDisposition == OPEN_EXISTING)
-        DbgPrint(L"\tOPEN_EXISTING\n");
-    if (CreationDisposition == TRUNCATE_EXISTING)
-        DbgPrint(L"\tTRUNCATE_EXISTING\n");
-
-    /*
-    if (ShareMode == 0 && AccessMode & FILE_WRITE_DATA)
-        ShareMode = FILE_SHARE_WRITE;
-    else if (ShareMode == 0)
-        ShareMode = FILE_SHARE_READ;
-    */
-
-    DbgPrint(L"\tShareMode = 0x%x\n", ShareMode);
-
-    MirrorCheckFlag(ShareMode, FILE_SHARE_READ);
-    MirrorCheckFlag(ShareMode, FILE_SHARE_WRITE);
-    MirrorCheckFlag(ShareMode, FILE_SHARE_DELETE);
-
-    DbgPrint(L"\tAccessMode = 0x%x\n", AccessMode);
-
-    MirrorCheckFlag(AccessMode, GENERIC_READ);
-    MirrorCheckFlag(AccessMode, GENERIC_WRITE);
-    MirrorCheckFlag(AccessMode, GENERIC_EXECUTE);
-    
-    MirrorCheckFlag(AccessMode, DELETE);
-    MirrorCheckFlag(AccessMode, FILE_READ_DATA);
-    MirrorCheckFlag(AccessMode, FILE_READ_ATTRIBUTES);
-    MirrorCheckFlag(AccessMode, FILE_READ_EA);
-    MirrorCheckFlag(AccessMode, READ_CONTROL);
-    MirrorCheckFlag(AccessMode, FILE_WRITE_DATA);
-    MirrorCheckFlag(AccessMode, FILE_WRITE_ATTRIBUTES);
-    MirrorCheckFlag(AccessMode, FILE_WRITE_EA);
-    MirrorCheckFlag(AccessMode, FILE_APPEND_DATA);
-    MirrorCheckFlag(AccessMode, WRITE_DAC);
-    MirrorCheckFlag(AccessMode, WRITE_OWNER);
-    MirrorCheckFlag(AccessMode, SYNCHRONIZE);
-    MirrorCheckFlag(AccessMode, FILE_EXECUTE);
-    MirrorCheckFlag(AccessMode, STANDARD_RIGHTS_READ);
-    MirrorCheckFlag(AccessMode, STANDARD_RIGHTS_WRITE);
-    MirrorCheckFlag(AccessMode, STANDARD_RIGHTS_EXECUTE);
-
-    // When filePath is a directory, needs to change the flag so that the file can be opened.
-    fileAttr = GetFileAttributes(filePath);
-    if (fileAttr && fileAttr & FILE_ATTRIBUTE_DIRECTORY) {
-        FlagsAndAttributes |= FILE_FLAG_BACKUP_SEMANTICS;
-        //AccessMode = 0;
-    }
-    DbgPrint(L"\tFlagsAndAttributes = 0x%x\n", FlagsAndAttributes);
-
     MirrorCheckFlag(FlagsAndAttributes, FILE_ATTRIBUTE_ARCHIVE);
     MirrorCheckFlag(FlagsAndAttributes, FILE_ATTRIBUTE_ENCRYPTED);
     MirrorCheckFlag(FlagsAndAttributes, FILE_ATTRIBUTE_HIDDEN);
@@ -205,10 +135,89 @@ NTSTATUS MirrorCreateFile(
     MirrorCheckFlag(FlagsAndAttributes, SECURITY_CONTEXT_TRACKING);
     MirrorCheckFlag(FlagsAndAttributes, SECURITY_EFFECTIVE_ONLY);
     MirrorCheckFlag(FlagsAndAttributes, SECURITY_SQOS_PRESENT);
+}
+
+void CheckDesiredAccessFlags(DWORD DesiredAccess)
+{
+    MirrorCheckFlag(DesiredAccess, GENERIC_READ);
+    MirrorCheckFlag(DesiredAccess, GENERIC_WRITE);
+    MirrorCheckFlag(DesiredAccess, GENERIC_EXECUTE);
+
+    MirrorCheckFlag(DesiredAccess, DELETE);
+    MirrorCheckFlag(DesiredAccess, FILE_READ_DATA);
+    MirrorCheckFlag(DesiredAccess, FILE_READ_ATTRIBUTES);
+    MirrorCheckFlag(DesiredAccess, FILE_READ_EA);
+    MirrorCheckFlag(DesiredAccess, READ_CONTROL);
+    MirrorCheckFlag(DesiredAccess, FILE_WRITE_DATA);
+    MirrorCheckFlag(DesiredAccess, FILE_WRITE_ATTRIBUTES);
+    MirrorCheckFlag(DesiredAccess, FILE_WRITE_EA);
+    MirrorCheckFlag(DesiredAccess, FILE_APPEND_DATA);
+    MirrorCheckFlag(DesiredAccess, WRITE_DAC);
+    MirrorCheckFlag(DesiredAccess, WRITE_OWNER);
+    MirrorCheckFlag(DesiredAccess, SYNCHRONIZE);
+    MirrorCheckFlag(DesiredAccess, FILE_EXECUTE);
+    MirrorCheckFlag(DesiredAccess, STANDARD_RIGHTS_READ);
+    MirrorCheckFlag(DesiredAccess, STANDARD_RIGHTS_WRITE);
+    MirrorCheckFlag(DesiredAccess, STANDARD_RIGHTS_EXECUTE);
+}
+
+void CheckShareModeFlags(DWORD ShareMode)
+{
+    MirrorCheckFlag(ShareMode, FILE_SHARE_READ);
+    MirrorCheckFlag(ShareMode, FILE_SHARE_WRITE);
+    MirrorCheckFlag(ShareMode, FILE_SHARE_DELETE);
+}
+
+NTSTATUS MirrorCreateFile(
+    LPCWSTR					FileName,
+    DWORD					DesiredAccess,
+    DWORD					ShareMode,
+    DWORD					CreationDisposition,
+    DWORD					FlagsAndAttributes,
+    PDOKAN_FILE_INFO		DokanFileInfo)
+{
+    WCHAR filePath[MAX_PATH];
+    HANDLE handle;
+    DWORD fileAttr;
+
+    GetFilePath(filePath, MAX_PATH, FileName);
+
+    DbgPrint(L"CreateFile : %s\n", filePath);
+
+    PrintUserName(DokanFileInfo);
+
+    if (CreationDisposition == CREATE_NEW)
+        DbgPrint(L"\tCREATE_NEW\n");
+    if (CreationDisposition == OPEN_ALWAYS)
+        DbgPrint(L"\tOPEN_ALWAYS\n");
+    if (CreationDisposition == CREATE_ALWAYS)
+        DbgPrint(L"\tCREATE_ALWAYS\n");
+    if (CreationDisposition == OPEN_EXISTING)
+        DbgPrint(L"\tOPEN_EXISTING\n");
+    if (CreationDisposition == TRUNCATE_EXISTING)
+        DbgPrint(L"\tTRUNCATE_EXISTING\n");
+
+    DbgPrint(L"\tShareMode = 0x%x\n", ShareMode);
+
+    CheckShareModeFlags(ShareMode);
+
+    DbgPrint(L"\tAccessMode = 0x%x\n", DesiredAccess);
+
+    CheckDesiredAccessFlags(DesiredAccess);
+
+    // When filePath is a directory, needs to change the flag so that the file can be opened.
+    fileAttr = GetFileAttributes(filePath);
+    if (fileAttr && fileAttr & FILE_ATTRIBUTE_DIRECTORY) {
+        FlagsAndAttributes |= FILE_FLAG_BACKUP_SEMANTICS;
+        //AccessMode = 0;
+    }
+    DbgPrint(L"\tFlagsAndAttributes = 0x%x\n", FlagsAndAttributes);
+
+    CheckFileAttributeFlags(FlagsAndAttributes);
 
     handle = CreateFile(
         filePath,
-        AccessMode,//GENERIC_READ|GENERIC_WRITE|GENERIC_EXECUTE,
+        DesiredAccess,//GENERIC_READ|GENERIC_WRITE|GENERIC_EXECUTE,
         ShareMode,
         NULL, // security attribute
         CreationDisposition,
@@ -957,7 +966,7 @@ NTSTATUS MirrorGetFileSecurity(
         if (error == ERROR_INSUFFICIENT_BUFFER) {
             DbgPrint(L"  GetUserObjectSecurity failed: ERROR_INSUFFICIENT_BUFFER\n");
             // fixlater;
-            return STATUS_ACCESS_DENIED;
+            return STATUS_BUFFER_OVERFLOW;
         } else {
             DbgPrint(L"  GetUserObjectSecurity failed: %d\n", error);
             // fixlater;
@@ -1033,7 +1042,17 @@ int _tmain(int argc, _TCHAR* argv[])
     int status;
     int command;
     PDOKAN_OPERATIONS dokanOperations = (PDOKAN_OPERATIONS)malloc(sizeof(DOKAN_OPERATIONS));
+    if (dokanOperations == nullptr)
+    {
+        return EXIT_FAILURE;
+    }
+
     PDOKAN_OPTIONS dokanOptions = (PDOKAN_OPTIONS)malloc(sizeof(DOKAN_OPTIONS));
+    if (dokanOperations == nullptr)
+    {
+        free(dokanOperations);
+        return EXIT_FAILURE;
+    }
 
     if (argc < 5) {
         fprintf(stderr, "mirror.exe\n"
@@ -1044,7 +1063,7 @@ int _tmain(int argc, _TCHAR* argv[])
             "  /s (use stderr for output)\n"
             "  /n (use network drive)\n"
             "  /m (use removable drive)\n");
-        return -1;
+        return EXIT_FAILURE;
     }
 
     g_DebugMode = FALSE;
@@ -1058,12 +1077,12 @@ int _tmain(int argc, _TCHAR* argv[])
         switch (towlower(argv[command][1])) {
         case L'r':
             command++;
-            wcscpy_s(RootDirectory, sizeof(RootDirectory)/sizeof(WCHAR), argv[command]);
+            wcscpy_s(RootDirectory, _countof(RootDirectory), argv[command]);
             DbgPrint(L"RootDirectory: %ls\n", RootDirectory);
             break;
         case L'l':
             command++;
-            wcscpy_s(MountPoint, sizeof(MountPoint)/sizeof(WCHAR), argv[command]);
+            wcscpy_s(MountPoint, _countof(MountPoint), argv[command]);
             dokanOptions->MountPoint = MountPoint;
             break;
         case L't':
@@ -1084,7 +1103,9 @@ int _tmain(int argc, _TCHAR* argv[])
             break;
         default:
             fwprintf(stderr, L"unknown command: %s\n", argv[command]);
-            return -1;
+            free(dokanOperations);
+            free(dokanOptions);
+            return EXIT_FAILURE;
         }
     }
 
