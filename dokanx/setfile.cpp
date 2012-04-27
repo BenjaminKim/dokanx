@@ -119,10 +119,9 @@ DokanSetDispositionInformation(
     if (!DokanOperations->DeleteFile || !DokanOperations->DeleteDirectory)
         return STATUS_NOT_IMPLEMENTED;
 
-    //if (!dispositionInfo->DeleteFile) {
-    //    
-    //    return 0;
-    //}
+    if (!dispositionInfo->DeleteFile) {    
+        return STATUS_SUCCESS;
+    }
 
     if (FileInfo->IsDirectory) {
         return DokanOperations->DeleteDirectory(
@@ -235,7 +234,7 @@ DispatchSetInformation(
     PEVENT_INFORMATION		eventInfo;
     PDOKAN_OPEN_INFO		openInfo;
     DOKAN_FILE_INFO			fileInfo;
-    int						status = STATUS_INVALID_PARAMETER;
+    NTSTATUS				status = STATUS_INVALID_PARAMETER;
     ULONG					sizeOfEventInfo = sizeof(EVENT_INFORMATION);
 
 

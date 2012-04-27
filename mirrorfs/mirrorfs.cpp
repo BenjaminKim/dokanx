@@ -30,6 +30,7 @@ THE SOFTWARE.
 #include <winbase.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string>
 #include "../dokan.h"
 #include "../dokanx/fileinfo.h"
 
@@ -42,7 +43,7 @@ static void DbgPrint(LPCWSTR format, ...)
         WCHAR buffer[512];
         va_list argp;
         va_start(argp, format);
-        vswprintf_s(buffer, sizeof(buffer)/sizeof(WCHAR), format, argp);
+        vswprintf_s(buffer, _countof(buffer), format, argp);
         va_end(argp);
         if (g_UseStdErr) {
             fwprintf(stderr, buffer);
@@ -52,20 +53,27 @@ static void DbgPrint(LPCWSTR format, ...)
     }
 }
 
-static WCHAR RootDirectory[MAX_PATH] = L"C:";
-static WCHAR MountPoint[MAX_PATH] = L"M:";
+static WCHAR g_RootDirectory[MAX_PATH] = L"C:";
+static WCHAR g_MountPoint[MAX_PATH] = L"M:";
 
-static void
-GetFilePath(
-    PWCHAR	filePath,
-    ULONG	numberOfElements,
-    LPCWSTR FileName)
+
+std::wstring GetFilePath(
+    __in const std::wstring& fileName
+    )
 {
-    RtlZeroMemory(filePath, numberOfElements * sizeof(WCHAR));
-    wcsncpy_s(filePath, numberOfElements, RootDirectory, wcslen(RootDirectory));
-    wcsncat_s(filePath, numberOfElements, FileName, wcslen(FileName));
+    return std::wstring(g_RootDirectory) + fileName;
 }
 
+//
+//    PWCHAR	filePath,
+//    ULONG	numberOfElements,
+//    LPCWSTR FileName)
+//{
+//    RtlZeroMemory(filePath, numberOfElements * sizeof(WCHAR));
+//    wcsncpy_s(filePath, numberOfElements, g_RootDirectory, wcslen(g_RootDirectory));
+//    wcsncat_s(filePath, numberOfElements, FileName, wcslen(FileName));
+//}
+//
 
 static void
 PrintUserName(PDOKAN_FILE_INFO	DokanFileInfo)
@@ -176,13 +184,13 @@ NTSTATUS MirrorCreateFile(
     DWORD					FlagsAndAttributes,
     PDOKAN_FILE_INFO		DokanFileInfo)
 {
-    WCHAR filePath[MAX_PATH];
+    std::wstring filePath;
     HANDLE handle;
     DWORD fileAttr;
 
-    GetFilePath(filePath, MAX_PATH, FileName);
+    filePath = GetFilePath(FileName);
 
-    DbgPrint(L"CreateFile : %s\n", filePath);
+    DbgPrint(L"CreateFile : %s\n", filePath.c_str());
 
     PrintUserName(DokanFileInfo);
 
@@ -206,7 +214,7 @@ NTSTATUS MirrorCreateFile(
     CheckDesiredAccessFlags(DesiredAccess);
 
     // When filePath is a directory, needs to change the flag so that the file can be opened.
-    fileAttr = GetFileAttributes(filePath);
+    fileAttr = GetFileAttributes(filePath.c_str());
     if (fileAttr && fileAttr & FILE_ATTRIBUTE_DIRECTORY) {
         FlagsAndAttributes |= FILE_FLAG_BACKUP_SEMANTICS;
         //AccessMode = 0;
@@ -216,7 +224,7 @@ NTSTATUS MirrorCreateFile(
     CheckFileAttributeFlags(FlagsAndAttributes);
 
     handle = CreateFile(
-        filePath,
+        filePath.c_str(),
         DesiredAccess,//GENERIC_READ|GENERIC_WRITE|GENERIC_EXECUTE,
         ShareMode,
         NULL, // security attribute
@@ -243,11 +251,10 @@ NTSTATUS MirrorCreateDirectory(
     LPCWSTR					FileName,
     PDOKAN_FILE_INFO		DokanFileInfo)
 {
-    WCHAR filePath[MAX_PATH];
-    GetFilePath(filePath, MAX_PATH, FileName);
+    std::wstring filePath = GetFilePath(FileName);
 
-    DbgPrint(L"CreateDirectory : %s\n", filePath);
-    if (!CreateDirectory(filePath, NULL)) {
+    DbgPrint(L"CreateDirectory : %s\n", filePath.c_str());
+    if (!CreateDirectory(filePath.c_str(), NULL)) {
         DWORD error = GetLastError();
         DbgPrint(L"\terror code = %d\n\n", error);
         // fixlater;
@@ -262,15 +269,13 @@ NTSTATUS MirrorOpenDirectory(
     LPCWSTR					FileName,
     PDOKAN_FILE_INFO		DokanFileInfo)
 {
-    WCHAR filePath[MAX_PATH];
     HANDLE handle;
     DWORD attr;
+    std::wstring filePath = GetFilePath(FileName);
 
-    GetFilePath(filePath, MAX_PATH, FileName);
+    DbgPrint(L"OpenDirectory : %s\n", filePath.c_str());
 
-    DbgPrint(L"OpenDirectory : %s\n", filePath);
-
-    attr = GetFileAttributes(filePath);
+    attr = GetFileAttributes(filePath.c_str());
     if (attr == INVALID_FILE_ATTRIBUTES) {
         DWORD error = GetLastError();
         DbgPrint(L"\terror code = %d\n\n", error);
@@ -283,7 +288,7 @@ NTSTATUS MirrorOpenDirectory(
     }
 
     handle = CreateFile(
-        filePath,
+        filePath.c_str(),
         0,
         FILE_SHARE_READ|FILE_SHARE_WRITE,
         NULL,
@@ -311,17 +316,16 @@ void MirrorCloseFile(
     LPCWSTR					FileName,
     PDOKAN_FILE_INFO		DokanFileInfo)
 {
-    WCHAR filePath[MAX_PATH];
-    GetFilePath(filePath, MAX_PATH, FileName);
+    std::wstring filePath = GetFilePath(FileName);
 
     if (DokanFileInfo->Context) {
-        DbgPrint(L"CloseFile: %s\n", filePath);
+        DbgPrint(L"CloseFile: %s\n", filePath.c_str());
         DbgPrint(L"\terror : not cleanuped file\n\n");
         CloseHandle((HANDLE)DokanFileInfo->Context);
         DokanFileInfo->Context = 0;
     } else {
-        //DbgPrint(L"Close: %s\n\tinvalid handle\n\n", filePath);
-        DbgPrint(L"Close: %s\n\n", filePath);
+        //DbgPrint(L"Close: %s\n\tinvalid handle\n\n", filePath.c_str());
+        DbgPrint(L"Close: %s\n\n", filePath.c_str());
     }
 
     //DbgPrint(L"\n");
@@ -331,11 +335,10 @@ void MirrorCleanup(
     LPCWSTR					FileName,
     PDOKAN_FILE_INFO		DokanFileInfo)
 {
-    WCHAR filePath[MAX_PATH];
-    GetFilePath(filePath, MAX_PATH, FileName);
+    std::wstring filePath = GetFilePath(FileName);
 
     if (DokanFileInfo->Context) {
-        DbgPrint(L"Cleanup: %s\n\n", filePath);
+        DbgPrint(L"Cleanup: %s\n\n", filePath.c_str());
         CloseHandle((HANDLE)DokanFileInfo->Context);
         DokanFileInfo->Context = 0;
 
@@ -343,14 +346,14 @@ void MirrorCleanup(
             DbgPrint(L"\tDeleteOnClose\n");
             if (DokanFileInfo->IsDirectory) {
                 DbgPrint(L"  DeleteDirectory ");
-                if (!RemoveDirectory(filePath)) {
+                if (!RemoveDirectory(filePath.c_str())) {
                     DbgPrint(L"error code = %d\n\n", GetLastError());
                 } else {
                     DbgPrint(L"success\n\n");
                 }
             } else {
                 DbgPrint(L"  DeleteFile ");
-                if (DeleteFile(filePath) == 0) {
+                if (DeleteFile(filePath.c_str()) == 0) {
                     DbgPrint(L" error code = %d\n\n", GetLastError());
                 } else {
                     DbgPrint(L"success\n\n");
@@ -359,7 +362,7 @@ void MirrorCleanup(
         }
 
     } else {
-        DbgPrint(L"Cleanup: %s\n\tinvalid handle\n\n", filePath);
+        DbgPrint(L"Cleanup: %s\n\tinvalid handle\n\n", filePath.c_str());
     }
 }
 
@@ -372,19 +375,17 @@ NTSTATUS MirrorReadFile(
     LONGLONG			Offset,
     PDOKAN_FILE_INFO	DokanFileInfo)
 {
-    WCHAR	filePath[MAX_PATH];
     HANDLE	handle = (HANDLE)DokanFileInfo->Context;
     ULONG	offset = (ULONG)Offset;
     BOOL	opened = FALSE;
+    std::wstring filePath = GetFilePath(FileName);
 
-    GetFilePath(filePath, MAX_PATH, FileName);
-
-    DbgPrint(L"ReadFile : %s\n", filePath);
+    DbgPrint(L"ReadFile : %s\n", filePath.c_str());
 
     if (!handle || handle == INVALID_HANDLE_VALUE) {
         DbgPrint(L"\tinvalid handle, cleanuped?\n");
         handle = CreateFile(
-            filePath,
+            filePath.c_str(),
             GENERIC_READ,
             FILE_SHARE_READ,
             NULL,
@@ -434,20 +435,18 @@ NTSTATUS MirrorWriteFile(
     LONGLONG			Offset,
     PDOKAN_FILE_INFO	DokanFileInfo)
 {
-    WCHAR	filePath[MAX_PATH];
     HANDLE	handle = (HANDLE)DokanFileInfo->Context;
     ULONG	offset = (ULONG)Offset;
     BOOL	opened = FALSE;
+    std::wstring filePath = GetFilePath(FileName);
 
-    GetFilePath(filePath, MAX_PATH, FileName);
-
-    DbgPrint(L"WriteFile : %s, offset %I64d, length %d\n", filePath, Offset, NumberOfBytesToWrite);
+    DbgPrint(L"WriteFile : %s, offset %I64d, length %d\n", filePath.c_str(), Offset, NumberOfBytesToWrite);
 
     // reopen the file
     if (!handle || handle == INVALID_HANDLE_VALUE) {
         DbgPrint(L"\tinvalid handle, cleanuped?\n");
         handle = CreateFile(
-            filePath,
+            filePath.c_str(),
             GENERIC_WRITE,
             FILE_SHARE_WRITE,
             NULL,
@@ -495,12 +494,10 @@ NTSTATUS MirrorFlushFileBuffers(
     LPCWSTR		FileName,
     PDOKAN_FILE_INFO	DokanFileInfo)
 {
-    WCHAR	filePath[MAX_PATH];
     HANDLE	handle = (HANDLE)DokanFileInfo->Context;
+    std::wstring filePath = GetFilePath(FileName);
 
-    GetFilePath(filePath, MAX_PATH, FileName);
-
-    DbgPrint(L"FlushFileBuffers : %s\n", filePath);
+    DbgPrint(L"FlushFileBuffers : %s\n", filePath.c_str());
 
     if (!handle || handle == INVALID_HANDLE_VALUE) {
         DbgPrint(L"\tinvalid handle\n\n");
@@ -524,20 +521,19 @@ NTSTATUS MirrorGetFileInformation(
     LPBY_HANDLE_FILE_INFORMATION	HandleFileInformation,
     PDOKAN_FILE_INFO				DokanFileInfo)
 {
-    WCHAR	filePath[MAX_PATH];
     HANDLE	handle = (HANDLE)DokanFileInfo->Context;
     BOOL	opened = FALSE;
 
-    GetFilePath(filePath, MAX_PATH, FileName);
+    std::wstring filePath = GetFilePath(FileName);
 
-    DbgPrint(L"GetFileInfo : %s\n", filePath);
+    DbgPrint(L"GetFileInfo : %s\n", filePath.c_str());
 
     if (!handle || handle == INVALID_HANDLE_VALUE) {
         DbgPrint(L"\tinvalid handle\n\n");
 
         // If CreateDirectory returned FILE_ALREADY_EXISTS and 
         // it is called with FILE_OPEN_IF, that handle must be opened.
-        handle = CreateFile(filePath, 0, FILE_SHARE_READ, NULL, OPEN_EXISTING,
+        handle = CreateFile(filePath.c_str(), 0, FILE_SHARE_READ, NULL, OPEN_EXISTING,
             FILE_FLAG_BACKUP_SEMANTICS, NULL);
         if (handle == INVALID_HANDLE_VALUE)
         {
@@ -554,12 +550,12 @@ NTSTATUS MirrorGetFileInformation(
         // in this case, FindFirstFile can't get directory information
         if (wcslen(FileName) == 1) {
             DbgPrint(L"  root dir\n");
-            HandleFileInformation->dwFileAttributes = GetFileAttributes(filePath);
+            HandleFileInformation->dwFileAttributes = GetFileAttributes(filePath.c_str());
 
         } else {
             WIN32_FIND_DATAW find;
             ZeroMemory(&find, sizeof(WIN32_FIND_DATAW));
-            handle = FindFirstFile(filePath, &find);
+            handle = FindFirstFile(filePath.c_str(), &find);
             if (handle == INVALID_HANDLE_VALUE) {
                 DbgPrint(L"\tFindFirstFile error code = %d\n\n", GetLastError());
                 // fixlater;
@@ -593,19 +589,17 @@ NTSTATUS MirrorFindFiles(
     PFillFindData		FillFindData, // function pointer
     PDOKAN_FILE_INFO	DokanFileInfo)
 {
-    WCHAR				filePath[MAX_PATH];
     HANDLE				hFind;
     WIN32_FIND_DATAW	findData;
     DWORD				error;
     PWCHAR				yenStar = L"\\*";
     int count = 0;
 
-    GetFilePath(filePath, MAX_PATH, FileName);
+    std::wstring filePath = GetFilePath(FileName);
+    filePath = filePath + yenStar;
+    DbgPrint(L"FindFiles :%s\n", filePath.c_str());
 
-    wcscat_s(filePath, MAX_PATH, yenStar);
-    DbgPrint(L"FindFiles :%s\n", filePath);
-
-    hFind = FindFirstFile(filePath, &findData);
+    hFind = FindFirstFile(filePath.c_str(), &findData);
 
     if (hFind == INVALID_HANDLE_VALUE) {
         DbgPrint(L"\tinvalid file handle. Error is %u\n\n", GetLastError());
@@ -630,7 +624,7 @@ NTSTATUS MirrorFindFiles(
         return STATUS_ACCESS_DENIED;
     }
 
-    DbgPrint(L"\tFindFiles return %d entries in %s\n\n", count, filePath);
+    DbgPrint(L"\tFindFiles return %d entries in %s\n\n", count, filePath.c_str());
 
     return STATUS_SUCCESS;
 }
@@ -640,12 +634,11 @@ NTSTATUS MirrorDeleteFile(
     LPCWSTR				FileName,
     PDOKAN_FILE_INFO	DokanFileInfo)
 {
-    WCHAR	filePath[MAX_PATH];
     HANDLE	handle = (HANDLE)DokanFileInfo->Context;
 
-    GetFilePath(filePath, MAX_PATH, FileName);
+    std::wstring filePath = GetFilePath(FileName);
 
-    DbgPrint(L"DeleteFile %s\n", filePath);
+    DbgPrint(L"DeleteFile %s\n", filePath.c_str());
 
     return STATUS_SUCCESS;
 }
@@ -654,24 +647,22 @@ NTSTATUS MirrorDeleteDirectory(
     LPCWSTR				FileName,
     PDOKAN_FILE_INFO	DokanFileInfo)
 {
-    WCHAR	filePath[MAX_PATH];
     HANDLE	handle = (HANDLE)DokanFileInfo->Context;
     HANDLE	hFind;
     WIN32_FIND_DATAW	findData;
     ULONG	fileLen;
 
-    ZeroMemory(filePath, sizeof(filePath));
-    GetFilePath(filePath, MAX_PATH, FileName);
+    std::wstring filePath = GetFilePath(FileName);
 
-    DbgPrint(L"DeleteDirectory %s\n", filePath);
+    DbgPrint(L"DeleteDirectory %s\n", filePath.c_str());
 
-    fileLen = wcslen(filePath);
+    fileLen = wcslen(filePath.c_str());
     if (filePath[fileLen-1] != L'\\') {
         filePath[fileLen++] = L'\\';
     }
     filePath[fileLen] = L'*';
 
-    hFind = FindFirstFile(filePath, &findData);
+    hFind = FindFirstFile(filePath.c_str(), &findData);
     while (hFind != INVALID_HANDLE_VALUE) {
         if (wcscmp(findData.cFileName, L"..") != 0 &&
             wcscmp(findData.cFileName, L".") != 0) {
@@ -700,14 +691,12 @@ NTSTATUS MirrorMoveFile(
     BOOL				ReplaceIfExisting,
     PDOKAN_FILE_INFO	DokanFileInfo)
 {
-    WCHAR			filePath[MAX_PATH];
-    WCHAR			newFilePath[MAX_PATH];
     BOOL			status;
 
-    GetFilePath(filePath, MAX_PATH, FileName);
-    GetFilePath(newFilePath, MAX_PATH, NewFileName);
+    std::wstring filePath = GetFilePath(FileName);
+    std::wstring newFilePath = GetFilePath(NewFileName);
 
-    DbgPrint(L"MoveFile %s -> %s\n\n", filePath, newFilePath);
+    DbgPrint(L"MoveFile %s -> %s\n\n", filePath.c_str(), newFilePath.c_str());
 
     if (DokanFileInfo->Context) {
         // should close? or rename at closing?
@@ -716,9 +705,9 @@ NTSTATUS MirrorMoveFile(
     }
 
     if (ReplaceIfExisting)
-        status = MoveFileEx(filePath, newFilePath, MOVEFILE_REPLACE_EXISTING);
+        status = MoveFileEx(filePath.c_str(), newFilePath.c_str(), MOVEFILE_REPLACE_EXISTING);
     else
-        status = MoveFile(filePath, newFilePath);
+        status = MoveFile(filePath.c_str(), newFilePath.c_str());
 
     if (status == FALSE) {
         DWORD error = GetLastError();
@@ -735,14 +724,13 @@ NTSTATUS MirrorLockFile(
     LONGLONG			Length,
     PDOKAN_FILE_INFO	DokanFileInfo)
 {
-    WCHAR	filePath[MAX_PATH];
     HANDLE	handle;
     LARGE_INTEGER offset;
     LARGE_INTEGER length;
 
-    GetFilePath(filePath, MAX_PATH, FileName);
+    std::wstring filePath = GetFilePath(FileName);
 
-    DbgPrint(L"LockFile %s\n", filePath);
+    DbgPrint(L"LockFile %s\n", filePath.c_str());
 
     handle = (HANDLE)DokanFileInfo->Context;
     if (!handle || handle == INVALID_HANDLE_VALUE) {
@@ -769,13 +757,12 @@ NTSTATUS MirrorSetEndOfFile(
     LONGLONG			ByteOffset,
     PDOKAN_FILE_INFO	DokanFileInfo)
 {
-    WCHAR			filePath[MAX_PATH];
     HANDLE			handle;
     LARGE_INTEGER	offset;
 
-    GetFilePath(filePath, MAX_PATH, FileName);
+    std::wstring filePath = GetFilePath(FileName);
 
-    DbgPrint(L"SetEndOfFile %s, %I64d\n", filePath, ByteOffset);
+    DbgPrint(L"SetEndOfFile %s, %I64d\n", filePath.c_str(), ByteOffset);
 
     handle = (HANDLE)DokanFileInfo->Context;
     if (!handle || handle == INVALID_HANDLE_VALUE) {
@@ -808,13 +795,12 @@ NTSTATUS MirrorSetAllocationSize(
     LONGLONG			AllocSize,
     PDOKAN_FILE_INFO	DokanFileInfo)
 {
-    WCHAR			filePath[MAX_PATH];
     HANDLE			handle;
     LARGE_INTEGER	fileSize;
 
-    GetFilePath(filePath, MAX_PATH, FileName);
+    std::wstring filePath = GetFilePath(FileName);
 
-    DbgPrint(L"SetAllocationSize %s, %I64d\n", filePath, AllocSize);
+    DbgPrint(L"SetAllocationSize %s, %I64d\n", filePath.c_str(), AllocSize);
 
     handle = (HANDLE)DokanFileInfo->Context;
     if (!handle || handle == INVALID_HANDLE_VALUE) {
@@ -853,13 +839,11 @@ NTSTATUS MirrorSetFileAttributes(
     DWORD				FileAttributes,
     PDOKAN_FILE_INFO	DokanFileInfo)
 {
-    WCHAR	filePath[MAX_PATH];
-    
-    GetFilePath(filePath, MAX_PATH, FileName);
+    std::wstring filePath = GetFilePath(FileName);
 
-    DbgPrint(L"SetFileAttributes %s\n", filePath);
+    DbgPrint(L"SetFileAttributes %s\n", filePath.c_str());
 
-    if (!SetFileAttributes(filePath, FileAttributes)) {
+    if (!SetFileAttributes(filePath.c_str(), FileAttributes)) {
         DWORD error = GetLastError();
         DbgPrint(L"\terror code = %d\n\n", error);
         // fixlater;
@@ -877,12 +861,11 @@ NTSTATUS MirrorSetFileTime(
     CONST FILETIME*		LastWriteTime,
     PDOKAN_FILE_INFO	DokanFileInfo)
 {
-    WCHAR	filePath[MAX_PATH];
     HANDLE	handle;
 
-    GetFilePath(filePath, MAX_PATH, FileName);
+    std::wstring filePath = GetFilePath(FileName);
 
-    DbgPrint(L"SetFileTime %s\n", filePath);
+    DbgPrint(L"SetFileTime %s\n", filePath.c_str());
 
     handle = (HANDLE)DokanFileInfo->Context;
 
@@ -909,14 +892,13 @@ NTSTATUS MirrorUnlockFile(
     LONGLONG			Length,
     PDOKAN_FILE_INFO	DokanFileInfo)
 {
-    WCHAR	filePath[MAX_PATH];
     HANDLE	handle;
     LARGE_INTEGER	length;
     LARGE_INTEGER	offset;
 
-    GetFilePath(filePath, MAX_PATH, FileName);
+    std::wstring filePath = GetFilePath(FileName);
 
-    DbgPrint(L"UnlockFile %s\n", filePath);
+    DbgPrint(L"UnlockFile %s\n", filePath.c_str());
 
     handle = (HANDLE)DokanFileInfo->Context;
     if (!handle || handle == INVALID_HANDLE_VALUE) {
@@ -947,11 +929,9 @@ NTSTATUS MirrorGetFileSecurity(
     PDOKAN_FILE_INFO	DokanFileInfo)
 {
     HANDLE	handle;
-    WCHAR	filePath[MAX_PATH];
+    std::wstring filePath = GetFilePath(FileName);
 
-    GetFilePath(filePath, MAX_PATH, FileName);
-
-    DbgPrint(L"GetFileSecurity %s\n", filePath);
+    DbgPrint(L"GetFileSecurity %s\n", filePath.c_str());
 
     handle = (HANDLE)DokanFileInfo->Context;
     if (!handle || handle == INVALID_HANDLE_VALUE) {
@@ -984,11 +964,9 @@ NTSTATUS MirrorSetFileSecurity(
     PDOKAN_FILE_INFO	DokanFileInfo)
 {
     HANDLE	handle;
-    WCHAR	filePath[MAX_PATH];
+    std::wstring filePath = GetFilePath(FileName);
 
-    GetFilePath(filePath, MAX_PATH, FileName);
-
-    DbgPrint(L"SetFileSecurity %s\n", filePath);
+    DbgPrint(L"SetFileSecurity %s\n", filePath.c_str());
 
     handle = (HANDLE)DokanFileInfo->Context;
     if (!handle || handle == INVALID_HANDLE_VALUE) {
@@ -1077,13 +1055,13 @@ int _tmain(int argc, _TCHAR* argv[])
         switch (towlower(argv[command][1])) {
         case L'r':
             command++;
-            wcscpy_s(RootDirectory, _countof(RootDirectory), argv[command]);
-            DbgPrint(L"RootDirectory: %ls\n", RootDirectory);
+            wcscpy_s(g_RootDirectory, _countof(g_RootDirectory), argv[command]);
+            DbgPrint(L"RootDirectory: %ls\n", g_RootDirectory);
             break;
         case L'l':
             command++;
-            wcscpy_s(MountPoint, _countof(MountPoint), argv[command]);
-            dokanOptions->MountPoint = MountPoint;
+            wcscpy_s(g_MountPoint, _countof(g_MountPoint), argv[command]);
+            dokanOptions->MountPoint = g_MountPoint;
             break;
         case L't':
             command++;
@@ -1129,7 +1107,7 @@ int _tmain(int argc, _TCHAR* argv[])
     dokanOperations->FlushFileBuffers = MirrorFlushFileBuffers;
     dokanOperations->GetFileInformation = MirrorGetFileInformation;
     dokanOperations->FindFiles = MirrorFindFiles;
-    dokanOperations->FindFilesWithPattern = NULL;
+    dokanOperations->FindFilesWithPattern = nullptr;
     dokanOperations->SetFileAttributes = MirrorSetFileAttributes;
     dokanOperations->SetFileTime = MirrorSetFileTime;
     dokanOperations->DeleteFile = MirrorDeleteFile;
@@ -1141,7 +1119,7 @@ int _tmain(int argc, _TCHAR* argv[])
     dokanOperations->UnlockFile = MirrorUnlockFile;
     dokanOperations->GetFileSecurity = MirrorGetFileSecurity;
     dokanOperations->SetFileSecurity = MirrorSetFileSecurity;
-    dokanOperations->GetDiskFreeSpace = NULL;
+    dokanOperations->GetDiskFreeSpace = nullptr;
     dokanOperations->GetVolumeInformation = MirrorGetVolumeInformation;
     dokanOperations->Unmount = MirrorUnmount;
 

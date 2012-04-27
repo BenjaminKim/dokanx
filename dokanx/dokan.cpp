@@ -537,7 +537,7 @@ ReleaseDokanOpenInfo(
 			if (openInfo->DirListHead != NULL) {
 				ClearFindData(openInfo->DirListHead);
 				free(openInfo->DirListHead);
-				openInfo->DirListHead = NULL;
+				openInfo->DirListHead = nullptr;
 			}
 			free(openInfo);
 			EventInformation->Context = 0;
