@@ -43,13 +43,13 @@ DokanDispatchLock(
 	__try {
 		FsRtlEnterFileSystem();
 
-		DDbgPrint("==> DokanLock\n");
+		DDbgPrint("==> DokanLock");
 	
 		irpSp = IoGetCurrentIrpStackLocation(Irp);
 		fileObject = irpSp->FileObject;
 
 		if (fileObject == NULL) {
-			DDbgPrint("  fileObject == NULL\n");
+			DDbgPrint("  fileObject == NULL");
 			status = STATUS_INVALID_PARAMETER;
 			__leave;
 		}
@@ -66,16 +66,16 @@ DokanDispatchLock(
 
 		switch(irpSp->MinorFunction) {
 		case IRP_MN_LOCK:
-			DDbgPrint("  IRP_MN_LOCK\n");
+			DDbgPrint("  IRP_MN_LOCK");
 			break;
 		case IRP_MN_UNLOCK_ALL:
-			DDbgPrint("  IRP_MN_UNLOCK_ALL\n");
+			DDbgPrint("  IRP_MN_UNLOCK_ALL");
 			break;
 		case IRP_MN_UNLOCK_ALL_BY_KEY:
-			DDbgPrint("  IRP_MN_UNLOCK_ALL_BY_KEY\n");
+			DDbgPrint("  IRP_MN_UNLOCK_ALL_BY_KEY");
 			break;
 		case IRP_MN_UNLOCK_SINGLE:
-			DDbgPrint("  IRP_MN_UNLOCK_SINGLE\n");
+			DDbgPrint("  IRP_MN_UNLOCK_SINGLE");
 			break;
 		default:
 			DDbgPrint("  unknown function : %d\n", irpSp->MinorFunction);
@@ -108,7 +108,7 @@ DokanDispatchLock(
 		if (irpSp->Parameters.LockControl.Length != NULL) {
 			eventContext->Lock.Length.QuadPart = irpSp->Parameters.LockControl.Length->QuadPart;
 		} else {
-			DDbgPrint("  LockControl.Length = NULL\n");
+			DDbgPrint("  LockControl.Length = NULL");
 		}
 		eventContext->Lock.Key = irpSp->Parameters.LockControl.Key;
 
@@ -127,7 +127,7 @@ DokanDispatchLock(
 			DokanPrintNTStatus(status);
 		}
 
-		DDbgPrint("<== DokanLock\n");
+		DDbgPrint("<== DokanLock");
 		FsRtlExitFileSystem();
 	}
 
@@ -152,7 +152,7 @@ DokanCompleteLock(
 
 	//FsRtlEnterFileSystem();
 
-	DDbgPrint("==> DokanCompleteLock\n");
+	DDbgPrint("==> DokanCompleteLock");
 
 	fileObject = irpSp->FileObject;
 	ccb = fileObject->FsContext2;
@@ -168,7 +168,7 @@ DokanCompleteLock(
 
 	DokanPrintNTStatus(status);
 
-	DDbgPrint("<== DokanCompleteLock\n");
+	DDbgPrint("<== DokanCompleteLock");
 
 	//FsRtlExitFileSystem();
 }

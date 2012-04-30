@@ -154,7 +154,7 @@ DokanEventNotification(
 
 	ASSERT(KeGetCurrentIrql() <= DISPATCH_LEVEL);
 
-	//DDbgPrint("DokanEventNotification\n");
+	//DDbgPrint("DokanEventNotification");
 
 	ExInterlockedInsertTailList(
 		&NotifyEvent->ListHead,
@@ -258,7 +258,7 @@ NotificationLoop(
 	ULONG	bufferLen;
 	PVOID	buffer;
 
-	//DDbgPrint("=> NotificationLoop\n");
+	//DDbgPrint("=> NotificationLoop");
 
 	InitializeListHead(&completeList);
 
@@ -310,7 +310,7 @@ NotificationLoop(
 
 		// buffer is not specified or short of length
 		if (bufferLen == 0 || buffer == NULL || bufferLen < eventLen) {
-			DDbgPrint("EventNotice : STATUS_INSUFFICIENT_RESOURCES\n");
+			DDbgPrint("EventNotice : STATUS_INSUFFICIENT_RESOURCES");
 			DDbgPrint("  bufferLen: %d, eventLen: %d\n", bufferLen, eventLen);
 			// push back
 			InsertTailList(&NotifyEvent->ListHead,
@@ -352,7 +352,7 @@ NotificationLoop(
 		IoCompleteRequest(irp, IO_NO_INCREMENT);
 	}
 
-	//DDbgPrint("<= NotificationLoop\n");
+	//DDbgPrint("<= NotificationLoop");
 }
 
 
@@ -366,11 +366,11 @@ NotificationThread(
 	PKWAIT_BLOCK waitBlock;
 	NTSTATUS status;
 
-	DDbgPrint("==> NotificationThread\n");
+	DDbgPrint("==> NotificationThread");
 
 	waitBlock = ExAllocatePool(sizeof(KWAIT_BLOCK) * 5);
 	if (waitBlock == NULL) {
-		DDbgPrint("  Can't allocate WAIT_BLOCK\n");
+		DDbgPrint("  Can't allocate WAIT_BLOCK");
 		return;
 	}
 	events[0] = &Dcb->ReleaseEvent;
@@ -401,7 +401,7 @@ NotificationThread(
 	}
 
 	ExFreePool(waitBlock);
-	DDbgPrint("<== NotificationThread\n");
+	DDbgPrint("<== NotificationThread");
 }
 
 
@@ -413,7 +413,7 @@ DokanStartEventNotificationThread(
 	NTSTATUS status;
 	HANDLE	thread;
 
-	DDbgPrint("==> DokanStartEventNotificationThread\n");
+	DDbgPrint("==> DokanStartEventNotificationThread");
 
 	KeResetEvent(&Dcb->ReleaseEvent);
 
@@ -431,7 +431,7 @@ DokanStartEventNotificationThread(
 
 	ZwClose(thread);
 
-	DDbgPrint("<== DokanStartEventNotificationThread\n");
+	DDbgPrint("<== DokanStartEventNotificationThread");
 
 	return STATUS_SUCCESS;
 }
@@ -441,7 +441,7 @@ VOID
 DokanStopEventNotificationThread(
 	__in PDokanDCB	Dcb)
 {
-	DDbgPrint("==> DokanStopEventNotificationThread\n");
+	DDbgPrint("==> DokanStopEventNotificationThread");
 	
 	KeSetEvent(&Dcb->ReleaseEvent, 0, FALSE);
 
@@ -453,7 +453,7 @@ DokanStopEventNotificationThread(
 		Dcb->EventNotificationThread = NULL;
 	}
 	
-	DDbgPrint("<== DokanStopEventNotificationThread\n");
+	DDbgPrint("<== DokanStopEventNotificationThread");
 }
 
 

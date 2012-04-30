@@ -18,7 +18,7 @@ You should have received a copy of the GNU Lesser General Public License along
 with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-
+#include "stdafx.h"
 #include "../dokani.h"
 #include "fileinfo.h"
 #include "list.h"
@@ -266,7 +266,7 @@ DokanFillDirectoryInformation(
 
     // no more memory, don't fill any more
     if (*LengthRemaining < thisEntrySize) {
-        DbgPrint("  no memory\n");
+        logw(L"  no memory");
         return 0;
     }
 
@@ -371,7 +371,7 @@ MatchFiles(
 
         find = CONTAINING_RECORD(thisEntry, DOKAN_FIND_DATA, ListEntry);
 
-        DbgPrintW(L"FileMatch? : %s (%s,%d,%d)\n", find->FindData.cFileName,
+        logw(L"FileMatch? : %s (%s,%d,%d)", find->FindData.cFileName,
             (pattern ? pattern : L"null"),
             EventContext->Directory.FileIndex, index);
 
@@ -392,12 +392,12 @@ MatchFiles(
 
                 // end if needs to return single entry
                 if (EventContext->Flags & SL_RETURN_SINGLE_ENTRY) {
-                    DbgPrint("  =>return single entry\n");
+                    logw(L"  =>return single entry");
                     index++;
                     break;
                 }
 
-                DbgPrint("  =>return\n");
+                logw(L"  =>return");
 
                 // the offset of next entry
                 ((PFILE_BOTH_DIR_INFORMATION)currentBuffer)->NextEntryOffset = entrySize;
@@ -454,7 +454,7 @@ DispatchDirectoryInformation(
         fileInfoClass != FileIdBothDirectoryInformation &&
         fileInfoClass != FileBothDirectoryInformation) {
         
-        DbgPrint("not suported type %d\n", fileInfoClass);
+        logw(L"not suported type %d", fileInfoClass);
 
         // send directory info to driver
         eventInfo->BufferLength = 0;
@@ -480,7 +480,7 @@ DispatchDirectoryInformation(
 
     if (IsListEmpty(openInfo->DirListHead)) {
 
-        DbgPrint("###FindFiles %04d\n", openInfo->EventId);
+        logw(L"###FindFiles %04d", openInfo->EventId);
 
         // if user defined FindFilesWithPattern
         if (DokanInstance->DokanOperations->FindFilesWithPattern) {
@@ -519,10 +519,10 @@ DispatchDirectoryInformation(
     if (status < 0) {
 
         if (EventContext->Directory.FileIndex == 0) {
-            DbgPrint("  STATUS_NO_SUCH_FILE\n");
+            logw(L"  STATUS_NO_SUCH_FILE");
             eventInfo->Status = STATUS_NO_SUCH_FILE;
         } else {
-            DbgPrint("  STATUS_NO_MORE_FILES\n");
+            logw(L"  STATUS_NO_MORE_FILES");
             eventInfo->Status = STATUS_NO_MORE_FILES;
         }
 
@@ -534,17 +534,17 @@ DispatchDirectoryInformation(
         LONG	index;
         eventInfo->Status = STATUS_SUCCESS;
 
-        DbgPrint("index from %d\n", EventContext->Directory.FileIndex);
+        logw(L"index from %d", EventContext->Directory.FileIndex);
         // extract entries that match search pattern from FindFiles result
         index = MatchFiles(EventContext, eventInfo, openInfo->DirListHead, patternCheck);
 
         // there is no matched file
         if (index <0) {
             if (EventContext->Directory.FileIndex == 0) {
-                DbgPrint("  STATUS_NO_SUCH_FILE\n");
+                logw(L"  STATUS_NO_SUCH_FILE");
                 eventInfo->Status = STATUS_NO_SUCH_FILE;
             } else {
-                DbgPrint("  STATUS_NO_MORE_FILES\n");
+                logw(L"  STATUS_NO_MORE_FILES");
                 eventInfo->Status = STATUS_NO_MORE_FILES;
             }
             eventInfo->BufferLength = 0;
@@ -553,7 +553,7 @@ DispatchDirectoryInformation(
             ClearFindData(openInfo->DirListHead);
 
         } else {
-            DbgPrint("index to %d\n", index);
+            logw(L"index to %d", index);
             eventInfo->Directory.Index	= index;
         }
         

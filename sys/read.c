@@ -65,13 +65,13 @@ Return Value:
 
 		FsRtlEnterFileSystem();
 
-		DDbgPrint("==> DokanRead\n");
+		DDbgPrint("==> DokanRead");
 
 		irpSp		= IoGetCurrentIrpStackLocation(Irp);
 		fileObject	= irpSp->FileObject;
 
 		if (fileObject == NULL) {
-			DDbgPrint("  fileObject == NULL\n");
+			DDbgPrint("  fileObject == NULL");
 			status = STATUS_INVALID_PARAMETER;
 			__leave;
 		}
@@ -89,7 +89,7 @@ Return Value:
 
 			// irpSp->Parameters.Read.ByteOffset == NULL don't need check?
 	
-			DDbgPrint("use FileObject ByteOffset\n");
+			DDbgPrint("use FileObject ByteOffset");
 			
 			byteOffset = fileObject->CurrentByteOffset;
 		
@@ -140,16 +140,16 @@ Return Value:
 		//DDbgPrint("   get Context %X\n", (ULONG)ccb->UserContext);
 
 		if (Irp->Flags & IRP_PAGING_IO) {
-			DDbgPrint("  Paging IO\n");
+			DDbgPrint("  Paging IO");
 			eventContext->FileFlags |= DOKAN_PAGING_IO;
 		}
 		if (fileObject->Flags & FO_SYNCHRONOUS_IO) {
-			DDbgPrint("  Synchronous IO\n");
+			DDbgPrint("  Synchronous IO");
 			eventContext->FileFlags |= DOKAN_SYNCHRONOUS_IO;
 		}
 
 		if (Irp->Flags & IRP_NOCACHE) {
-			DDbgPrint("  Nocache\n");
+			DDbgPrint("  Nocache");
 			eventContext->FileFlags |= DOKAN_NOCACHE;
 		}
 
@@ -176,10 +176,10 @@ Return Value:
 			IoCompleteRequest(Irp, IO_NO_INCREMENT);
 			DokanPrintNTStatus(status);
 		} else {
-			DDbgPrint("  STATUS_PENDING\n");
+			DDbgPrint("  STATUS_PENDING");
 		}
 
-		DDbgPrint("<== DokanRead\n");
+		DDbgPrint("<== DokanRead");
 		
 		FsRtlExitFileSystem();
 
@@ -221,10 +221,10 @@ DokanCompleteRead(
 
 	// buffer which is used to copy Read info
 	if (irp->MdlAddress) {
-		//DDbgPrint("   use MDL Address\n");
+		//DDbgPrint("   use MDL Address");
 		buffer = MmGetSystemAddressForMdlSafe(irp->MdlAddress, NormalPagePriority);
 	} else {
-		//DDbgPrint("   use UserBuffer\n");
+		//DDbgPrint("   use UserBuffer");
 		buffer	= irp->UserBuffer;
 	}
 
@@ -260,11 +260,11 @@ DokanCompleteRead(
 	}
 
 	if (status == STATUS_SUCCESS) {
-		DDbgPrint("  STATUS_SUCCESS\n");
+		DDbgPrint("  STATUS_SUCCESS");
 	} else if (status == STATUS_INSUFFICIENT_RESOURCES) {
-		DDbgPrint("  STATUS_INSUFFICIENT_RESOURCES\n");
+		DDbgPrint("  STATUS_INSUFFICIENT_RESOURCES");
 	} else if (status == STATUS_END_OF_FILE) {
-		DDbgPrint("  STATUS_END_OF_FILE\n");
+		DDbgPrint("  STATUS_END_OF_FILE");
 	} else {
 		DDbgPrint("  status = 0x%X\n", status);
 	}
@@ -273,7 +273,7 @@ DokanCompleteRead(
 	irp->IoStatus.Information = readLength;
 	IoCompleteRequest(irp, IO_NO_INCREMENT);
 
-	DDbgPrint("<== DokanCompleteRead\n");
+	DDbgPrint("<== DokanCompleteRead");
 }
 
 

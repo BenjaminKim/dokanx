@@ -45,7 +45,7 @@ DokanDispatchQueryInformation(
 	__try {
 		FsRtlEnterFileSystem();
 
-		DDbgPrint("==> DokanQueryInformation\n");
+		DDbgPrint("==> DokanQueryInformation");
 
 		irpSp			= IoGetCurrentIrpStackLocation(Irp);
 		fileObject		= irpSp->FileObject;
@@ -54,7 +54,7 @@ DokanDispatchQueryInformation(
 		DDbgPrint("  ProcessId %lu\n", IoGetRequestorProcessId(Irp));
 
 		if (fileObject == NULL) {
-			DDbgPrint("  Failed. fileObject == NULL\n");
+			DDbgPrint("  Failed. fileObject == NULL");
 			status = STATUS_INVALID_PARAMETER;
 			__leave;
 		}
@@ -83,34 +83,34 @@ DokanDispatchQueryInformation(
 
 		switch (irpSp->Parameters.QueryFile.FileInformationClass) {
 		case FileBasicInformation:
-			DDbgPrint("  FileBasicInformation\n");
+			DDbgPrint("  FileBasicInformation");
 			break;  
 		case FileInternalInformation:
-			DDbgPrint("  FileInternalInformation\n");
+			DDbgPrint("  FileInternalInformation");
 			break;
 		case FileEaInformation:
-			DDbgPrint("  FileEaInformation\n");
+			DDbgPrint("  FileEaInformation");
 			break;          
 		case FileStandardInformation:
-			DDbgPrint("  FileStandardInformation\n");
+			DDbgPrint("  FileStandardInformation");
 			break;
 		case FileAllInformation:
-			DDbgPrint("  FileAllInformation\n");
+			DDbgPrint("  FileAllInformation");
 			break;
 		case FileAlternateNameInformation:
-			DDbgPrint("  FileAlternateNameInformation\n");
+			DDbgPrint("  FileAlternateNameInformation");
 			break;
 		case FileAttributeTagInformation:
-			DDbgPrint("  FileAttributeTagInformation\n");
+			DDbgPrint("  FileAttributeTagInformation");
 			break;
 		case FileCompressionInformation:
-			DDbgPrint("  FileCompressionInformation\n");
+			DDbgPrint("  FileCompressionInformation");
 			break;
 		case FileNameInformation:
 			{
 				PFILE_NAME_INFORMATION nameInfo;
 
-				DDbgPrint("  FileNameInformation\n");
+				DDbgPrint("  FileNameInformation");
 	
 				if (irpSp->Parameters.QueryFile.Length < sizeof(FILE_NAME_INFORMATION)
 					+ fcb->FileName.Length) {
@@ -131,7 +131,7 @@ DokanDispatchQueryInformation(
 			}
 			break;
 		case FileNetworkOpenInformation:
-			DDbgPrint("  FileNetworkOpenInformation\n");
+			DDbgPrint("  FileNetworkOpenInformation");
 			break;
 		case FilePositionInformation:
 			{
@@ -140,7 +140,7 @@ DokanDispatchQueryInformation(
 				//
 				PFILE_POSITION_INFORMATION posInfo;
 			
-				DDbgPrint("  FilePositionInformation\n");
+				DDbgPrint("  FilePositionInformation");
 
 				if (irpSp->Parameters.QueryFile.Length < sizeof(FILE_POSITION_INFORMATION)) {
 					status = STATUS_INFO_LENGTH_MISMATCH;
@@ -168,7 +168,7 @@ DokanDispatchQueryInformation(
 			}
 			break;
 		case FileStreamInformation:
-			DDbgPrint("  FileStreamInformation\n");
+			DDbgPrint("  FileStreamInformation");
 			break;
 		default:
 			DDbgPrint("  unknown type:%d\n", irpSp->Parameters.QueryFile.FileInformationClass);
@@ -216,7 +216,7 @@ DokanDispatchQueryInformation(
 			DokanPrintNTStatus(status);
 		}
 
-		DDbgPrint("<== DokanQueryInformation\n");
+		DDbgPrint("<== DokanQueryInformation");
 
 		FsRtlExitFileSystem();
 
@@ -243,7 +243,7 @@ DokanCompleteQueryInformation(
 
 	//FsRtlEnterFileSystem();
 
-	DDbgPrint("==> DokanCompleteQueryInformation\n");
+	DDbgPrint("==> DokanCompleteQueryInformation");
 
 	irp = IrpEntry->Irp;
 	irpSp = IrpEntry->IrpSp;
@@ -294,7 +294,7 @@ DokanCompleteQueryInformation(
 	IoCompleteRequest(irp, IO_NO_INCREMENT);
 
 	DokanPrintNTStatus(status);
-	DDbgPrint("<== DokanCompleteQueryInformation\n");
+	DDbgPrint("<== DokanCompleteQueryInformation");
 
 	//FsRtlExitFileSystem();
 
@@ -326,13 +326,13 @@ DokanDispatchSetInformation(
 	__try {
 		FsRtlEnterFileSystem();
 
-		DDbgPrint("==> DokanSetInformationn\n");
+		DDbgPrint("==> DokanSetInformationn");
 
 		irpSp			= IoGetCurrentIrpStackLocation(Irp);
 		fileObject		= irpSp->FileObject;
 		
 		if (fileObject == NULL) {
-			DDbgPrint("  fileObject == NULL\n");
+			DDbgPrint("  fileObject == NULL");
 			status = STATUS_INVALID_PARAMETER;
 			__leave;
 		}
@@ -361,17 +361,17 @@ DokanDispatchSetInformation(
 						((PFILE_ALLOCATION_INFORMATION)buffer)->AllocationSize.QuadPart);
 			break;
 		case FileBasicInformation:
-			DDbgPrint("  FileBasicInformation\n");
+			DDbgPrint("  FileBasicInformation");
 			break;
 		case FileDispositionInformation:
-			DDbgPrint("  FileDispositionInformation\n");
+			DDbgPrint("  FileDispositionInformation");
 			break;
 		case FileEndOfFileInformation:
 			DDbgPrint("  FileEndOfFileInformation %lld\n",
 						((PFILE_END_OF_FILE_INFORMATION)buffer)->EndOfFile.QuadPart);
 			break;
 		case FileLinkInformation:
-			DDbgPrint("  FileLinkInformation\n");
+			DDbgPrint("  FileLinkInformation");
 			break;
 		case FilePositionInformation:
 			{
@@ -390,10 +390,10 @@ DokanDispatchSetInformation(
 			}
 			break;
 		case FileRenameInformation:
-			DDbgPrint("  FileRenameInformation\n");
+			DDbgPrint("  FileRenameInformation");
 			break;
 		case FileValidDataLengthInformation:
-			DDbgPrint("  FileValidDataLengthInformation\n");
+			DDbgPrint("  FileValidDataLengthInformation");
 			break;
 		default:
 			DDbgPrint("  unknown type:%d\n", irpSp->Parameters.SetFile.FileInformationClass);
@@ -488,7 +488,7 @@ DokanDispatchSetInformation(
 		}
 
 
-		DDbgPrint("<== DokanSetInformation\n");
+		DDbgPrint("<== DokanSetInformation");
 
 		FsRtlExitFileSystem();
 	}
@@ -517,7 +517,7 @@ DokanCompleteSetInformation(
 
 	__try {
 
-		DDbgPrint("==> DokanCompleteSetInformation\n");
+		DDbgPrint("==> DokanCompleteSetInformation");
 
 		irp = IrpEntry->Irp;
 		irpSp = IrpEntry->IrpSp;
@@ -549,19 +549,19 @@ DokanCompleteSetInformation(
 					if (!MmFlushImageSection(
 						&fcb->SectionObjectPointers,
 						MmFlushForDelete)) {
-						DDbgPrint("  Cannot delete user mapped image\n");
+						DDbgPrint("  Cannot delete user mapped image");
 						status = STATUS_CANNOT_DELETE;
 					} else {
 						ccb->Flags |= DOKAN_DELETE_ON_CLOSE;
 						fcb->Flags |= DOKAN_DELETE_ON_CLOSE;
-						DDbgPrint("   FileObject->DeletePending = TRUE\n");
+						DDbgPrint("   FileObject->DeletePending = TRUE");
 						IrpEntry->FileObject->DeletePending = TRUE;
 					}
 
 				} else {
 					ccb->Flags &= ~DOKAN_DELETE_ON_CLOSE;
 					fcb->Flags &= ~DOKAN_DELETE_ON_CLOSE;
-					DDbgPrint("   FileObject->DeletePending = FALSE\n");
+					DDbgPrint("   FileObject->DeletePending = FALSE");
 					IrpEntry->FileObject->DeletePending = FALSE;
 				}
 			}
@@ -665,6 +665,6 @@ DokanCompleteSetInformation(
 
 		DokanPrintNTStatus(status);
 
-		DDbgPrint("<== DokanCompleteSetInformation\n");
+		DDbgPrint("<== DokanCompleteSetInformation");
 	}
 }

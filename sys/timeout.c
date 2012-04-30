@@ -88,7 +88,7 @@ DokanCheckKeepAlive(
 	ULONG				mounted;
 	PDokanVCB			vcb = Dcb->Vcb;
 
-	//DDbgPrint("==> DokanCheckKeepAlive\n");
+	//DDbgPrint("==> DokanCheckKeepAlive");
 
 	KeEnterCriticalRegion();
 	KeQueryTickCount(&tickCount);
@@ -100,7 +100,7 @@ DokanCheckKeepAlive(
 
 		ExReleaseResourceLite(&Dcb->Resource);
 
-		DDbgPrint("  Timeout, force to umount\n");
+		DDbgPrint("  Timeout, force to umount");
 
 		if (!mounted) {
 			// not mounted
@@ -114,7 +114,7 @@ DokanCheckKeepAlive(
 	}
 
 	KeLeaveCriticalRegion();
-	//DDbgPrint("<== DokanCheckKeepAlive\n");
+	//DDbgPrint("<== DokanCheckKeepAlive");
 }
 
 
@@ -131,7 +131,7 @@ ReleaseTimeoutPendingIrp(
 	LIST_ENTRY			completeList;
 	PIRP				irp;
 
-	DDbgPrint("==> ReleaseTimeoutPendingIRP\n");
+	DDbgPrint("==> ReleaseTimeoutPendingIRP");
 	InitializeListHead(&completeList);
 
 	ASSERT(KeGetCurrentIrql() <= DISPATCH_LEVEL);
@@ -140,7 +140,7 @@ ReleaseTimeoutPendingIrp(
 	// when IRP queue is empty, there is nothing to do
 	if (IsListEmpty(&Dcb->PendingIrp.ListHead)) {
 		KeReleaseSpinLock(&Dcb->PendingIrp.ListLock, oldIrql);
-		DDbgPrint("  IrpQueue is Empty\n");
+		DDbgPrint("  IrpQueue is Empty");
 		return STATUS_SUCCESS;
 	}
 
@@ -203,7 +203,7 @@ ReleaseTimeoutPendingIrp(
 		IoCompleteRequest(irp, IO_NO_INCREMENT);
 	}
 
-	DDbgPrint("<== ReleaseTimeoutPendingIRP\n");
+	DDbgPrint("<== ReleaseTimeoutPendingIRP");
 	return STATUS_SUCCESS;
 }
 
@@ -222,7 +222,7 @@ DokanResetPendingIrpTimeout(
 	ULONG				timeout; // in milisecond
 
 
-	DDbgPrint("==> ResetPendingIrpTimeout\n");
+	DDbgPrint("==> ResetPendingIrpTimeout");
 
 	eventInfo		= (PEVENT_INFORMATION)Irp->AssociatedIrp.SystemBuffer;
 	ASSERT(eventInfo != NULL);
@@ -259,7 +259,7 @@ DokanResetPendingIrpTimeout(
 		break;
 	}
 	KeReleaseSpinLock(&vcb->Dcb->PendingIrp.ListLock, oldIrql);
-	DDbgPrint("<== ResetPendingIrpTimeout\n");
+	DDbgPrint("<== ResetPendingIrpTimeout");
 	return STATUS_SUCCESS;
 }
 
@@ -281,7 +281,7 @@ Routine Description:
 	PVOID			pollevents[2];
 	LARGE_INTEGER	timeout = {0};
 
-	DDbgPrint("==> DokanTimeoutThread\n");
+	DDbgPrint("==> DokanTimeoutThread");
 
 	KeInitializeTimerEx(&timer, SynchronizationTimer);
 	
@@ -295,7 +295,7 @@ Routine Description:
 			Executive, KernelMode, FALSE, NULL, NULL);
 		
 		if (!NT_SUCCESS(status) || status ==  STATUS_WAIT_0) {
-			DDbgPrint("  DokanTimeoutThread catched KillEvent\n");
+			DDbgPrint("  DokanTimeoutThread catched KillEvent");
 			// KillEvent or something error is occured
 			break;
 		}
@@ -307,7 +307,7 @@ Routine Description:
 
 	KeCancelTimer(&timer);
 
-	DDbgPrint("<== DokanTimeoutThread\n");
+	DDbgPrint("<== DokanTimeoutThread");
 
 	PsTerminateSystemThread(STATUS_SUCCESS);
 }
@@ -327,7 +327,7 @@ Routine Description:
 	NTSTATUS status;
 	HANDLE	thread;
 
-	DDbgPrint("==> DokanStartCheckThread\n");
+	DDbgPrint("==> DokanStartCheckThread");
 
 	status = PsCreateSystemThread(&thread, THREAD_ALL_ACCESS,
 		NULL, NULL, NULL, (PKSTART_ROUTINE)DokanTimeoutThread, Dcb);
@@ -341,7 +341,7 @@ Routine Description:
 
 	ZwClose(thread);
 
-	DDbgPrint("<== DokanStartCheckThread\n");
+	DDbgPrint("<== DokanStartCheckThread");
 
 	return STATUS_SUCCESS;
 }
@@ -358,7 +358,7 @@ Routine Description:
 
 --*/
 {
-	DDbgPrint("==> DokanStopCheckThread\n");
+	DDbgPrint("==> DokanStopCheckThread");
 	
 	KeSetEvent(&Dcb->KillEvent, 0, FALSE);
 
@@ -369,7 +369,7 @@ Routine Description:
 		Dcb->TimeoutThread = NULL;
 	}
 	
-	DDbgPrint("<== DokanStopCheckThread\n");
+	DDbgPrint("<== DokanStopCheckThread");
 }
 
 

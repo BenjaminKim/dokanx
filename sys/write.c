@@ -43,13 +43,13 @@ DokanDispatchWrite(
 
 		FsRtlEnterFileSystem();
 
-		DDbgPrint("==> DokanWrite\n");
+		DDbgPrint("==> DokanWrite");
 
 		irpSp		= IoGetCurrentIrpStackLocation(Irp);
 		fileObject	= irpSp->FileObject;
 
 		if (fileObject == NULL) {
-			DDbgPrint("  fileObject == NULL\n");
+			DDbgPrint("  fileObject == NULL");
 			status = STATUS_INVALID_PARAMETER;
 			__leave;
 		}
@@ -82,15 +82,15 @@ DokanDispatchWrite(
 		}
 
 		if (Irp->MdlAddress) {
-			DDbgPrint("  use MdlAddress\n");
+			DDbgPrint("  use MdlAddress");
 			buffer = MmGetSystemAddressForMdlSafe(Irp->MdlAddress, NormalPagePriority);
 		} else {
-			DDbgPrint("  use UserBuffer\n");
+			DDbgPrint("  use UserBuffer");
 			buffer = Irp->UserBuffer;
 		}
 
 		if (buffer == NULL) {
-			DDbgPrint("  buffer == NULL\n");
+			DDbgPrint("  buffer == NULL");
 			status = STATUS_INVALID_PARAMETER;
 			__leave;
 		}
@@ -117,11 +117,11 @@ DokanDispatchWrite(
 		Irp->Tail.Overlay.DriverContext[DRIVER_CONTEXT_EVENT] = eventContext;
 		
 		if (Irp->Flags & IRP_PAGING_IO) {
-			DDbgPrint("  Paging IO\n");
+			DDbgPrint("  Paging IO");
 			eventContext->FileFlags |= DOKAN_PAGING_IO;
 		}
 		if (fileObject->Flags & FO_SYNCHRONOUS_IO) {
-			DDbgPrint("  Synchronous IO\n");
+			DDbgPrint("  Synchronous IO");
 			eventContext->FileFlags |= DOKAN_SYNCHRONOUS_IO;
 		}
 
@@ -132,7 +132,7 @@ DokanDispatchWrite(
 			&& irpSp->Parameters.Write.ByteOffset.HighPart == -1) {
 
 			eventContext->FileFlags |= DOKAN_WRITE_TO_END_OF_FILE;
-			DDbgPrint("  WriteOffset = end of file\n");
+			DDbgPrint("  WriteOffset = end of file");
 		}
 
 		if ((fileObject->Flags & FO_SYNCHRONOUS_IO) &&
@@ -216,10 +216,10 @@ DokanDispatchWrite(
 			IoCompleteRequest(Irp, IO_NO_INCREMENT);
 			DokanPrintNTStatus(status);
 		} else {
-			DDbgPrint("  STATUS_PENDING\n");
+			DDbgPrint("  STATUS_PENDING");
 		}
 
-		DDbgPrint("<== DokanWrite\n");
+		DDbgPrint("<== DokanWrite");
 
 		FsRtlExitFileSystem();
 
@@ -278,6 +278,6 @@ DokanCompleteWrite(
 	IoCompleteRequest(irp, IO_NO_INCREMENT);
 
 	DokanPrintNTStatus(status);
-	DDbgPrint("<== DokanCompleteWrite\n");
+	DDbgPrint("<== DokanCompleteWrite");
 }
 

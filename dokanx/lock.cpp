@@ -18,6 +18,7 @@ You should have received a copy of the GNU Lesser General Public License along
 with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
+#include "stdafx.h"
 #include "../dokani.h"
 #include "fileinfo.h"
 
@@ -39,7 +40,7 @@ DispatchLock(
 	eventInfo = DispatchCommon(
 		EventContext, sizeOfEventInfo, DokanInstance, &fileInfo, &openInfo);
 
-	DbgPrint("###Lock %04d\n", openInfo != NULL ? openInfo->EventId : -1);
+	logw(L"###Lock %04d\n", openInfo != NULL ? openInfo->EventId : -1);
 
 	eventInfo->Status = STATUS_NOT_IMPLEMENTED;
 
@@ -76,7 +77,7 @@ DispatchLock(
 		}
 		break;
 	default:
-		DbgPrint("unkown lock function %d\n", EventContext->MinorFunction);
+		logw(L"unkown lock function %d\n", EventContext->MinorFunction);
 	}
 
 	openInfo->UserContext = fileInfo.Context;

@@ -33,29 +33,28 @@ THE SOFTWARE.
 #include <string>
 #include "../dokan.h"
 #include "../dokanx/fileinfo.h"
+#include "../Common/String/StringHelper.h"
 
 BOOL g_UseStdErr;
 BOOL g_DebugMode;
 
-static void DbgPrint(LPCWSTR format, ...)
-{
-    if (g_DebugMode) {
-        WCHAR buffer[512];
-        va_list argp;
-        va_start(argp, format);
-        vswprintf_s(buffer, _countof(buffer), format, argp);
-        va_end(argp);
-        if (g_UseStdErr) {
-            fwprintf(stderr, buffer);
-        } else {
-            OutputDebugStringW(buffer);
-        }
-    }
-}
-
 static WCHAR g_RootDirectory[MAX_PATH] = L"C:";
 static WCHAR g_MountPoint[MAX_PATH] = L"M:";
 
+NTSTATUS ToNtStatus(DWORD dwError)
+{
+    switch (dwError)
+    {
+    case ERROR_FILE_NOT_FOUND:
+        return STATUS_OBJECT_NAME_NOT_FOUND;
+    case ERROR_PATH_NOT_FOUND:
+        return STATUS_OBJECT_PATH_NOT_FOUND;
+    case ERROR_INVALID_PARAMETER:
+        return STATUS_INVALID_PARAMETER;
+    default:
+        return STATUS_ACCESS_DENIED;
+    }
+}
 
 std::wstring GetFilePath(
     __in const std::wstring& fileName
@@ -63,17 +62,6 @@ std::wstring GetFilePath(
 {
     return std::wstring(g_RootDirectory) + fileName;
 }
-
-//
-//    PWCHAR	filePath,
-//    ULONG	numberOfElements,
-//    LPCWSTR FileName)
-//{
-//    RtlZeroMemory(filePath, numberOfElements * sizeof(WCHAR));
-//    wcsncpy_s(filePath, numberOfElements, g_RootDirectory, wcslen(g_RootDirectory));
-//    wcsncat_s(filePath, numberOfElements, FileName, wcslen(FileName));
-//}
-//
 
 static void
 PrintUserName(PDOKAN_FILE_INFO	DokanFileInfo)
@@ -90,12 +78,12 @@ PrintUserName(PDOKAN_FILE_INFO	DokanFileInfo)
 
     handle = DokanOpenRequestorToken(DokanFileInfo);
     if (handle == INVALID_HANDLE_VALUE) {
-        DbgPrint(L"  DokanOpenRequestorToken failed\n");
+        logw(L"  DokanOpenRequestorToken failed");
         return;
     }
 
     if (!GetTokenInformation(handle, TokenUser, buffer, sizeof(buffer), &returnLength)) {
-        DbgPrint(L"  GetTokenInformaiton failed: %d\n", GetLastError());
+        logw(L"  GetTokenInformaiton failed: %d", GetLastError());
         CloseHandle(handle);
         return;
     }
@@ -105,14 +93,14 @@ PrintUserName(PDOKAN_FILE_INFO	DokanFileInfo)
     tokenUser = (PTOKEN_USER)buffer;
     if (!LookupAccountSid(NULL, tokenUser->User.Sid, accountName,
             &accountLength, domainName, &domainLength, &snu)) {
-        DbgPrint(L"  LookupAccountSid failed: %d\n", GetLastError());
+        logw(L"  LookupAccountSid failed: %d", GetLastError());
         return;
     }
 
-    DbgPrint(L"  AccountName: %s, DomainName: %s\n", accountName, domainName);
+    logw(L"  AccountName: %s, DomainName: %s", accountName, domainName);
 }
 
-#define MirrorCheckFlag(val, flag) if (val&flag) { DbgPrint(L"\t" L#flag L"\n"); }
+#define MirrorCheckFlag(val, flag) if (val&flag) { logw(L#flag); }
 
 
 void CheckFileAttributeFlags(DWORD FlagsAndAttributes)
@@ -184,32 +172,33 @@ NTSTATUS MirrorCreateFile(
     DWORD					FlagsAndAttributes,
     PDOKAN_FILE_INFO		DokanFileInfo)
 {
+    logw(L"Start<%s>", FileName);
     std::wstring filePath;
     HANDLE handle;
     DWORD fileAttr;
 
     filePath = GetFilePath(FileName);
 
-    DbgPrint(L"CreateFile : %s\n", filePath.c_str());
+    logw(L"CreateFile : %s", filePath.c_str());
 
     PrintUserName(DokanFileInfo);
 
     if (CreationDisposition == CREATE_NEW)
-        DbgPrint(L"\tCREATE_NEW\n");
+        logw(L"CREATE_NEW");
     if (CreationDisposition == OPEN_ALWAYS)
-        DbgPrint(L"\tOPEN_ALWAYS\n");
+        logw(L"OPEN_ALWAYS");
     if (CreationDisposition == CREATE_ALWAYS)
-        DbgPrint(L"\tCREATE_ALWAYS\n");
+        logw(L"CREATE_ALWAYS");
     if (CreationDisposition == OPEN_EXISTING)
-        DbgPrint(L"\tOPEN_EXISTING\n");
+        logw(L"OPEN_EXISTING");
     if (CreationDisposition == TRUNCATE_EXISTING)
-        DbgPrint(L"\tTRUNCATE_EXISTING\n");
+        logw(L"TRUNCATE_EXISTING");
 
-    DbgPrint(L"\tShareMode = 0x%x\n", ShareMode);
+    logw(L"ShareMode = 0x%x", ShareMode);
 
     CheckShareModeFlags(ShareMode);
 
-    DbgPrint(L"\tAccessMode = 0x%x\n", DesiredAccess);
+    logw(L"AccessMode = 0x%x", DesiredAccess);
 
     CheckDesiredAccessFlags(DesiredAccess);
 
@@ -219,7 +208,7 @@ NTSTATUS MirrorCreateFile(
         FlagsAndAttributes |= FILE_FLAG_BACKUP_SEMANTICS;
         //AccessMode = 0;
     }
-    DbgPrint(L"\tFlagsAndAttributes = 0x%x\n", FlagsAndAttributes);
+    logw(L"FlagsAndAttributes = 0x%08X", FlagsAndAttributes);
 
     CheckFileAttributeFlags(FlagsAndAttributes);
 
@@ -234,12 +223,16 @@ NTSTATUS MirrorCreateFile(
 
     if (handle == INVALID_HANDLE_VALUE) {
         DWORD error = GetLastError();
-        DbgPrint(L"\terror code = %d\n\n", error);
-        // fixlater;
-        return STATUS_ACCESS_DENIED;
+        logw(L"error code = %d", error);
+        if (error == ERROR_FILE_NOT_FOUND)
+        {
+            return STATUS_OBJECT_NAME_NOT_FOUND;
+        }
+        else
+        {
+            return STATUS_ACCESS_DENIED;
+        }
     }
-
-    DbgPrint(L"\n");
 
     // save the file handle in Context
     DokanFileInfo->Context = (ULONG64)handle;
@@ -251,15 +244,14 @@ NTSTATUS MirrorCreateDirectory(
     LPCWSTR					FileName,
     PDOKAN_FILE_INFO		DokanFileInfo)
 {
+    logw(L"Start<%s>", FileName);
     std::wstring filePath = GetFilePath(FileName);
 
-    DbgPrint(L"CreateDirectory : %s\n", filePath.c_str());
+    logw(L"CreateDirectory : %s", filePath.c_str());
     if (!CreateDirectory(filePath.c_str(), NULL)) {
         DWORD error = GetLastError();
-        DbgPrint(L"\terror code = %d\n\n", error);
-        // fixlater;
-        return STATUS_ACCESS_DENIED;
-        //return error * -1; // error codes are negated value of Windows System Error codes
+        logw(L"failed(%d)", error);
+        return ToNtStatus(error);
     }
     return STATUS_SUCCESS;
 }
@@ -269,19 +261,18 @@ NTSTATUS MirrorOpenDirectory(
     LPCWSTR					FileName,
     PDOKAN_FILE_INFO		DokanFileInfo)
 {
+    logw(L"Start<%s>", FileName);
     HANDLE handle;
     DWORD attr;
     std::wstring filePath = GetFilePath(FileName);
 
-    DbgPrint(L"OpenDirectory : %s\n", filePath.c_str());
+    logw(L"OpenDirectory : %s", filePath.c_str());
 
     attr = GetFileAttributes(filePath.c_str());
     if (attr == INVALID_FILE_ATTRIBUTES) {
         DWORD error = GetLastError();
-        DbgPrint(L"\terror code = %d\n\n", error);
-        // fixlater;
-        return STATUS_ACCESS_DENIED;
-        //return error * -1;
+        logw(L"failed(%d)", error);
+        return ToNtStatus(error);
     }
     if (!(attr & FILE_ATTRIBUTE_DIRECTORY)) {
         return STATUS_NOT_A_DIRECTORY;
@@ -297,14 +288,12 @@ NTSTATUS MirrorOpenDirectory(
         NULL);
 
     if (handle == INVALID_HANDLE_VALUE) {
-        DWORD error = GetLastError();
-        DbgPrint(L"\terror code = %d\n\n", error);
-        // fixlater;
-        return STATUS_ACCESS_DENIED;
-        //return error * -1;
+        DWORD dwError = GetLastError();
+        logw(L"failed(%d)", dwError);
+        return ToNtStatus(dwError);
     }
 
-    DbgPrint(L"\n");
+    logw(L"");
 
     DokanFileInfo->Context = (ULONG64)handle;
 
@@ -319,16 +308,16 @@ void MirrorCloseFile(
     std::wstring filePath = GetFilePath(FileName);
 
     if (DokanFileInfo->Context) {
-        DbgPrint(L"CloseFile: %s\n", filePath.c_str());
-        DbgPrint(L"\terror : not cleanuped file\n\n");
+        logw(L"CloseFile: %s", filePath.c_str());
+        logw(L"error : not cleanuped file");
         CloseHandle((HANDLE)DokanFileInfo->Context);
         DokanFileInfo->Context = 0;
     } else {
-        //DbgPrint(L"Close: %s\n\tinvalid handle\n\n", filePath.c_str());
-        DbgPrint(L"Close: %s\n\n", filePath.c_str());
+        //DbgPrint(L"Close: %s\ninvalid handle", filePath.c_str());
+        logw(L"Close: %s", filePath.c_str());
     }
 
-    //DbgPrint(L"\n");
+    //DbgPrint(L"");
 }
 
 void MirrorCleanup(
@@ -338,31 +327,31 @@ void MirrorCleanup(
     std::wstring filePath = GetFilePath(FileName);
 
     if (DokanFileInfo->Context) {
-        DbgPrint(L"Cleanup: %s\n\n", filePath.c_str());
+        logw(L"Cleanup: %s", filePath.c_str());
         CloseHandle((HANDLE)DokanFileInfo->Context);
         DokanFileInfo->Context = 0;
 
         if (DokanFileInfo->DeleteOnClose) {
-            DbgPrint(L"\tDeleteOnClose\n");
+            logw(L"DeleteOnClose");
             if (DokanFileInfo->IsDirectory) {
-                DbgPrint(L"  DeleteDirectory ");
+                logw(L"  DeleteDirectory ");
                 if (!RemoveDirectory(filePath.c_str())) {
-                    DbgPrint(L"error code = %d\n\n", GetLastError());
+                    logw(L"error code = %d", GetLastError());
                 } else {
-                    DbgPrint(L"success\n\n");
+                    logw(L"success");
                 }
             } else {
-                DbgPrint(L"  DeleteFile ");
+                logw(L"  DeleteFile ");
                 if (DeleteFile(filePath.c_str()) == 0) {
-                    DbgPrint(L" error code = %d\n\n", GetLastError());
+                    logw(L" error code = %d", GetLastError());
                 } else {
-                    DbgPrint(L"success\n\n");
+                    logw(L"success");
                 }
             }
         }
 
     } else {
-        DbgPrint(L"Cleanup: %s\n\tinvalid handle\n\n", filePath.c_str());
+        logw(L"Cleanup: %s\ninvalid handle", filePath.c_str());
     }
 }
 
@@ -380,10 +369,10 @@ NTSTATUS MirrorReadFile(
     BOOL	opened = FALSE;
     std::wstring filePath = GetFilePath(FileName);
 
-    DbgPrint(L"ReadFile : %s\n", filePath.c_str());
+    logw(L"ReadFile : %s", filePath.c_str());
 
     if (!handle || handle == INVALID_HANDLE_VALUE) {
-        DbgPrint(L"\tinvalid handle, cleanuped?\n");
+        logw(L"invalid handle, cleanuped?");
         handle = CreateFile(
             filePath.c_str(),
             GENERIC_READ,
@@ -393,31 +382,35 @@ NTSTATUS MirrorReadFile(
             0,
             NULL);
         if (handle == INVALID_HANDLE_VALUE) {
-            DbgPrint(L"\tCreateFile error : %d\n\n", GetLastError());
-            // fixlater;
-            return STATUS_ACCESS_DENIED;
+            DWORD dwError = GetLastError();
+            logw(L"failed(%d)", dwError);
+            return ToNtStatus(dwError);
         }
         opened = TRUE;
     }
     
     if (SetFilePointer(handle, offset, NULL, FILE_BEGIN) == 0xFFFFFFFF) {
-        DbgPrint(L"\tseek error, offset = %d\n\n", offset);
+        DWORD dwError = GetLastError();
+        logw(L"seek error, offset = %d", offset);
         if (opened)
             CloseHandle(handle);
-        // fixlater;
-        return STATUS_ACCESS_DENIED;
+        
+        logw(L"failed(%d)", dwError);
+        return ToNtStatus(dwError);
     }
         
     if (!ReadFile(handle, Buffer, BufferLength, ReadLength,NULL)) {
-        DbgPrint(L"\tread error = %u, buffer length = %d, read length = %d\n\n",
-            GetLastError(), BufferLength, *ReadLength);
+        DWORD dwError = GetLastError();
+        logw(L"read error = %u, buffer length = %d, read length = %d",
+            dwError, BufferLength, *ReadLength);
         if (opened)
             CloseHandle(handle);
-        // fixlater;
-        return STATUS_ACCESS_DENIED;
+        
+        logw(L"failed(%d)", dwError);
+        return ToNtStatus(dwError);
 
     } else {
-        DbgPrint(L"\tread %d, offset %d\n\n", *ReadLength, offset);
+        logw(L"read %d, offset %d", *ReadLength, offset);
     }
 
     if (opened)
@@ -440,11 +433,11 @@ NTSTATUS MirrorWriteFile(
     BOOL	opened = FALSE;
     std::wstring filePath = GetFilePath(FileName);
 
-    DbgPrint(L"WriteFile : %s, offset %I64d, length %d\n", filePath.c_str(), Offset, NumberOfBytesToWrite);
+    logw(L"WriteFile : %s, offset %I64d, length %d", filePath.c_str(), Offset, NumberOfBytesToWrite);
 
     // reopen the file
     if (!handle || handle == INVALID_HANDLE_VALUE) {
-        DbgPrint(L"\tinvalid handle, cleanuped?\n");
+        logw(L"invalid handle, cleanuped?");
         handle = CreateFile(
             filePath.c_str(),
             GENERIC_WRITE,
@@ -454,33 +447,37 @@ NTSTATUS MirrorWriteFile(
             0,
             NULL);
         if (handle == INVALID_HANDLE_VALUE) {
-            DbgPrint(L"\tCreateFile error : %d\n\n", GetLastError());
-            // fixlater;
-            return STATUS_ACCESS_DENIED;
+            DWORD dwError = GetLastError();
+            logw(L"failed(%d)", dwError);
+            return ToNtStatus(dwError);
         }
         opened = TRUE;
     }
 
     if (DokanFileInfo->WriteToEndOfFile) {
         if (SetFilePointer(handle, 0, NULL, FILE_END) == INVALID_SET_FILE_POINTER) {
-            DbgPrint(L"\tseek error, offset = EOF, error = %d\n", GetLastError());
-            // fixlater;
-            return STATUS_ACCESS_DENIED;
+            DWORD dwError = GetLastError();
+            
+            logw(L"seek error, offset = EOF, error = %d", GetLastError());
+            logw(L"failed(%d)", dwError);
+            return ToNtStatus(dwError);
         }
     } else if (SetFilePointer(handle, offset, NULL, FILE_BEGIN) == INVALID_SET_FILE_POINTER) {
-        DbgPrint(L"\tseek error, offset = %d, error = %d\n", offset, GetLastError());
-        // fixlater;
-        return STATUS_ACCESS_DENIED;
+        DWORD dwError = GetLastError();
+        logw(L"seek error, offset = %d, error = %d", offset, GetLastError());
+        logw(L"failed(%d)", dwError);
+        return ToNtStatus(dwError);
     }
         
     if (!WriteFile(handle, Buffer, NumberOfBytesToWrite, NumberOfBytesWritten, NULL)) {
-        DbgPrint(L"\twrite error = %u, buffer length = %d, write length = %d\n",
+        DWORD dwError = GetLastError();
+        logw(L"write error = %u, buffer length = %d, write length = %d",
             GetLastError(), NumberOfBytesToWrite, *NumberOfBytesWritten);
-        // fixlater;
-        return STATUS_ACCESS_DENIED;
+        logw(L"failed(%d)", dwError);
+        return ToNtStatus(dwError);
 
     } else {
-        DbgPrint(L"\twrite %d, offset %d\n\n", *NumberOfBytesWritten, offset);
+        logw(L"write %d, offset %d", *NumberOfBytesWritten, offset);
     }
 
     // close the file when it is reopened
@@ -497,21 +494,19 @@ NTSTATUS MirrorFlushFileBuffers(
     HANDLE	handle = (HANDLE)DokanFileInfo->Context;
     std::wstring filePath = GetFilePath(FileName);
 
-    DbgPrint(L"FlushFileBuffers : %s\n", filePath.c_str());
+    logw(L"FlushFileBuffers : %s", filePath.c_str());
 
     if (!handle || handle == INVALID_HANDLE_VALUE) {
-        DbgPrint(L"\tinvalid handle\n\n");
-        // fixlater;
-        // should return success? why?
-        return STATUS_INVALID_HANDLE;
+        logw(L"invalid handle, but return success");
+        return STATUS_SUCCESS;
     }
 
     if (FlushFileBuffers(handle)) {
         return STATUS_SUCCESS;
     } else {
-        DbgPrint(L"\tflush error code = %d\n", GetLastError());
-        // fixlater;
-        return STATUS_ACCESS_DENIED;
+        DWORD dwError = GetLastError();
+        logw(L"FlushFileBuffers failed(%d)", dwError);
+        return ToNtStatus(dwError);
     }
 }
 
@@ -526,10 +521,10 @@ NTSTATUS MirrorGetFileInformation(
 
     std::wstring filePath = GetFilePath(FileName);
 
-    DbgPrint(L"GetFileInfo : %s\n", filePath.c_str());
+    logw(L"GetFileInfo : %s", filePath.c_str());
 
     if (!handle || handle == INVALID_HANDLE_VALUE) {
-        DbgPrint(L"\tinvalid handle\n\n");
+        logw(L"invalid handle");
 
         // If CreateDirectory returned FILE_ALREADY_EXISTS and 
         // it is called with FILE_OPEN_IF, that handle must be opened.
@@ -537,19 +532,20 @@ NTSTATUS MirrorGetFileInformation(
             FILE_FLAG_BACKUP_SEMANTICS, NULL);
         if (handle == INVALID_HANDLE_VALUE)
         {
-            // fixlater;
-            return STATUS_ACCESS_DENIED;
+            DWORD dwError = GetLastError();
+            logw(L"CreateFile failed(%d)", dwError);
+            return ToNtStatus(dwError);
         }
         opened = TRUE;
     }
 
     if (!GetFileInformationByHandle(handle,HandleFileInformation)) {
-        DbgPrint(L"\terror code = %d\n", GetLastError());
+        logw(L"error code = %d", GetLastError());
 
         // FileName is a root directory
         // in this case, FindFirstFile can't get directory information
         if (wcslen(FileName) == 1) {
-            DbgPrint(L"  root dir\n");
+            logw(L"  root dir");
             HandleFileInformation->dwFileAttributes = GetFileAttributes(filePath.c_str());
 
         } else {
@@ -557,9 +553,9 @@ NTSTATUS MirrorGetFileInformation(
             ZeroMemory(&find, sizeof(WIN32_FIND_DATAW));
             handle = FindFirstFile(filePath.c_str(), &find);
             if (handle == INVALID_HANDLE_VALUE) {
-                DbgPrint(L"\tFindFirstFile error code = %d\n\n", GetLastError());
-                // fixlater;
-                return STATUS_ACCESS_DENIED;
+                DWORD dwError = GetLastError();
+                logw(L"FindFirstFile failed(%d)", dwError);
+                return ToNtStatus(dwError);
             }
             HandleFileInformation->dwFileAttributes = find.dwFileAttributes;
             HandleFileInformation->ftCreationTime = find.ftCreationTime;
@@ -567,15 +563,13 @@ NTSTATUS MirrorGetFileInformation(
             HandleFileInformation->ftLastWriteTime = find.ftLastWriteTime;
             HandleFileInformation->nFileSizeHigh = find.nFileSizeHigh;
             HandleFileInformation->nFileSizeLow = find.nFileSizeLow;
-            DbgPrint(L"\tFindFiles OK, file size = %d\n", find.nFileSizeLow);
+            logw(L"FindFiles OK, file size = %d", find.nFileSizeLow);
             FindClose(handle);
         }
     } else {
-        DbgPrint(L"\tGetFileInformationByHandle success, file size = %d\n",
+        logw(L"GetFileInformationByHandle success, file size = %d",
             HandleFileInformation->nFileSizeLow);
     }
-
-    DbgPrint(L"\n");
 
     if (opened) {
         CloseHandle(handle);
@@ -597,14 +591,14 @@ NTSTATUS MirrorFindFiles(
 
     std::wstring filePath = GetFilePath(FileName);
     filePath = filePath + yenStar;
-    DbgPrint(L"FindFiles :%s\n", filePath.c_str());
+    logw(L"FindFiles :%s", filePath.c_str());
 
     hFind = FindFirstFile(filePath.c_str(), &findData);
 
     if (hFind == INVALID_HANDLE_VALUE) {
-        DbgPrint(L"\tinvalid file handle. Error is %u\n\n", GetLastError());
-        // fixlater;
-        return STATUS_ACCESS_DENIED;
+        DWORD dwError = GetLastError();
+        logw(L"FindFirstFile failed(%d)", dwError);
+        return ToNtStatus(dwError);
     }
 
     FillFindData(&findData, DokanFileInfo);
@@ -619,12 +613,11 @@ NTSTATUS MirrorFindFiles(
     FindClose(hFind);
 
     if (error != ERROR_NO_MORE_FILES) {
-        DbgPrint(L"\tFindNextFile error. Error is %u\n\n", error);
-        // fixlater;
-        return STATUS_ACCESS_DENIED;
+        logw(L"FindFirstFile failed not ERROR_NO_MORE_FILES(%d)", error);
+        return ToNtStatus(error);
     }
 
-    DbgPrint(L"\tFindFiles return %d entries in %s\n\n", count, filePath.c_str());
+    logw(L"FindFiles return %d entries in %s", count, filePath.c_str());
 
     return STATUS_SUCCESS;
 }
@@ -638,7 +631,7 @@ NTSTATUS MirrorDeleteFile(
 
     std::wstring filePath = GetFilePath(FileName);
 
-    DbgPrint(L"DeleteFile %s\n", filePath.c_str());
+    logw(L"DeleteFile %s", filePath.c_str());
 
     return STATUS_SUCCESS;
 }
@@ -647,27 +640,25 @@ NTSTATUS MirrorDeleteDirectory(
     LPCWSTR				FileName,
     PDOKAN_FILE_INFO	DokanFileInfo)
 {
+    logw(L"Start<%s>", FileName);
     HANDLE	handle = (HANDLE)DokanFileInfo->Context;
     HANDLE	hFind;
-    WIN32_FIND_DATAW	findData;
-    ULONG	fileLen;
+    WIN32_FIND_DATAW findData;
+    ULONG	cchFilePath;
 
     std::wstring filePath = GetFilePath(FileName);
 
-    DbgPrint(L"DeleteDirectory %s\n", filePath.c_str());
+    logw(L"DeleteDirectory %s", filePath.c_str());
 
-    fileLen = wcslen(filePath.c_str());
-    if (filePath[fileLen-1] != L'\\') {
-        filePath[fileLen++] = L'\\';
-    }
-    filePath[fileLen] = L'*';
+    filePath = AppendPathSeperatorIfNotExist(filePath, L'\\');
+    filePath = filePath + L"*";
 
     hFind = FindFirstFile(filePath.c_str(), &findData);
     while (hFind != INVALID_HANDLE_VALUE) {
         if (wcscmp(findData.cFileName, L"..") != 0 &&
             wcscmp(findData.cFileName, L".") != 0) {
             FindClose(hFind);
-            DbgPrint(L"  Directory is not empty: %s\n", findData.cFileName);
+            logw(L"  Directory is not empty: %s", findData.cFileName);
             return -(int)ERROR_DIR_NOT_EMPTY;
         }
         if (!FindNextFile(hFind, &findData)) {
@@ -676,11 +667,12 @@ NTSTATUS MirrorDeleteDirectory(
     }
     FindClose(hFind);
 
-    if (GetLastError() == ERROR_NO_MORE_FILES) {
+    DWORD dwError = GetLastError();
+    if (dwError == ERROR_NO_MORE_FILES) {
         return STATUS_SUCCESS;
     } else {
-        // fixlater;
-        return STATUS_ACCESS_DENIED;
+        logw(L"FindFirstFile failed(%d)", dwError);
+        return ToNtStatus(dwError);
     }
 }
 
@@ -691,12 +683,13 @@ NTSTATUS MirrorMoveFile(
     BOOL				ReplaceIfExisting,
     PDOKAN_FILE_INFO	DokanFileInfo)
 {
-    BOOL			status;
+    logw(L"Start. Origin<%s> Target<%s>", FileName, NewFileName);
+    BOOL status;
 
     std::wstring filePath = GetFilePath(FileName);
     std::wstring newFilePath = GetFilePath(NewFileName);
 
-    DbgPrint(L"MoveFile %s -> %s\n\n", filePath.c_str(), newFilePath.c_str());
+    logw(L"MoveFile %s -> %s", filePath.c_str(), newFilePath.c_str());
 
     if (DokanFileInfo->Context) {
         // should close? or rename at closing?
@@ -711,8 +704,8 @@ NTSTATUS MirrorMoveFile(
 
     if (status == FALSE) {
         DWORD error = GetLastError();
-        DbgPrint(L"\tMoveFile failed status = %d, code = %d\n", status, error);
-        return -(int)error;
+        logw(L"MoveFile failed code = %d", error);
+        return ToNtStatus(error);
     } else {
         return STATUS_SUCCESS;
     }
@@ -730,25 +723,23 @@ NTSTATUS MirrorLockFile(
 
     std::wstring filePath = GetFilePath(FileName);
 
-    DbgPrint(L"LockFile %s\n", filePath.c_str());
+    logw(L"LockFile %s", filePath.c_str());
 
     handle = (HANDLE)DokanFileInfo->Context;
     if (!handle || handle == INVALID_HANDLE_VALUE) {
-        DbgPrint(L"\tinvalid handle\n\n");
-        // fixlater;
-        return STATUS_ACCESS_DENIED;
+        return STATUS_INVALID_HANDLE;
     }
 
     length.QuadPart = Length;
     offset.QuadPart = ByteOffset;
 
     if (LockFile(handle, offset.HighPart, offset.LowPart, length.HighPart, length.LowPart)) {
-        DbgPrint(L"\tsuccess\n\n");
+        logw(L"success");
         return STATUS_SUCCESS;
     } else {
-        DbgPrint(L"\tfail\n\n");
-        // fixlater;
-        return STATUS_ACCESS_DENIED;
+        DWORD dwError = GetLastError();
+        logw(L"failed(%d)", dwError);
+        return ToNtStatus(dwError);
     }
 }
 
@@ -762,28 +753,24 @@ NTSTATUS MirrorSetEndOfFile(
 
     std::wstring filePath = GetFilePath(FileName);
 
-    DbgPrint(L"SetEndOfFile %s, %I64d\n", filePath.c_str(), ByteOffset);
+    logw(L"SetEndOfFile %s, %I64d", filePath.c_str(), ByteOffset);
 
     handle = (HANDLE)DokanFileInfo->Context;
     if (!handle || handle == INVALID_HANDLE_VALUE) {
-        DbgPrint(L"\tinvalid handle\n\n");
-        // fixlater;
-        return STATUS_ACCESS_DENIED;
+        return STATUS_INVALID_HANDLE;
     }
 
     offset.QuadPart = ByteOffset;
     if (!SetFilePointerEx(handle, offset, NULL, FILE_BEGIN)) {
-        DbgPrint(L"\tSetFilePointer error: %d, offset = %I64d\n\n",
-                GetLastError(), ByteOffset);
-        // fixlater;
-        return STATUS_ACCESS_DENIED;
+        DWORD dwError = GetLastError();
+        logw(L"SetFilePointerEx failed(%d)", dwError);
+        return ToNtStatus(dwError);
     }
 
     if (!SetEndOfFile(handle)) {
-        DWORD error = GetLastError();
-        DbgPrint(L"\terror code = %d\n\n", error);
-        // fixlater;
-        return STATUS_ACCESS_DENIED;
+        DWORD dwError = GetLastError();
+        logw(L"SetEndOfFile failed(%d)", dwError);
+        return ToNtStatus(dwError);
     }
 
     return STATUS_SUCCESS;
@@ -800,36 +787,32 @@ NTSTATUS MirrorSetAllocationSize(
 
     std::wstring filePath = GetFilePath(FileName);
 
-    DbgPrint(L"SetAllocationSize %s, %I64d\n", filePath.c_str(), AllocSize);
+    logw(L"SetAllocationSize %s, %I64d", filePath.c_str(), AllocSize);
 
     handle = (HANDLE)DokanFileInfo->Context;
     if (!handle || handle == INVALID_HANDLE_VALUE) {
-        DbgPrint(L"\tinvalid handle\n\n");
-        // fixlater;
-        return STATUS_ACCESS_DENIED;
+        return STATUS_INVALID_HANDLE;
     }
 
     if (GetFileSizeEx(handle, &fileSize)) {
         if (AllocSize < fileSize.QuadPart) {
             fileSize.QuadPart = AllocSize;
-            if (!SetFilePointerEx(handle, fileSize, NULL, FILE_BEGIN)) {
-                DbgPrint(L"\tSetAllocationSize: SetFilePointer eror: %d, "
-                    L"offset = %I64d\n\n", GetLastError(), AllocSize);
-                // fixlater;
-                return STATUS_ACCESS_DENIED;
+            if (!SetFilePointerEx(handle, fileSize, NULL, FILE_BEGIN))
+            {    
+                DWORD dwError = GetLastError();
+                logw(L"SetAllocationSize: SetFilePointer failed(%d), offset = %I64d", dwError, AllocSize);
+                return ToNtStatus(dwError);
             }
             if (!SetEndOfFile(handle)) {
-                DWORD error = GetLastError();
-                DbgPrint(L"\terror code = %d\n\n", error);
-                // fixlater;
-                return STATUS_ACCESS_DENIED;
+                DWORD dwError = GetLastError();
+                logw(L"SetEndOfFile failed(%d)", dwError);
+                return ToNtStatus(dwError);
             }
         }
     } else {
         DWORD error = GetLastError();
-        DbgPrint(L"\terror code = %d\n\n", error);
-        // fixlater;
-        return STATUS_ACCESS_DENIED;
+        logw(L"error code = %d", error);
+        return ToNtStatus(error);
     }
     return STATUS_SUCCESS;
 }
@@ -841,16 +824,15 @@ NTSTATUS MirrorSetFileAttributes(
 {
     std::wstring filePath = GetFilePath(FileName);
 
-    DbgPrint(L"SetFileAttributes %s\n", filePath.c_str());
+    logw(L"SetFileAttributes %s", filePath.c_str());
 
     if (!SetFileAttributes(filePath.c_str(), FileAttributes)) {
         DWORD error = GetLastError();
-        DbgPrint(L"\terror code = %d\n\n", error);
-        // fixlater;
-        return STATUS_ACCESS_DENIED;
+        logw(L"error code = %d", error);
+        return ToNtStatus(error);
     }
 
-    DbgPrint(L"\n");
+    logw(L"");
     return STATUS_SUCCESS;
 }
 
@@ -865,24 +847,21 @@ NTSTATUS MirrorSetFileTime(
 
     std::wstring filePath = GetFilePath(FileName);
 
-    DbgPrint(L"SetFileTime %s\n", filePath.c_str());
+    logw(L"SetFileTime %s", filePath.c_str());
 
     handle = (HANDLE)DokanFileInfo->Context;
 
     if (!handle || handle == INVALID_HANDLE_VALUE) {
-        DbgPrint(L"\tinvalid handle\n\n");
-        // fixlater;
-        return STATUS_ACCESS_DENIED;
+        return STATUS_INVALID_HANDLE;
     }
 
     if (!SetFileTime(handle, CreationTime, LastAccessTime, LastWriteTime)) {
         DWORD error = GetLastError();
-        DbgPrint(L"\terror code = %d\n\n", error);
-        // fixlater;
-        return STATUS_ACCESS_DENIED;
+        logw(L"error code = %d", error);
+        return ToNtStatus(error);
     }
 
-    DbgPrint(L"\n");
+    logw(L"");
     return STATUS_SUCCESS;
 }
 
@@ -898,25 +877,23 @@ NTSTATUS MirrorUnlockFile(
 
     std::wstring filePath = GetFilePath(FileName);
 
-    DbgPrint(L"UnlockFile %s\n", filePath.c_str());
+    logw(L"UnlockFile %s", filePath.c_str());
 
     handle = (HANDLE)DokanFileInfo->Context;
     if (!handle || handle == INVALID_HANDLE_VALUE) {
-        DbgPrint(L"\tinvalid handle\n\n");
-        // fixlater;
-        return STATUS_ACCESS_DENIED;
+        return STATUS_INVALID_HANDLE;
     }
 
     length.QuadPart = Length;
     offset.QuadPart = ByteOffset;
 
     if (UnlockFile(handle, offset.HighPart, offset.LowPart, length.HighPart, length.LowPart)) {
-        DbgPrint(L"\tsuccess\n\n");
+        logw(L"success");
         return STATUS_SUCCESS;
     } else {
-        DbgPrint(L"\tfail\n\n");
-        // fixlater;
-        return STATUS_ACCESS_DENIED;
+        DWORD error = GetLastError();
+        logw(L"error code = %d", error);
+        return ToNtStatus(error);
     }
 }
 
@@ -931,26 +908,22 @@ NTSTATUS MirrorGetFileSecurity(
     HANDLE	handle;
     std::wstring filePath = GetFilePath(FileName);
 
-    DbgPrint(L"GetFileSecurity %s\n", filePath.c_str());
+    logw(L"GetFileSecurity %s", filePath.c_str());
 
     handle = (HANDLE)DokanFileInfo->Context;
     if (!handle || handle == INVALID_HANDLE_VALUE) {
-        DbgPrint(L"\tinvalid handle\n\n");
-        // fixlater;
-        return STATUS_ACCESS_DENIED;
+        return STATUS_INVALID_HANDLE;
     }
 
     if (!GetUserObjectSecurity(handle, SecurityInformation, SecurityDescriptor,
             BufferLength, LengthNeeded)) {
         int error = GetLastError();
         if (error == ERROR_INSUFFICIENT_BUFFER) {
-            DbgPrint(L"  GetUserObjectSecurity failed: ERROR_INSUFFICIENT_BUFFER\n");
-            // fixlater;
+            logw(L"  GetUserObjectSecurity failed: ERROR_INSUFFICIENT_BUFFER");
             return STATUS_BUFFER_OVERFLOW;
         } else {
-            DbgPrint(L"  GetUserObjectSecurity failed: %d\n", error);
-            // fixlater;
-            return STATUS_ACCESS_DENIED;
+            logw(L"  GetUserObjectSecurity failed: %d", error);
+            return ToNtStatus(error);
         }
     }
     return STATUS_SUCCESS;
@@ -966,20 +939,18 @@ NTSTATUS MirrorSetFileSecurity(
     HANDLE	handle;
     std::wstring filePath = GetFilePath(FileName);
 
-    DbgPrint(L"SetFileSecurity %s\n", filePath.c_str());
+    logw(L"SetFileSecurity %s", filePath.c_str());
 
     handle = (HANDLE)DokanFileInfo->Context;
     if (!handle || handle == INVALID_HANDLE_VALUE) {
-        DbgPrint(L"\tinvalid handle\n\n");
-        // fixlater;
-        return STATUS_ACCESS_DENIED;
+        logw(L"invalid handle");
+        return STATUS_INVALID_HANDLE;
     }
 
     if (!SetUserObjectSecurity(handle, SecurityInformation, SecurityDescriptor)) {
         int error = GetLastError();
-        DbgPrint(L"  SetUserObjectSecurity failed: %d\n", error);
-        // fixlater;
-        return STATUS_ACCESS_DENIED;
+        logw(L"  SetUserObjectSecurity failed: %d", error);
+        return ToNtStatus(error);
     }
     return STATUS_SUCCESS;
 }
@@ -1011,7 +982,7 @@ NTSTATUS MirrorGetVolumeInformation(
 NTSTATUS MirrorUnmount(
     PDOKAN_FILE_INFO	DokanFileInfo)
 {
-    DbgPrint(L"Unmount\n");
+    logw(L"Unmount");
     return STATUS_SUCCESS;
 }
 
@@ -1040,7 +1011,7 @@ int _tmain(int argc, _TCHAR* argv[])
             "  /d (enable debug output)\n"
             "  /s (use stderr for output)\n"
             "  /n (use network drive)\n"
-            "  /m (use removable drive)\n");
+            "  /m (use removable drive)");
         return EXIT_FAILURE;
     }
 
@@ -1056,7 +1027,7 @@ int _tmain(int argc, _TCHAR* argv[])
         case L'r':
             command++;
             wcscpy_s(g_RootDirectory, _countof(g_RootDirectory), argv[command]);
-            DbgPrint(L"RootDirectory: %ls\n", g_RootDirectory);
+            logw(L"RootDirectory: %ls", g_RootDirectory);
             break;
         case L'l':
             command++;
@@ -1080,7 +1051,7 @@ int _tmain(int argc, _TCHAR* argv[])
             dokanOptions->Options |= DOKAN_OPTION_REMOVABLE;
             break;
         default:
-            fwprintf(stderr, L"unknown command: %s\n", argv[command]);
+            fwprintf(stderr, L"unknown command: %s", argv[command]);
             free(dokanOperations);
             free(dokanOptions);
             return EXIT_FAILURE;
@@ -1126,28 +1097,28 @@ int _tmain(int argc, _TCHAR* argv[])
     status = DokanMain(dokanOptions, dokanOperations);
     switch (status) {
     case DOKAN_SUCCESS:
-        fprintf(stderr, "Success\n");
+        fprintf(stderr, "Success");
         break;
     case DOKAN_ERROR:
-        fprintf(stderr, "Error\n");
+        fprintf(stderr, "Error");
         break;
     case DOKAN_DRIVE_LETTER_ERROR:
-        fprintf(stderr, "Bad Drive letter\n");
+        fprintf(stderr, "Bad Drive letter");
         break;
     case DOKAN_DRIVER_INSTALL_ERROR:
-        fprintf(stderr, "Can't install driver\n");
+        fprintf(stderr, "Can't install driver");
         break;
     case DOKAN_START_ERROR:
-        fprintf(stderr, "Driver something wrong\n");
+        fprintf(stderr, "Driver something wrong");
         break;
     case DOKAN_MOUNT_ERROR:
-        fprintf(stderr, "Can't assign a drive letter\n");
+        fprintf(stderr, "Can't assign a drive letter");
         break;
     case DOKAN_MOUNT_POINT_ERROR:
-        fprintf(stderr, "Mount point error\n");
+        fprintf(stderr, "Mount point error");
         break;
     default:
-        fprintf(stderr, "Unknown error: %d\n", status);
+        fprintf(stderr, "Unknown error: %d", status);
         break;
     }
 

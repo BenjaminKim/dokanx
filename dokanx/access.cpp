@@ -18,6 +18,7 @@ You should have received a copy of the GNU Lesser General Public License along
 with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
+#include "stdafx.h"
 #include "../dokani.h"
 #include "fileinfo.h"
 
@@ -69,7 +70,7 @@ DokanOpenRequestorToken(PDOKAN_FILE_INFO FileInfo)
 	if (status) {
 		handle = eventInfo->AccessToken.Handle;
 	} else {
-		DbgPrintW(L"IOCTL_GET_ACCESS_TOKEN failed\n");
+		logw(L"IOCTL_GET_ACCESS_TOKEN failed");
 	}
 	free(eventInfo);
 	return handle;

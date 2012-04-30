@@ -42,13 +42,13 @@ DokanDispatchFlush(
 	__try {
 		FsRtlEnterFileSystem();
 
-		DDbgPrint("==> DokanFlush\n");
+		DDbgPrint("==> DokanFlush");
 
 		irpSp		= IoGetCurrentIrpStackLocation(Irp);
 		fileObject	= irpSp->FileObject;
 
 		if (fileObject == NULL) {
-			DDbgPrint("  fileObject == NULL\n");
+			DDbgPrint("  fileObject == NULL");
 			status = STATUS_SUCCESS;
 			__leave;
 		}
@@ -99,10 +99,10 @@ DokanDispatchFlush(
 			IoCompleteRequest(Irp, IO_NO_INCREMENT);
 			DokanPrintNTStatus(status);
 		} else {
-			DDbgPrint("  STATUS_PENDING\n");
+			DDbgPrint("  STATUS_PENDING");
 		}
 
-		DDbgPrint("<== DokanFlush\n");
+		DDbgPrint("<== DokanFlush");
 
 		FsRtlExitFileSystem();
 	}
@@ -130,7 +130,7 @@ DokanCompleteFlush(
 
 	//FsRtlEnterFileSystem();
 
-	DDbgPrint("==> DokanCompleteFlush\n");
+	DDbgPrint("==> DokanCompleteFlush");
 
 	fileObject = irpSp->FileObject;
 	ccb = fileObject->FsContext2;
@@ -148,7 +148,7 @@ DokanCompleteFlush(
 
 	DokanPrintNTStatus(status);
 
-	DDbgPrint("<== DokanCompleteFlush\n");
+	DDbgPrint("<== DokanCompleteFlush");
 
 	//FsRtlExitFileSystem();
 

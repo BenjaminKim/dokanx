@@ -31,7 +31,7 @@ DokanIrpCancelRoutine(
 	ULONG				serialNumber;
 	PIO_STACK_LOCATION	irpSp;
 
-    DDbgPrint("==> DokanIrpCancelRoutine\n");
+    DDbgPrint("==> DokanIrpCancelRoutine");
 
     // Release the cancel spinlock
     IoReleaseCancelSpinLock(Irp->CancelIrql);
@@ -64,7 +64,7 @@ DokanIrpCancelRoutine(
 
 
 		if (IsListEmpty(&irpEntry->IrpList->ListHead)) {
-			//DDbgPrint("    list is empty ClearEvent\n");
+			//DDbgPrint("    list is empty ClearEvent");
 			KeClearEvent(&irpEntry->IrpList->NotEmpty);
 		}
 
@@ -87,7 +87,7 @@ DokanIrpCancelRoutine(
     Irp->IoStatus.Information = 0;
     IoCompleteRequest(Irp, IO_NO_INCREMENT);
 
-	DDbgPrint("<== DokanIrpCancelRoutine\n");
+	DDbgPrint("<== DokanIrpCancelRoutine");
     return;
 
 }
@@ -107,12 +107,12 @@ RegisterPendingIrpMain(
     PIO_STACK_LOCATION	irpSp;
     KIRQL				oldIrql;
  
-	//DDbgPrint("==> DokanRegisterPendingIrpMain\n");
+	//DDbgPrint("==> DokanRegisterPendingIrpMain");
 
 	if (GetIdentifierType(DeviceObject->DeviceExtension) == VCB) {
 		PDokanVCB vcb = DeviceObject->DeviceExtension;
 		if (CheckMount && !vcb->Dcb->Mounted) {
-			DDbgPrint(" device is not mounted\n");
+			DDbgPrint(" device is not mounted");
 			return STATUS_INSUFFICIENT_RESOURCES;
 		}
 	}
@@ -123,7 +123,7 @@ RegisterPendingIrpMain(
     irpEntry = DokanAllocateIrpEntry();
 
     if (NULL == irpEntry) {
-		DDbgPrint("  can't allocate IRP_ENTRY\n");
+		DDbgPrint("  can't allocate IRP_ENTRY");
         return  STATUS_INSUFFICIENT_RESOURCES;
     }
 
@@ -140,7 +140,7 @@ RegisterPendingIrpMain(
 
 	DokanUpdateTimeout(&irpEntry->TickCount, DOKAN_IRP_PENDING_TIMEOUT);
 
-	//DDbgPrint("  Lock IrpList.ListLock\n");
+	//DDbgPrint("  Lock IrpList.ListLock");
 	ASSERT(KeGetCurrentIrql() <= DISPATCH_LEVEL);
     KeAcquireSpinLock(&IrpList->ListLock, &oldIrql);
 
@@ -169,10 +169,10 @@ RegisterPendingIrpMain(
 
 	KeSetEvent(&IrpList->NotEmpty, IO_NO_INCREMENT, FALSE);
 
-	//DDbgPrint("  Release IrpList.ListLock\n");
+	//DDbgPrint("  Release IrpList.ListLock");
     KeReleaseSpinLock(&IrpList->ListLock, oldIrql);
 
-	//DDbgPrint("<== DokanRegisterPendingIrpMain\n");
+	//DDbgPrint("<== DokanRegisterPendingIrpMain");
     return STATUS_PENDING;;
 }
 
@@ -189,7 +189,7 @@ DokanRegisterPendingIrp(
 	NTSTATUS status;
 
 	if (GetIdentifierType(vcb) != VCB) {
-		DbgPrint("  Type != VCB\n");
+		logw(L"  Type != VCB");
 		return STATUS_INVALID_PARAMETER;
 	}
 
@@ -220,11 +220,11 @@ DokanRegisterPendingIrpForEvent(
 	PDokanVCB vcb = DeviceObject->DeviceExtension;
 
 	if (GetIdentifierType(vcb) != VCB) {
-		DbgPrint("  Type != VCB\n");
+		logw(L"  Type != VCB");
 		return STATUS_INVALID_PARAMETER;
 	}
 
-	//DDbgPrint("DokanRegisterPendingIrpForEvent\n");
+	//DDbgPrint("DokanRegisterPendingIrpForEvent");
 
 	return RegisterPendingIrpMain(
 		DeviceObject,
@@ -244,7 +244,7 @@ DokanRegisterPendingIrpForService(
 	)
 {
 	PDOKAN_GLOBAL dokanGlobal;
-	DDbgPrint("DokanRegisterPendingIrpForService\n");
+	DDbgPrint("DokanRegisterPendingIrpForService");
 
 	dokanGlobal = DeviceObject->DeviceExtension;
 	if (GetIdentifierType(dokanGlobal) != DGL) {
@@ -285,7 +285,7 @@ DokanCompleteIrp(
 		return STATUS_INVALID_PARAMETER;
 	}
 
-	//DDbgPrint("      Lock IrpList.ListLock\n");
+	//DDbgPrint("      Lock IrpList.ListLock");
 	ASSERT(KeGetCurrentIrql() <= DISPATCH_LEVEL);
 	KeAcquireSpinLock(&vcb->Dcb->PendingIrp.ListLock, &oldIrql);
 
@@ -421,7 +421,7 @@ DokanEventStart(
 	ULONG				deviceNamePos;
 	
 
-	DDbgPrint("==> DokanEventStart\n");
+	DDbgPrint("==> DokanEventStart");
 
 	dokanGlobal = DeviceObject->DeviceExtension;
 	if (GetIdentifierType(dokanGlobal) != DGL) {
@@ -465,7 +465,7 @@ DokanEventStart(
 	}
 
 	if (eventStart.Flags & DOKAN_EVENT_REMOVABLE) {
-		DDbgPrint("  DeviceCharacteristics |= FILE_REMOVABLE_MEDIA\n");
+		DDbgPrint("  DeviceCharacteristics |= FILE_REMOVABLE_MEDIA");
 		deviceCharacteristics |= FILE_REMOVABLE_MEDIA;
 	}
 
@@ -521,12 +521,12 @@ DokanEventStart(
 
 	dcb->UseAltStream = 0;
 	if (eventStart.Flags & DOKAN_EVENT_ALTERNATIVE_STREAM_ON) {
-		DDbgPrint("  ALT_STREAM_ON\n");
+		DDbgPrint("  ALT_STREAM_ON");
 		dcb->UseAltStream = 1;
 	}
 	dcb->UseKeepAlive = 0;
 	if (eventStart.Flags & DOKAN_EVENT_KEEP_ALIVE_ON) {
-		DDbgPrint("  KEEP_ALIVE_ON\n");
+		DDbgPrint("  KEEP_ALIVE_ON");
 		dcb->UseKeepAlive = 1;
 	}
 	dcb->Mounted = 1;
@@ -540,7 +540,7 @@ DokanEventStart(
 	Irp->IoStatus.Status = STATUS_SUCCESS;
 	Irp->IoStatus.Information = sizeof(EVENT_DRIVER_INFO);
 
-	DDbgPrint("<== DokanEventStart\n");
+	DDbgPrint("<== DokanEventStart");
 
 	return Irp->IoStatus.Status;
 }
@@ -626,11 +626,11 @@ DokanEventWrite(
 		// short of buffer length
 		if (eventIrpSp->Parameters.DeviceIoControl.OutputBufferLength
 			< eventContext->Length) {		
-			DDbgPrint("  EventWrite: STATUS_INSUFFICIENT_RESOURCE\n");
+			DDbgPrint("  EventWrite: STATUS_INSUFFICIENT_RESOURCE");
 			status =  STATUS_INSUFFICIENT_RESOURCES;
 		} else {
 			PVOID buffer;
-			//DDbgPrint("  EventWrite CopyMemory\n");
+			//DDbgPrint("  EventWrite CopyMemory");
 			//DDbgPrint("  EventLength %d, BufLength %d\n", eventContext->Length,
 			//			eventIrpSp->Parameters.DeviceIoControl.OutputBufferLength);
 			if (Irp->MdlAddress)

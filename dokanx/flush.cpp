@@ -18,7 +18,7 @@ You should have received a copy of the GNU Lesser General Public License along
 with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-
+#include "stdafx.h"
 #include "../dokani.h"
 #include "fileinfo.h"
 
@@ -40,7 +40,7 @@ DispatchFlush(
 	eventInfo = DispatchCommon(
 		EventContext, sizeOfEventInfo, DokanInstance, &fileInfo, &openInfo);
 
-	DbgPrint("###Flush %04d\n", openInfo != NULL ? openInfo->EventId : -1);
+	logw(L"###Flush %04d\n", openInfo != NULL ? openInfo->EventId : -1);
 
 	eventInfo->Status = STATUS_SUCCESS;
 

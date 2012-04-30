@@ -46,20 +46,20 @@ DokanDispatchQuerySecurity(
 	__try {
 		FsRtlEnterFileSystem();
 
-		DDbgPrint("==> DokanQuerySecurity\n");
+		DDbgPrint("==> DokanQuerySecurity");
 
 		irpSp = IoGetCurrentIrpStackLocation(Irp);
 		fileObject = irpSp->FileObject;
 
 		if (fileObject == NULL) {
-			DDbgPrint("  fileObject == NULL\n");
+			DDbgPrint("  fileObject == NULL");
 			status = STATUS_INVALID_PARAMETER;
 			__leave;
 		}
 
 		vcb = DeviceObject->DeviceExtension;
 		if (GetIdentifierType(vcb) != VCB) {
-			DbgPrint("    DeviceExtension != VCB\n");
+			logw(L"    DeviceExtension != VCB");
 			status = STATUS_INVALID_PARAMETER;
 			__leave;
 		}
@@ -70,7 +70,7 @@ DokanDispatchQuerySecurity(
 
 		ccb = fileObject->FsContext2;
 		if (ccb == NULL) {
-			DDbgPrint("    ccb == NULL\n");
+			DDbgPrint("    ccb == NULL");
 			status = STATUS_INVALID_PARAMETER;
 			__leave;
 		}
@@ -84,19 +84,19 @@ DokanDispatchQuerySecurity(
 		securityInfo = &irpSp->Parameters.QuerySecurity.SecurityInformation;
 
 		if (*securityInfo & OWNER_SECURITY_INFORMATION) {
-			DDbgPrint("    OWNER_SECURITY_INFORMATION\n");
+			DDbgPrint("    OWNER_SECURITY_INFORMATION");
 		}
 		if (*securityInfo & GROUP_SECURITY_INFORMATION) {
-			DDbgPrint("    GROUP_SECURITY_INFORMATION\n");
+			DDbgPrint("    GROUP_SECURITY_INFORMATION");
 		}
 		if (*securityInfo & DACL_SECURITY_INFORMATION) {
-			DDbgPrint("    DACL_SECURITY_INFORMATION\n");
+			DDbgPrint("    DACL_SECURITY_INFORMATION");
 		}
 		if (*securityInfo & SACL_SECURITY_INFORMATION) {
-			DDbgPrint("    SACL_SECURITY_INFORMATION\n");
+			DDbgPrint("    SACL_SECURITY_INFORMATION");
 		}
 		if (*securityInfo & LABEL_SECURITY_INFORMATION) {
-			DDbgPrint("    LABEL_SECURITY_INFORMATION\n");
+			DDbgPrint("    LABEL_SECURITY_INFORMATION");
 		}
 
 		eventLength = sizeof(EVENT_CONTEXT) + fcb->FileName.Length;
@@ -138,7 +138,7 @@ DokanDispatchQuerySecurity(
 			DokanPrintNTStatus(status);
 		}
 
-		DDbgPrint("<== DokanQuerySecurity\n");
+		DDbgPrint("<== DokanQuerySecurity");
 		FsRtlExitFileSystem();
 	}
 
@@ -161,7 +161,7 @@ DokanCompleteQuerySecurity(
 	PFILE_OBJECT	fileObject;
 	PDokanCCB		ccb;
 
-	DDbgPrint("==> DokanCompleteQuerySecurity\n");
+	DDbgPrint("==> DokanCompleteQuerySecurity");
 
 	irp   = IrpEntry->Irp;
 	irpSp = IrpEntry->IrpSp;	
@@ -201,7 +201,7 @@ DokanCompleteQuerySecurity(
 	if (ccb != NULL) {
 		ccb->UserContext = EventInfo->Context;
 	} else {
-		DDbgPrint("  ccb == NULL\n");
+		DDbgPrint("  ccb == NULL");
 	}
 
 	irp->IoStatus.Status = status;
@@ -210,7 +210,7 @@ DokanCompleteQuerySecurity(
 
 	DokanPrintNTStatus(status);
 
-	DDbgPrint("<== DokanCompleteQuerySecurity\n");
+	DDbgPrint("<== DokanCompleteQuerySecurity");
 }
 
 
@@ -238,20 +238,20 @@ DokanDispatchSetSecurity(
 	__try {
 		FsRtlEnterFileSystem();
 
-		DDbgPrint("==> DokanSetSecurity\n");
+		DDbgPrint("==> DokanSetSecurity");
 
 		irpSp = IoGetCurrentIrpStackLocation(Irp);
 		fileObject = irpSp->FileObject;
 
 		if (fileObject == NULL) {
-			DDbgPrint("  fileObject == NULL\n");
+			DDbgPrint("  fileObject == NULL");
 			status = STATUS_INVALID_PARAMETER;
 			__leave;
 		}
 
 		vcb = DeviceObject->DeviceExtension;
 		if (GetIdentifierType(vcb) != VCB) {
-			DbgPrint("    DeviceExtension != VCB\n");
+			logw(L"    DeviceExtension != VCB");
 			status = STATUS_INVALID_PARAMETER;
 			__leave;
 		}
@@ -262,7 +262,7 @@ DokanDispatchSetSecurity(
 
 		ccb = fileObject->FsContext2;
 		if (ccb == NULL) {
-			DDbgPrint("    ccb == NULL\n");
+			DDbgPrint("    ccb == NULL");
 			status = STATUS_INVALID_PARAMETER;
 			__leave;
 		}
@@ -276,19 +276,19 @@ DokanDispatchSetSecurity(
 		securityInfo = &irpSp->Parameters.SetSecurity.SecurityInformation;
 
 		if (*securityInfo & OWNER_SECURITY_INFORMATION) {
-			DDbgPrint("    OWNER_SECURITY_INFORMATION\n");
+			DDbgPrint("    OWNER_SECURITY_INFORMATION");
 		}
 		if (*securityInfo & GROUP_SECURITY_INFORMATION) {
-			DDbgPrint("    GROUP_SECURITY_INFORMATION\n");
+			DDbgPrint("    GROUP_SECURITY_INFORMATION");
 		}
 		if (*securityInfo & DACL_SECURITY_INFORMATION) {
-			DDbgPrint("    DACL_SECURITY_INFORMATION\n");
+			DDbgPrint("    DACL_SECURITY_INFORMATION");
 		}
 		if (*securityInfo & SACL_SECURITY_INFORMATION) {
-			DDbgPrint("    SACL_SECURITY_INFORMATION\n");
+			DDbgPrint("    SACL_SECURITY_INFORMATION");
 		}
 		if (*securityInfo & LABEL_SECURITY_INFORMATION) {
-			DDbgPrint("    LABEL_SECURITY_INFORMATION\n");
+			DDbgPrint("    LABEL_SECURITY_INFORMATION");
 		}
 
 		securityDescriptor = irpSp->Parameters.SetSecurity.SecurityDescriptor;
@@ -335,7 +335,7 @@ DokanDispatchSetSecurity(
 			DokanPrintNTStatus(status);
 		}
 
-		DDbgPrint("<== DokanSetSecurity\n");
+		DDbgPrint("<== DokanSetSecurity");
 		FsRtlExitFileSystem();
 	}
 
@@ -355,7 +355,7 @@ DokanCompleteSetSecurity(
 	PDokanCCB			ccb;
 	NTSTATUS			status;
 
-	DDbgPrint("==> DokanCompleteSetSecurity\n");
+	DDbgPrint("==> DokanCompleteSetSecurity");
 
 	irp   = IrpEntry->Irp;
 	irpSp = IrpEntry->IrpSp;	
@@ -367,7 +367,7 @@ DokanCompleteSetSecurity(
 	if (ccb != NULL) {
 		ccb->UserContext = EventInfo->Context;
 	} else {
-		DDbgPrint("  ccb == NULL\n");
+		DDbgPrint("  ccb == NULL");
 	}
 
 	status = EventInfo->Status;
@@ -378,5 +378,5 @@ DokanCompleteSetSecurity(
 
 	DokanPrintNTStatus(status);
 
-	DDbgPrint("<== DokanCompleteSetSecurity\n");
+	DDbgPrint("<== DokanCompleteSetSecurity");
 }

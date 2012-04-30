@@ -79,7 +79,7 @@ extern ULONG g_Debug;
 	if (g_Debug) { KdPrintEx((DPFLTR_IHVDRIVER_ID, DPFLTR_TRACE_LEVEL, "[DokanFS] " __VA_ARGS__ )); }
 #else
 	#define DDbgPrint(...) \
-		if (g_Debug) { DbgPrint("[DokanFS] " __VA_ARGS__); }
+		if (g_Debug) { logw(L"[DokanFS] " __VA_ARGS__); }
 #endif
 
 #if _WIN32_WINNT < 0x0501

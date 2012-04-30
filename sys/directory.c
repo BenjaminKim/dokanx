@@ -49,13 +49,13 @@ DokanDispatchDirectoryControl(
 	__try {
 		FsRtlEnterFileSystem();
 
-		DDbgPrint("==> DokanDirectoryControl\n");
+		DDbgPrint("==> DokanDirectoryControl");
 
 		irpSp		= IoGetCurrentIrpStackLocation(Irp);
 		fileObject	= irpSp->FileObject;
 
 		if (fileObject == NULL) {
-			DDbgPrint(" failed  fileObject is NULL\n");
+			DDbgPrint(" failed  fileObject is NULL");
 			status = STATUS_INVALID_PARAMETER;
 			__leave;
 		}
@@ -76,7 +76,7 @@ DokanDispatchDirectoryControl(
 		} else if( irpSp->MinorFunction == IRP_MN_NOTIFY_CHANGE_DIRECTORY) {
 			status = DokanNotifyChangeDirectory(DeviceObject, Irp);
 		} else {
-			DDbgPrint("  invalid minor function\n");
+			DDbgPrint("  invalid minor function");
 			status = STATUS_INVALID_PARAMETER;
 		}
 	
@@ -89,7 +89,7 @@ DokanDispatchDirectoryControl(
 		}
 
 		DokanPrintNTStatus(status);
-		DDbgPrint("<== DokanDirectoryControl\n");
+		DDbgPrint("<== DokanDirectoryControl");
 
 		FsRtlExitFileSystem();
 	}
@@ -137,10 +137,10 @@ DokanQueryDirectory(
 		DDbgPrint("  index specified %d\n", irpSp->Parameters.QueryDirectory.FileIndex);
 	}
 	if (irpSp->Flags & SL_RETURN_SINGLE_ENTRY) {
-		DDbgPrint("  return single entry\n");
+		DDbgPrint("  return single entry");
 	}
 	if (irpSp->Flags & SL_RESTART_SCAN) {
-		DDbgPrint("  restart scan\n");
+		DDbgPrint("  restart scan");
 	}
 	if (irpSp->Parameters.QueryDirectory.FileName) {
 		DDbgPrint("  pattern:%wZ\n", irpSp->Parameters.QueryDirectory.FileName);
@@ -148,19 +148,19 @@ DokanQueryDirectory(
 	
 	switch (irpSp->Parameters.QueryDirectory.FileInformationClass) {
 	case FileDirectoryInformation:
-		DDbgPrint("  FileDirectoryInformation\n");
+		DDbgPrint("  FileDirectoryInformation");
 		break;
 	case FileFullDirectoryInformation:
-		DDbgPrint("  FileFullDirectoryInformation\n");
+		DDbgPrint("  FileFullDirectoryInformation");
 		break;
 	case FileNamesInformation:
-		DDbgPrint("  FileNamesInformation\n");
+		DDbgPrint("  FileNamesInformation");
 		break;
 	case FileBothDirectoryInformation:
-		DDbgPrint("  FileBothDirectoryInformation\n");
+		DDbgPrint("  FileBothDirectoryInformation");
 		break;
 	case FileIdBothDirectoryInformation:
-		DDbgPrint("  FileIdBothDirectoryInformation\n");
+		DDbgPrint("  FileIdBothDirectoryInformation");
 		break;
 	default:
 		DDbgPrint("  unknown FileInfoClass %d\n", irpSp->Parameters.QueryDirectory.FileInformationClass);
@@ -185,7 +185,7 @@ DokanQueryDirectory(
 
 	// this is an initial query
 	if (initial) {
-		DDbgPrint("    initial query\n");
+		DDbgPrint("    initial query");
 		// and search pattern is provided
 		if (irpSp->Parameters.QueryDirectory.FileName) {
 			// free current search pattern stored in CCB
@@ -235,7 +235,7 @@ DokanQueryDirectory(
 		DDbgPrint("    using FileIndex %d\n", index);
 		
 	} else if (FlagOn(irpSp->Flags, SL_RESTART_SCAN)) {
-		DDbgPrint("    SL_RESTART_SCAN\n");
+		DDbgPrint("    SL_RESTART_SCAN");
 		index = 0;
 		
 	} else {
@@ -289,7 +289,7 @@ DokanNotifyChangeDirectory(
 	PIO_STACK_LOCATION	irpSp;
 	PDokanVCB			vcb;
 
-	DDbgPrint("\tNotifyChangeDirectory\n");
+	DDbgPrint("\tNotifyChangeDirectory");
 
 	irpSp		= IoGetCurrentIrpStackLocation(Irp);
 	fileObject	= irpSp->FileObject;
@@ -341,7 +341,7 @@ DokanCompleteDirectoryControl(
 
 	//FsRtlEnterFileSystem();
 
-	DDbgPrint("==> DokanCompleteDirectoryControl\n");
+	DDbgPrint("==> DokanCompleteDirectoryControl");
 
 	irp   = IrpEntry->Irp;
 	irpSp = IrpEntry->IrpSp;	
@@ -349,10 +349,10 @@ DokanCompleteDirectoryControl(
 
 	// buffer pointer which points DirecotryInfo
 	if (irp->MdlAddress) {
-		//DDbgPrint("   use MDL Address\n");
+		//DDbgPrint("   use MDL Address");
 		buffer = MmGetSystemAddressForMdlSafe(irp->MdlAddress, NormalPagePriority);
 	} else {
-		//DDbgPrint("   use UserBuffer\n");
+		//DDbgPrint("   use UserBuffer");
 		buffer	= irp->UserBuffer;
 	}
 	// usable buffer size
@@ -360,7 +360,7 @@ DokanCompleteDirectoryControl(
 
 
 
-	//DDbgPrint("  !!Returning DirecotyInfo!!\n");
+	//DDbgPrint("  !!Returning DirecotyInfo!!");
 
 	// buffer is not specified or short of length
 	if (bufferLen == 0 || buffer == NULL || bufferLen < EventInfo->BufferLength) {
@@ -379,7 +379,7 @@ DokanCompleteDirectoryControl(
 		
 		RtlZeroMemory(buffer, bufferLen);
 		
-		//DDbgPrint("   copy DirectoryInfo\n");
+		//DDbgPrint("   copy DirectoryInfo");
 		RtlCopyMemory(buffer, EventInfo->Buffer, EventInfo->BufferLength);
 
 		DDbgPrint("    eventInfo->Directory.Index = %d\n", EventInfo->Directory.Index);
@@ -413,7 +413,7 @@ DokanCompleteDirectoryControl(
 
 	DokanPrintNTStatus(status);
 
-	DDbgPrint("<== DokanCompleteDirectoryControl\n");
+	DDbgPrint("<== DokanCompleteDirectoryControl");
 
 	//FsRtlExitFileSystem();
 }

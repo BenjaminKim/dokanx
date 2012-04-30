@@ -41,7 +41,7 @@ DokanSendIoContlToMountManager(
 	KEVENT			driverEvent;
 	IO_STATUS_BLOCK	iosb;
 
-	DDbgPrint("=> DokanSnedIoContlToMountManager\n");
+	DDbgPrint("=> DokanSnedIoContlToMountManager");
 
 	RtlInitUnicodeString(&mountManagerName, MOUNTMGR_DEVICE_NAME);
 
@@ -71,7 +71,7 @@ DokanSendIoContlToMountManager(
 			&iosb);
 
 	if (irp == NULL) {
-		DDbgPrint("  IoBuildDeviceIoControlRequest failed\n");
+		DDbgPrint("  IoBuildDeviceIoControlRequest failed");
 		return STATUS_INSUFFICIENT_RESOURCES;
 	}
 
@@ -87,12 +87,12 @@ DokanSendIoContlToMountManager(
 	ObDereferenceObject(mountDeviceObject);
 
 	if (NT_SUCCESS(status)) {
-		DDbgPrint("  IoCallDriver success\n");
+		DDbgPrint("  IoCallDriver success");
 	} else {
 		DDbgPrint("  IoCallDriver faield: 0x%x\n", status);
 	}
 
-	DDbgPrint("<= DokanSendIoContlToMountManager\n");
+	DDbgPrint("<= DokanSendIoContlToMountManager");
 
 	return status;
 }
@@ -106,13 +106,13 @@ DokanSendVolumeArrivalNotification(
 	PMOUNTMGR_TARGET_NAME targetName;
 	ULONG			length;
 
-	DDbgPrint("=> DokanSendVolumeArrivalNotification\n");
+	DDbgPrint("=> DokanSendVolumeArrivalNotification");
 
 	length = sizeof(MOUNTMGR_TARGET_NAME) + DeviceName->Length - 1;
 	targetName = ExAllocatePool(length);
 
 	if (targetName == NULL) {
-		DDbgPrint("  can't allocate MOUNTMGR_TARGET_NAME\n");
+		DDbgPrint("  can't allocate MOUNTMGR_TARGET_NAME");
 		return STATUS_INSUFFICIENT_RESOURCES;
 	}
 
@@ -124,14 +124,14 @@ DokanSendVolumeArrivalNotification(
 	status = DokanSendIoContlToMountManager(targetName, length);
 
 	if (NT_SUCCESS(status)) {
-		DDbgPrint("  IoCallDriver success\n");
+		DDbgPrint("  IoCallDriver success");
 	} else {
 		DDbgPrint("  IoCallDriver faield: 0x%x\n", status);
 	}
 
 	ExFreePool(targetName);
 
-	DDbgPrint("<= DokanSendVolumeArrivalNotification\n");
+	DDbgPrint("<= DokanSendVolumeArrivalNotification");
 
 	return status;
 }
@@ -145,7 +145,7 @@ DokanRegisterMountedDeviceInterface(
 {
 	NTSTATUS		status;
 	UNICODE_STRING	interfaceName;
-	DDbgPrint("=> DokanRegisterMountedDeviceInterface\n");
+	DDbgPrint("=> DokanRegisterMountedDeviceInterface");
 
 	status = IoRegisterDeviceInterface(
                 DeviceObject,
@@ -172,7 +172,7 @@ DokanRegisterMountedDeviceInterface(
         RtlInitUnicodeString(&(Dcb->MountedDeviceInterfaceName),
                              NULL);
     }
-	DDbgPrint("<= DokanRegisterMountedDeviceInterface\n");
+	DDbgPrint("<= DokanRegisterMountedDeviceInterface");
 	return status;
 }
 
@@ -198,16 +198,16 @@ DokanRegisterDeviceInterface(
 				&pnpDeviceObject);
 
 	if (NT_SUCCESS(status)) {
-		DDbgPrint("  IoReportDetectedDevice success\n");
+		DDbgPrint("  IoReportDetectedDevice success");
 	} else {
 		DDbgPrint("  IoReportDetectedDevice failed: 0x%x\n", status);
 		return status;
 	}
 
 	if (IoAttachDeviceToDeviceStack(pnpDeviceObject, DeviceObject) != NULL) {
-		DDbgPrint("  IoAttachDeviceToDeviceStack success\n");
+		DDbgPrint("  IoAttachDeviceToDeviceStack success");
 	} else {
-		DDbgPrint("  IoAttachDeviceToDeviceStack failed\n");
+		DDbgPrint("  IoAttachDeviceToDeviceStack failed");
 	}
 
 	status = IoRegisterDeviceInterface(
@@ -226,7 +226,7 @@ DokanRegisterDeviceInterface(
 	status = IoSetDeviceInterfaceState(&Dcb->DiskDeviceInterfaceName, TRUE);
 
 	if (NT_SUCCESS(status)) {
-		DDbgPrint("  IoSetDeviceInterfaceState success\n");
+		DDbgPrint("  IoSetDeviceInterfaceState success");
 	} else {
 		DDbgPrint("  IoSetDeviceInterfaceState failed: 0x%x\n", status);
 		return status;
@@ -248,7 +248,7 @@ DokanRegisterDeviceInterface(
 	status = IoSetDeviceInterfaceState(&Dcb->MountedDeviceInterfaceName, TRUE);
 
 	if (NT_SUCCESS(status)) {
-		DDbgPrint("  IoSetDeviceInterfaceState success\n");
+		DDbgPrint("  IoSetDeviceInterfaceState success");
 	} else {
 		DDbgPrint("  IoSetDeviceInterfaceState failed: 0x%x\n", status);
 		return status;
@@ -333,7 +333,7 @@ DokanRegisterUncProvider(
 	NTSTATUS status;
 	status = FsRtlRegisterUncProvider(&(Dcb->MupHandle), Dcb->FileSystemDeviceName, FALSE);
 	if (NT_SUCCESS(status)) {
-		DDbgPrint("  FsRtlRegisterUncProvider success\n");
+		DDbgPrint("  FsRtlRegisterUncProvider success");
 	} else {
 		DDbgPrint("  FsRtlRegisterUncProvider failed: 0x%x\n", status);
 		Dcb->MupHandle = 0;
@@ -665,11 +665,11 @@ DokanDeleteDeviceObject(
 	DDbgPrint("  CCB     freed: %d\n", vcb->CcbFreed);
 
 	// delete diskDeviceObject
-	DDbgPrint("  Delete DeviceObject\n");
+	DDbgPrint("  Delete DeviceObject");
 	IoDeleteDevice(vcb->DeviceObject);
 
 	// delete DeviceObject
-	DDbgPrint("  Delete Disk DeviceObject\n");
+	DDbgPrint("  Delete Disk DeviceObject");
 	IoDeleteDevice(Dcb->DeviceObject);
 }
 

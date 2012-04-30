@@ -44,7 +44,7 @@ DokanDispatchQueryVolumeInformation(
 
 		FsRtlEnterFileSystem();
 
-		DDbgPrint("==> DokanQueryVolumeInformation\n");
+		DDbgPrint("==> DokanQueryVolumeInformation");
 		DDbgPrint("  ProcessId %lu\n", IoGetRequestorProcessId(Irp));
 
 		vcb = DeviceObject->DeviceExtension;
@@ -59,7 +59,7 @@ DokanDispatchQueryVolumeInformation(
 		fileObject		= irpSp->FileObject;
 
 		if (fileObject == NULL) {
-			DDbgPrint("  fileObject == NULL\n");
+			DDbgPrint("  fileObject == NULL");
 			status = STATUS_INVALID_PARAMETER;
 			__leave;
 		}
@@ -73,21 +73,21 @@ DokanDispatchQueryVolumeInformation(
 
 		switch(irpSp->Parameters.QueryVolume.FsInformationClass) {
 		case FileFsVolumeInformation:
-			DDbgPrint("  FileFsVolumeInformation\n");
+			DDbgPrint("  FileFsVolumeInformation");
 			break;
 
 		case FileFsLabelInformation:
-			DDbgPrint("  FileFsLabelInformation\n");
+			DDbgPrint("  FileFsLabelInformation");
 			break;
 	        
 		case FileFsSizeInformation:
-			DDbgPrint("  FileFsSizeInformation\n");
+			DDbgPrint("  FileFsSizeInformation");
 			break;
 	    
 		case FileFsDeviceInformation:
 			{
 				PFILE_FS_DEVICE_INFORMATION device;
-				DDbgPrint("  FileFsDeviceInformation\n");
+				DDbgPrint("  FileFsDeviceInformation");
 				device = (PFILE_FS_DEVICE_INFORMATION)Irp->AssociatedIrp.SystemBuffer;
 				if (irpSp->Parameters.QueryVolume.Length < sizeof(FILE_FS_DEVICE_INFORMATION)) {
 					status = STATUS_BUFFER_TOO_SMALL;
@@ -103,22 +103,22 @@ DokanDispatchQueryVolumeInformation(
 			break;
 	    
 		case FileFsAttributeInformation:
-			DDbgPrint("  FileFsAttributeInformation\n");
+			DDbgPrint("  FileFsAttributeInformation");
 			break;
 	    
 		case FileFsControlInformation:
-			DDbgPrint("  FileFsControlInformation\n");
+			DDbgPrint("  FileFsControlInformation");
 			break;
 	    
 		case FileFsFullSizeInformation:
-			DDbgPrint("  FileFsFullSizeInformation\n");
+			DDbgPrint("  FileFsFullSizeInformation");
 			break;
 		case FileFsObjectIdInformation:
-			DDbgPrint("  FileFsObjectIdInformation\n");
+			DDbgPrint("  FileFsObjectIdInformation");
 			break;
 	    
 		case FileFsMaximumInformation:
-			DDbgPrint("  FileFsMaximumInformation\n");
+			DDbgPrint("  FileFsMaximumInformation");
 			break;
 	    
 		default:
@@ -173,7 +173,7 @@ DokanDispatchQueryVolumeInformation(
 			DokanPrintNTStatus(status);
 		}
 
-		DDbgPrint("<== DokanQueryVolumeInformation\n");
+		DDbgPrint("<== DokanQueryVolumeInformation");
 
 		FsRtlExitFileSystem();
 	}
@@ -198,7 +198,7 @@ DokanCompleteQueryVolumeInformation(
 
 	//FsRtlEnterFileSystem();
 
-	DDbgPrint("==> DokanCompleteQueryVolumeInformation\n");
+	DDbgPrint("==> DokanCompleteQueryVolumeInformation");
 
 	irp = IrpEntry->Irp;
 	irpSp = IrpEntry->IrpSp;
@@ -242,7 +242,7 @@ DokanCompleteQueryVolumeInformation(
 	IoCompleteRequest(irp, IO_NO_INCREMENT);
 
 	DokanPrintNTStatus(status);
-	DDbgPrint("<== DokanCompleteQueryVolumeInformation\n");
+	DDbgPrint("<== DokanCompleteQueryVolumeInformation");
 
 	//FsRtlExitFileSystem();
 }
@@ -261,7 +261,7 @@ DokanDispatchSetVolumeInformation(
 
 	//FsRtlEnterFileSystem();
 
-	DDbgPrint("==> DokanSetVolumeInformation\n");
+	DDbgPrint("==> DokanSetVolumeInformation");
 
 	Irp->IoStatus.Status = status;
 	Irp->IoStatus.Information = 0;

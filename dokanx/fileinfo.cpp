@@ -18,6 +18,7 @@ You should have received a copy of the GNU Lesser General Public License along
 with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
+#include "stdafx.h"
 #include <windows.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -269,7 +270,7 @@ DispatchQueryInformation(
     
     eventInfo->BufferLength = EventContext->File.BufferLength;
 
-    DbgPrint("###GetFileInfo %04d\n", openInfo != NULL ? openInfo->EventId : -1);
+    logw(L"###GetFileInfo %04d\n", openInfo != NULL ? openInfo->EventId : -1);
 
     if (DokanInstance->DokanOperations->GetFileInformation) {
         result = DokanInstance->DokanOperations->GetFileInformation(
@@ -290,7 +291,7 @@ DispatchQueryInformation(
 
         switch(EventContext->File.FileInformationClass) {
         case FileBasicInformation:
-            //DbgPrint("FileBasicInformation\n");
+            //DbgPrint("FileBasicInformation");
             status = DokanFillFileBasicInfo((PFILE_BASIC_INFORMATION)eventInfo->Buffer,
                                         &byHandleFileInfo, &remainingLength);
             break;
@@ -301,20 +302,20 @@ DispatchQueryInformation(
             break;
 
         case FileEaInformation:
-            //DbgPrint("FileEaInformation or FileInternalInformation\n");
+            //DbgPrint("FileEaInformation or FileInternalInformation");
             //status = STATUS_NOT_IMPLEMENTED;
             status = STATUS_SUCCESS;
             remainingLength -= sizeof(FILE_EA_INFORMATION);
             break;
 
         case FileStandardInformation:
-            //DbgPrint("FileStandardInformation\n");
+            //DbgPrint("FileStandardInformation");
             status = DokanFillFileStandardInfo((PFILE_STANDARD_INFORMATION)eventInfo->Buffer,
                                         &byHandleFileInfo, &remainingLength);
             break;
 
         case FileAllInformation:
-            //DbgPrint("FileAllInformation\n");
+            //DbgPrint("FileAllInformation");
             status = DokanFillFileAllInfo((PFILE_ALL_INFORMATION)eventInfo->Buffer,
                                         &byHandleFileInfo, &remainingLength, EventContext);
             break;
@@ -329,37 +330,37 @@ DispatchQueryInformation(
             break;
 
         case FileCompressionInformation:
-            //DbgPrint("FileAlternateNameInformation or...\n");
+            //DbgPrint("FileAlternateNameInformation or...");
             status = STATUS_NOT_IMPLEMENTED;
             break;
 
         case FileNameInformation:
             // this case is not used because driver deal with
-            //DbgPrint("FileNameInformation\n");
+            //DbgPrint("FileNameInformation");
             status = DokanFillFileNameInfo((PFILE_NAME_INFORMATION)eventInfo->Buffer,
                                 &byHandleFileInfo, &remainingLength, EventContext);
             break;
 
         case FileNetworkOpenInformation:
-            //DbgPrint("FileNetworkOpenInformation\n");
+            //DbgPrint("FileNetworkOpenInformation");
             status = DokanFillNetworkOpenInfo((PFILE_NETWORK_OPEN_INFORMATION)eventInfo->Buffer,
                                 &byHandleFileInfo, &remainingLength);
             break;
 
         case FilePositionInformation:
             // this case is not used because driver deal with
-            //DbgPrint("FilePositionInformation\n");
+            //DbgPrint("FilePositionInformation");
             status = DokanFillFilePositionInfo((PFILE_POSITION_INFORMATION)eventInfo->Buffer,
                                 &byHandleFileInfo, &remainingLength);
 
             break;
         case FileStreamInformation:
-            //DbgPrint("FileStreamInformation\n");
+            //DbgPrint("FileStreamInformation");
             status = STATUS_NOT_IMPLEMENTED;
             break;
         default:
             {
-                DbgPrint("  unknown type:%d\n", EventContext->File.FileInformationClass);
+                logw(L"  unknown type:%d\n", EventContext->File.FileInformationClass);
             }
             break;
         }

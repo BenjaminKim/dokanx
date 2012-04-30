@@ -124,7 +124,7 @@ DokanGetFCB(
 
 	// we don't have FCB
 	if (fcb == NULL) {
-		DDbgPrint("  Allocate FCB\n");
+		DDbgPrint("  Allocate FCB");
 		
 		fcb = DokanAllocateFCB(Vcb);
 		
@@ -354,14 +354,14 @@ Return Value:
 	__try {
 		FsRtlEnterFileSystem();
 
-		DDbgPrint("==> DokanCreate\n");
+		DDbgPrint("==> DokanCreate");
 
 		irpSp = IoGetCurrentIrpStackLocation(Irp);
 		fileObject = irpSp->FileObject;
 		relatedFileObject = fileObject->RelatedFileObject;
 
 		if (fileObject == NULL) {
-			DDbgPrint("  fileObject == NULL\n");
+			DDbgPrint("  fileObject == NULL");
 			status = STATUS_INVALID_PARAMETER;
 			__leave;
 		}
@@ -379,16 +379,16 @@ Return Value:
 
 		DDbgPrint("  IrpSp->Flags = %d\n", irpSp->Flags);
 		if (irpSp->Flags & SL_CASE_SENSITIVE) {
-			DDbgPrint("  IrpSp->Flags SL_CASE_SENSITIVE\n");
+			DDbgPrint("  IrpSp->Flags SL_CASE_SENSITIVE");
 		}
 		if (irpSp->Flags & SL_FORCE_ACCESS_CHECK) {
-			DDbgPrint("  IrpSp->Flags SL_FORCE_ACCESS_CHECK\n");
+			DDbgPrint("  IrpSp->Flags SL_FORCE_ACCESS_CHECK");
 		}
 		if (irpSp->Flags & SL_OPEN_PAGING_FILE) {
-			DDbgPrint("  IrpSp->Flags SL_OPEN_PAGING_FILE\n");
+			DDbgPrint("  IrpSp->Flags SL_OPEN_PAGING_FILE");
 		}
 		if (irpSp->Flags & SL_OPEN_TARGET_DIRECTORY) {
-			DDbgPrint("  IrpSp->Flags SL_OPEN_TARGET_DIRECTORY\n");
+			DDbgPrint("  IrpSp->Flags SL_OPEN_TARGET_DIRECTORY");
 		}
 
 	   if ((fileObject->FileName.Length > sizeof(WCHAR)) &&
@@ -411,7 +411,7 @@ Return Value:
 		if ((relatedFileObject == NULL || relatedFileObject->FileName.Length == 0) &&
 			fileObject->FileName.Length == 0) {
 
-			DDbgPrint("   request for FS device\n");
+			DDbgPrint("   request for FS device");
 
 			if (irpSp->Parameters.Create.Options & FILE_DIRECTORY_FILE) {
 				status = STATUS_NOT_A_DIRECTORY;
@@ -434,7 +434,7 @@ Return Value:
 
 			if (fileObject->FileName.Length > 0 &&
 				fileObject->FileName.Buffer[0] == '\\') {
-				DDbgPrint("  when RelatedFileObject is specified, the file name should be relative path\n");
+				DDbgPrint("  when RelatedFileObject is specified, the file name should be relative path");
 				status = STATUS_OBJECT_NAME_INVALID;
 				__leave;
 			}
@@ -448,7 +448,7 @@ Return Value:
 		// don't open file like stream
 		if (!dcb->UseAltStream &&
 			DokanUnicodeStringChar(&fileObject->FileName, L':') != -1) {
-			DDbgPrint("    alternate stream\n");
+			DDbgPrint("    alternate stream");
 			status = STATUS_INVALID_PARAMETER;
 			info = 0;
 			__leave;
@@ -545,7 +545,7 @@ Return Value:
 			DokanPrintNTStatus(status);
 		}
 
-		DDbgPrint("<== DokanCreate\n");
+		DDbgPrint("<== DokanCreate");
 		FsRtlExitFileSystem();
 	}
 
@@ -569,7 +569,7 @@ DokanCompleteCreate(
 	irp   = IrpEntry->Irp;
 	irpSp = IrpEntry->IrpSp;	
 
-	DDbgPrint("==> DokanCompleteCreate\n");
+	DDbgPrint("==> DokanCompleteCreate");
 
 	ccb	= IrpEntry->FileObject->FsContext2;
 	ASSERT(ccb != NULL);
@@ -588,19 +588,19 @@ DokanCompleteCreate(
 
 	switch (info) {
 	case FILE_OPENED:
-		DDbgPrint("  FILE_OPENED\n");
+		DDbgPrint("  FILE_OPENED");
 		break;
 	case FILE_CREATED:
-		DDbgPrint("  FILE_CREATED\n");
+		DDbgPrint("  FILE_CREATED");
 		break;
 	case FILE_OVERWRITTEN:
-		DDbgPrint("  FILE_OVERWRITTEN\n");
+		DDbgPrint("  FILE_OVERWRITTEN");
 		break;
 	case FILE_DOES_NOT_EXIST:
-		DDbgPrint("  FILE_DOES_NOT_EXIST\n");
+		DDbgPrint("  FILE_DOES_NOT_EXIST");
 		break;
 	case FILE_EXISTS:
-		DDbgPrint("  FILE_EXISTS\n");
+		DDbgPrint("  FILE_EXISTS");
 		break;
 	default:
 		DDbgPrint("  info = %d\n", info);
@@ -649,6 +649,6 @@ DokanCompleteCreate(
 	IoCompleteRequest(irp, IO_NO_INCREMENT);
 
 	DokanPrintNTStatus(status);
-	DDbgPrint("<== DokanCompleteCreate\n");
+	DDbgPrint("<== DokanCompleteCreate");
 }
 

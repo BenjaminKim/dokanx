@@ -18,7 +18,7 @@ You should have received a copy of the GNU Lesser General Public License along
 with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-
+#include "stdafx.h"
 #include <windows.h>
 #include <stdio.h>
 #include "../dokani.h"
@@ -34,7 +34,7 @@ DokanServiceCheck(
     controlHandle = OpenSCManager(NULL, NULL, SC_MANAGER_CONNECT);
 
     if (controlHandle == NULL) {
-        DbgPrint("failed to open SCM: %d\n", GetLastError());
+        logw(L"failed to open SCM: %d\n", GetLastError());
         return FALSE;
     }
 
@@ -66,7 +66,7 @@ DokanServiceControl(
     controlHandle = OpenSCManager(NULL, NULL, SC_MANAGER_CONNECT);
 
     if (controlHandle == NULL) {
-        DokanDbgPrint("failed to open SCM: %d\n", GetLastError());
+        logw(L"failed to open SCM: %d\n", GetLastError());
         return FALSE;
     }
 
@@ -74,7 +74,7 @@ DokanServiceControl(
         SERVICE_START | SERVICE_STOP | SERVICE_QUERY_STATUS | DELETE);
 
     if (serviceHandle == NULL) {
-        DokanDbgPrintW(L"failed to open Service (%s): %d\n", ServiceName, GetLastError());
+        logw(L"failed to open Service (%s): %d\n", ServiceName, GetLastError());
         CloseServiceHandle(controlHandle);
         return FALSE;
     }
@@ -83,29 +83,29 @@ DokanServiceControl(
 
     if (Type == DOKAN_SERVICE_DELETE) {
         if (DeleteService(serviceHandle)) {
-            DokanDbgPrintW(L"Service (%s) deleted\n", ServiceName);
+            logw(L"Service (%s) deleted\n", ServiceName);
             result = TRUE;
         } else {
-            DokanDbgPrintW(L"failed to delete service (%s): %d\n", ServiceName, GetLastError());
+            logw(L"failed to delete service (%s): %d\n", ServiceName, GetLastError());
             result = FALSE;
         }
 
     } else if (ss.dwCurrentState == SERVICE_STOPPED && Type == DOKAN_SERVICE_START) {
         if (StartService(serviceHandle, 0, NULL)) {
-            DokanDbgPrintW(L"Service (%s) started\n", ServiceName);
+            logw(L"Service (%s) started\n", ServiceName);
             result = TRUE;
         } else {
-            DokanDbgPrintW(L"failed to start service (%s): %d\n", ServiceName, GetLastError());
+            logw(L"failed to start service (%s): %d\n", ServiceName, GetLastError());
             result = FALSE;
         }
     
     } else if (ss.dwCurrentState == SERVICE_RUNNING && Type == DOKAN_SERVICE_STOP) {
 
         if (ControlService(serviceHandle, SERVICE_CONTROL_STOP, &ss)) {
-            DokanDbgPrintW(L"Service (%s) stopped\n", ServiceName);
+            logw(L"Service (%s) stopped\n", ServiceName);
             result = TRUE;
         } else {
-            DokanDbgPrintW(L"failed to stop service (%s): %d\n", ServiceName, GetLastError());
+            logw(L"failed to stop service (%s): %d\n", ServiceName, GetLastError());
             result = FALSE;
         }
     }
@@ -123,7 +123,6 @@ BOOL DOKANAPI
 DokanMountControl(PDOKAN_CONTROL Control)
 {
     HANDLE pipe;
-//	DWORD writtenBytes;
     DWORD readBytes;
     DWORD pipeMode;
     DWORD error;
@@ -138,15 +137,15 @@ DokanMountControl(PDOKAN_CONTROL Control)
         error = GetLastError();
         if (error == ERROR_PIPE_BUSY) {
             if (!WaitNamedPipe(DOKAN_CONTROL_PIPE, NMPWAIT_USE_DEFAULT_WAIT)) {
-                DbgPrint("DokanMounter service : ERROR_PIPE_BUSY\n");
+                logw(L"DokanMounter service : ERROR_PIPE_BUSY");
                 return FALSE;
             }
             continue;
         } else if (error == ERROR_ACCESS_DENIED) {
-            DbgPrint("failed to connect DokanMounter service: access denied\n");
+            logw(L"failed to connect DokanMounter service: access denied");
             return FALSE;
         } else {
-            DbgPrint("failed to connect DokanMounter service: %d\n", GetLastError());
+            logw(L"failed to connect DokanMounter service: %d\n", GetLastError());
             return FALSE;
         }
     }
@@ -154,15 +153,14 @@ DokanMountControl(PDOKAN_CONTROL Control)
     pipeMode = PIPE_READMODE_MESSAGE|PIPE_WAIT;
 
     if(!SetNamedPipeHandleState(pipe, &pipeMode, NULL, NULL)) {
-        DbgPrint("failed to set named pipe state: %d\n", GetLastError());
+        logw(L"failed to set named pipe state: %d\n", GetLastError());
         CloseHandle(pipe);
         return FALSE;
     }
 
-
     if(!TransactNamedPipe(pipe, Control, sizeof(DOKAN_CONTROL),
         Control, sizeof(DOKAN_CONTROL), &readBytes, NULL)) {
-        DbgPrint("failed to transact named pipe: %d\n", GetLastError());
+        logw(L"failed to transact named pipe: %d\n", GetLastError());
     }
 
     CloseHandle(pipe);
@@ -186,7 +184,7 @@ DokanServiceInstall(
     
     controlHandle = OpenSCManager(NULL, NULL, SC_MANAGER_CREATE_SERVICE);
     if (controlHandle == NULL) {
-        DokanDbgPrint("failed to open SCM");
+        logw(L"failed to open SCM");
         return FALSE;
     }
 
@@ -196,9 +194,9 @@ DokanServiceInstall(
     
     if (serviceHandle == NULL) {
         if (GetLastError() == ERROR_SERVICE_EXISTS) {
-            DokanDbgPrintW(L"Service (%s) is already installed\n", ServiceName);
+            logw(L"Service (%s) is already installed\n", ServiceName);
         } else {
-            DokanDbgPrintW(L"failted to install service (%s): %d\n", ServiceName, GetLastError());
+            logw(L"failted to install service (%s): %d\n", ServiceName, GetLastError());
         }
         CloseServiceHandle(controlHandle);
         return FALSE;
@@ -207,13 +205,13 @@ DokanServiceInstall(
     CloseServiceHandle(serviceHandle);
     CloseServiceHandle(controlHandle);
 
-    DokanDbgPrintW(L"Service (%s) installed\n", ServiceName);
+    logw(L"Service (%s) installed\n", ServiceName);
 
     if (DokanServiceControl(ServiceName, DOKAN_SERVICE_START)) {
-        DokanDbgPrintW(L"Service (%s) started\n", ServiceName);
+        logw(L"Service (%s) started\n", ServiceName);
         return TRUE;
     } else {
-        DokanDbgPrintW(L"Service (%s) start failed\n", ServiceName);
+        logw(L"Service (%s) start failed\n", ServiceName);
         return FALSE;
     }
 }
@@ -256,14 +254,14 @@ DokanRemoveMountPoint(
     control.Type = DOKAN_CONTROL_UNMOUNT;
     wcscpy_s(control.MountPoint, sizeof(control.MountPoint) / sizeof(WCHAR), MountPoint);
 
-    DbgPrintW(L"DokanRemoveMountPoint %ws\n", MountPoint);
+    logw(L"DokanRemoveMountPoint %ws\n", MountPoint);
 
     result = DokanMountControl(&control);
     if (result) {
-        DbgPrint("DokanControl recieved DeviceName:%ws\n", control.DeviceName);
+        logw(L"DokanControl recieved DeviceName:%ws\n", control.DeviceName);
         SendReleaseIRP(control.DeviceName);
     } else {
-        DbgPrint("DokanRemoveMountPoint failed\n");
+        logw(L"DokanRemoveMountPoint failed");
     }
     return result;
 }
@@ -279,10 +277,10 @@ DokanMount(
     ZeroMemory(&control, sizeof(DOKAN_CONTROL));
     control.Type = DOKAN_CONTROL_MOUNT;
 
-    wcscpy_s(control.MountPoint, sizeof(control.MountPoint) / sizeof(WCHAR), MountPoint);
-    wcscpy_s(control.DeviceName, sizeof(control.DeviceName) / sizeof(WCHAR), DeviceName);
+    wcscpy_s(control.MountPoint, _countof(control.MountPoint), MountPoint);
+    wcscpy_s(control.DeviceName, _countof(control.DeviceName), DeviceName);
 
-    return  DokanMountControl(&control);
+    return DokanMountControl(&control);
 }
 
 

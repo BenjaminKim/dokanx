@@ -59,13 +59,13 @@ Return Value:
 
 		FsRtlEnterFileSystem();
 
-		DDbgPrint("==> DokanClose\n");
+		DDbgPrint("==> DokanClose");
 	
 		irpSp = IoGetCurrentIrpStackLocation(Irp);
 		fileObject = irpSp->FileObject;
 
 		if (fileObject == NULL) {
-			DDbgPrint("  fileObject is NULL\n");
+			DDbgPrint("  fileObject is NULL");
 			status = STATUS_SUCCESS;
 			__leave;
 		}
@@ -106,7 +106,7 @@ Return Value:
 
 		if (eventContext == NULL) {
 			//status = STATUS_INSUFFICIENT_RESOURCES;
-			DDbgPrint("   eventContext == NULL\n");
+			DDbgPrint("   eventContext == NULL");
 			DDbgPrint("   Free CCB:%X\n", ccb);
 			DokanFreeCCB(ccb);
 			DokanFreeFCB(fcb);
@@ -143,7 +143,7 @@ Return Value:
 			IoCompleteRequest(Irp, IO_NO_INCREMENT);
 		}
 
-		DDbgPrint("<== DokanClose\n");
+		DDbgPrint("<== DokanClose");
 
 		FsRtlExitFileSystem();
 	}

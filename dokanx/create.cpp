@@ -18,7 +18,7 @@ You should have received a copy of the GNU Lesser General Public License along
 with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-
+#include "stdafx.h"
 #include "../dokani.h"
 #include "fileinfo.h"
 
@@ -75,7 +75,7 @@ DispatchCreate(
     // even if this flag is not specifed, 
     // there is a case to open a directory
     if (options & FILE_DIRECTORY_FILE) {
-        //DbgPrint("FILE_DIRECTORY_FILE\n");
+        //DbgPrint("FILE_DIRECTORY_FILE");
         directoryRequested = TRUE;
     }
 
@@ -83,14 +83,14 @@ DispatchCreate(
     // event if this flag is not specified,
     // there is a case to open non directory file
     if (options & FILE_NON_DIRECTORY_FILE) {
-        //DbgPrint("FILE_NON_DIRECTORY_FILE\n");
+        //DbgPrint("FILE_NON_DIRECTORY_FILE");
     }
 
     if (options & FILE_DELETE_ON_CLOSE) {
         EventContext->Create.FileAttributes |= FILE_FLAG_DELETE_ON_CLOSE;
     }
 
-    DbgPrint("###Create %04d\n", eventId);
+    logw(L"###Create %04d", eventId);
     //DbgPrint("### OpenInfo %X\n", openInfo);
     openInfo->EventId = eventId++;
 
@@ -109,14 +109,14 @@ DispatchCreate(
                             EventContext->Create.FileName, &fileInfo);
             }
         } else {
-            DbgPrint("### Create other disposition : %d\n", disposition);
+            logw(L"### Create other disposition : %d", disposition);
         }
     
     // open a file
     } else {
         DWORD creationDisposition = OPEN_EXISTING;
         fileInfo.IsDirectory = FALSE;
-        DbgPrint("   CreateDisposition %X\n", disposition);
+        logw(L"   CreateDisposition %0x08X", disposition);
         switch(disposition) {
             case FILE_CREATE:
                 creationDisposition = CREATE_NEW;
@@ -135,19 +135,19 @@ DispatchCreate(
                 break;
             default:
                 // TODO: should support FILE_SUPERSEDE ?
-                DbgPrint("### Create other disposition : %d\n", disposition);
+                logw(L"### Create other disposition : %d", disposition);
                 break;
         }
         
         if (DokanInstance->DokanOperations->CreateFile)
         {
             status = DokanInstance->DokanOperations->CreateFile(
-                                    EventContext->Create.FileName,
-                                    EventContext->Create.DesiredAccess,
-                                    EventContext->Create.ShareAccess,
-                                    creationDisposition,
-                                    EventContext->Create.FileAttributes,
-                                    &fileInfo);
+                EventContext->Create.FileName,
+                EventContext->Create.DesiredAccess,
+                EventContext->Create.ShareAccess,
+                creationDisposition,
+                EventContext->Create.FileAttributes,
+                &fileInfo);
         }
     }
 
@@ -162,19 +162,19 @@ DispatchCreate(
     // FILE_OVERWRITTEN
     // FILE_SUPERSEDED
 
-
+    logw(L"CreateFile status = 0x%08X", status);
     if (status != STATUS_SUCCESS)
     {
-        DbgPrint("CreateFile status = 0x%08X\n", status);
         if (EventContext->Flags & SL_OPEN_TARGET_DIRECTORY)
         {
-            DbgPrint("SL_OPEN_TARGET_DIRECTORY spcefied\n");
+            logw(L"SL_OPEN_TARGET_DIRECTORY spcefied");
         }
         eventInfo->Create.Information = FILE_DOES_NOT_EXIST;
         eventInfo->Status = status;
 
         if (status == STATUS_OBJECT_NAME_NOT_FOUND && EventContext->Flags & SL_OPEN_TARGET_DIRECTORY)
         {
+            logw(L"This case should be returned as SUCCESS");
             eventInfo->Status = STATUS_SUCCESS;
         }
 
@@ -193,8 +193,6 @@ DispatchCreate(
     }
     else
     {
-        //DbgPrint("status = %d\n", status);
-        
         eventInfo->Status = STATUS_SUCCESS;
         eventInfo->Create.Information = FILE_OPENED;
 

@@ -71,30 +71,6 @@ typedef struct _DOKAN_CONTROL {
 
 } DOKAN_CONTROL, *PDOKAN_CONTROL;
 
-VOID DokanDbgPrint(LPCSTR format, ...);
-VOID DokanDbgPrintW(LPCWSTR format, ...);
-
-#define DbgPrint(format, ... ) \
-	do {\
-		if (g_DebugMode) {\
-			DokanDbgPrint(format, __VA_ARGS__);\
-		}\
-	__pragma (warning(push)) \
-	__pragma (warning(disable:4127)) \
-	} while(0) \
-	__pragma (warning(pop))
-
-#define DbgPrintW(format, ... ) \
-	do {\
-		if (g_DebugMode) {\
-			DokanDbgPrintW(format, __VA_ARGS__);\
-		}\
-	__pragma (warning(push)) \
-	__pragma (warning(disable:4127)) \
-	} while(0) \
-	__pragma (warning(pop))
-
-
 BOOL DOKANAPI
 DokanServiceInstall(
 	LPCWSTR	ServiceName,

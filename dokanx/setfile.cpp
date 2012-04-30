@@ -18,7 +18,7 @@ You should have received a copy of the GNU Lesser General Public License along
 with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-
+#include "stdafx.h"
 #include <windows.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -54,7 +54,7 @@ DokanSetAllocationInformation(
             allocInfo->AllocationSize.QuadPart,
             FileInfo);
     } else {
-        DbgPrint("  SetAllocationInformation %I64d, can't handle this parameter.\n",
+        logw(L"  SetAllocationInformation %I64d, can't handle this parameter.\n",
                 allocInfo->AllocationSize.QuadPart);
     }
 
@@ -117,7 +117,9 @@ DokanSetDispositionInformation(
         (PFILE_DISPOSITION_INFORMATION)((PCHAR)EventContext + EventContext->SetFile.BufferOffset);
 
     if (!DokanOperations->DeleteFile || !DokanOperations->DeleteDirectory)
+    {
         return STATUS_NOT_IMPLEMENTED;
+    }
 
     if (!dispositionInfo->DeleteFile) {    
         return STATUS_SUCCESS;
@@ -249,7 +251,7 @@ DispatchSetInformation(
     eventInfo = DispatchCommon(
         EventContext, sizeOfEventInfo, DokanInstance, &fileInfo, &openInfo);
     
-    DbgPrint("###SetFileInfo %04d\n", openInfo != NULL ? openInfo->EventId : -1);
+    logw(L"###SetFileInfo %04d\n", openInfo != NULL ? openInfo->EventId : -1);
 
     switch (EventContext->SetFile.FileInformationClass) {
     case FileAllocationInformation:
@@ -305,7 +307,7 @@ DispatchSetInformation(
             PFILE_DISPOSITION_INFORMATION dispositionInfo =
                 (PFILE_DISPOSITION_INFORMATION)((PCHAR)EventContext + EventContext->SetFile.BufferOffset);
             eventInfo->Delete.DeleteOnClose = dispositionInfo->DeleteFile ? TRUE : FALSE;
-            DbgPrint("  dispositionInfo->DeleteFile = %d\n", dispositionInfo->DeleteFile);
+            logw(L"  dispositionInfo->DeleteFile = %d\n", dispositionInfo->DeleteFile);
         }
     }
     else

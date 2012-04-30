@@ -18,6 +18,7 @@ You should have received a copy of the GNU Lesser General Public License along
 with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
+#include "stdafx.h"
 #include "../dokani.h"
 #include "fileinfo.h"
 
@@ -40,7 +41,7 @@ DispatchCleanup(
 	
 	eventInfo->Status = STATUS_SUCCESS; // return success at any case
 
-	DbgPrint("###Cleanup %04d\n", openInfo != NULL ? openInfo->EventId : -1);
+	logw(L"###Cleanup %04d\n", openInfo != NULL ? openInfo->EventId : -1);
 
 	if (DokanInstance->DokanOperations->Cleanup) {
 		// ignore return value

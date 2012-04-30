@@ -37,241 +37,241 @@ DokanUserFsRequest(
 	switch(irpSp->Parameters.FileSystemControl.FsControlCode) {
 
 	case FSCTL_REQUEST_OPLOCK_LEVEL_1:
-		DDbgPrint("    FSCTL_REQUEST_OPLOCK_LEVEL_1\n");
+		DDbgPrint("    FSCTL_REQUEST_OPLOCK_LEVEL_1");
 		status = STATUS_SUCCESS;
 		break;
 
 	case FSCTL_REQUEST_OPLOCK_LEVEL_2:
-		DDbgPrint("    FSCTL_REQUEST_OPLOCK_LEVEL_2\n");
+		DDbgPrint("    FSCTL_REQUEST_OPLOCK_LEVEL_2");
 		status = STATUS_SUCCESS;
 		break;
 
 	case FSCTL_REQUEST_BATCH_OPLOCK:
-		DDbgPrint("    FSCTL_REQUEST_BATCH_OPLOCK\n");
+		DDbgPrint("    FSCTL_REQUEST_BATCH_OPLOCK");
 		status = STATUS_SUCCESS;
 		break;
 
 	case FSCTL_OPLOCK_BREAK_ACKNOWLEDGE:
-		DDbgPrint("    FSCTL_OPLOCK_BREAK_ACKNOWLEDGE\n");
+		DDbgPrint("    FSCTL_OPLOCK_BREAK_ACKNOWLEDGE");
 		status = STATUS_SUCCESS;
 		break;
 
 	case FSCTL_OPBATCH_ACK_CLOSE_PENDING:
-		DDbgPrint("    FSCTL_OPBATCH_ACK_CLOSE_PENDING\n");
+		DDbgPrint("    FSCTL_OPBATCH_ACK_CLOSE_PENDING");
 		status = STATUS_SUCCESS;
 		break;
 
 	case FSCTL_OPLOCK_BREAK_NOTIFY:
-		DDbgPrint("    FSCTL_OPLOCK_BREAK_NOTIFY\n");
+		DDbgPrint("    FSCTL_OPLOCK_BREAK_NOTIFY");
 		status = STATUS_SUCCESS;
 		break;
 
 	case FSCTL_LOCK_VOLUME:
-		DDbgPrint("    FSCTL_LOCK_VOLUME\n");
+		DDbgPrint("    FSCTL_LOCK_VOLUME");
 		status = STATUS_SUCCESS;
 		break;
 
 	case FSCTL_UNLOCK_VOLUME:
-		DDbgPrint("    FSCTL_UNLOCK_VOLUME\n");
+		DDbgPrint("    FSCTL_UNLOCK_VOLUME");
 		status = STATUS_SUCCESS;
 		break;
 
 	case FSCTL_DISMOUNT_VOLUME:
-		DDbgPrint("    FSCTL_DISMOUNT_VOLUME\n");
+		DDbgPrint("    FSCTL_DISMOUNT_VOLUME");
 		break;
 
 	case FSCTL_IS_VOLUME_MOUNTED:
-		DDbgPrint("    FSCTL_IS_VOLUME_MOUNTED\n");
+		DDbgPrint("    FSCTL_IS_VOLUME_MOUNTED");
 		status = STATUS_SUCCESS;
 		break;
 
 	case FSCTL_IS_PATHNAME_VALID:
-		DDbgPrint("    FSCTL_IS_PATHNAME_VALID\n");
+		DDbgPrint("    FSCTL_IS_PATHNAME_VALID");
 		break;
 
 	case FSCTL_MARK_VOLUME_DIRTY:
-		DDbgPrint("    FSCTL_MARK_VOLUME_DIRTY\n");
+		DDbgPrint("    FSCTL_MARK_VOLUME_DIRTY");
 		break;
 
 	case FSCTL_QUERY_RETRIEVAL_POINTERS:
-		DDbgPrint("    FSCTL_QUERY_RETRIEVAL_POINTERS\n");
+		DDbgPrint("    FSCTL_QUERY_RETRIEVAL_POINTERS");
 		break;
 
 	case FSCTL_GET_COMPRESSION:
-		DDbgPrint("    FSCTL_GET_COMPRESSION\n");
+		DDbgPrint("    FSCTL_GET_COMPRESSION");
 		break;
 
 	case FSCTL_SET_COMPRESSION:
-		DDbgPrint("    FSCTL_SET_COMPRESSION\n");
+		DDbgPrint("    FSCTL_SET_COMPRESSION");
 		break;
 
 	case FSCTL_MARK_AS_SYSTEM_HIVE:
-		DDbgPrint("    FSCTL_MARK_AS_SYSTEM_HIVE\n");
+		DDbgPrint("    FSCTL_MARK_AS_SYSTEM_HIVE");
 		break;
 
 	case FSCTL_OPLOCK_BREAK_ACK_NO_2:
-		DDbgPrint("    FSCTL_OPLOCK_BREAK_ACK_NO_2\n");
+		DDbgPrint("    FSCTL_OPLOCK_BREAK_ACK_NO_2");
 		break;
 
 	case FSCTL_INVALIDATE_VOLUMES:
-		DDbgPrint("    FSCTL_INVALIDATE_VOLUMES\n");
+		DDbgPrint("    FSCTL_INVALIDATE_VOLUMES");
 		break;
 
 	case FSCTL_QUERY_FAT_BPB:
-		DDbgPrint("    FSCTL_QUERY_FAT_BPB\n");
+		DDbgPrint("    FSCTL_QUERY_FAT_BPB");
 		break;
 
 	case FSCTL_REQUEST_FILTER_OPLOCK:
-		DDbgPrint("    FSCTL_REQUEST_FILTER_OPLOCK\n");
+		DDbgPrint("    FSCTL_REQUEST_FILTER_OPLOCK");
 		break;
 
 	case FSCTL_FILESYSTEM_GET_STATISTICS:
-		DDbgPrint("    FSCTL_FILESYSTEM_GET_STATISTICS\n");
+		DDbgPrint("    FSCTL_FILESYSTEM_GET_STATISTICS");
 		break;
 
 	case FSCTL_GET_NTFS_VOLUME_DATA:
-		DDbgPrint("    FSCTL_GET_NTFS_VOLUME_DATA\n");
+		DDbgPrint("    FSCTL_GET_NTFS_VOLUME_DATA");
 		break;
 
 	case FSCTL_GET_NTFS_FILE_RECORD:
-		DDbgPrint("    FSCTL_GET_NTFS_FILE_RECORD\n");
+		DDbgPrint("    FSCTL_GET_NTFS_FILE_RECORD");
 		break;
 
 	case FSCTL_GET_VOLUME_BITMAP:
-		DDbgPrint("    FSCTL_GET_VOLUME_BITMAP\n");
+		DDbgPrint("    FSCTL_GET_VOLUME_BITMAP");
 		break;
 
 	case FSCTL_GET_RETRIEVAL_POINTERS:
-		DDbgPrint("    FSCTL_GET_RETRIEVAL_POINTERS\n");
+		DDbgPrint("    FSCTL_GET_RETRIEVAL_POINTERS");
 		break;
 
 	case FSCTL_MOVE_FILE:
-		DDbgPrint("    FSCTL_MOVE_FILE\n");
+		DDbgPrint("    FSCTL_MOVE_FILE");
 		break;
 
 	case FSCTL_IS_VOLUME_DIRTY:
-		DDbgPrint("    FSCTL_IS_VOLUME_DIRTY\n");
+		DDbgPrint("    FSCTL_IS_VOLUME_DIRTY");
 		break;
 
 	case FSCTL_ALLOW_EXTENDED_DASD_IO:
-		DDbgPrint("    FSCTL_ALLOW_EXTENDED_DASD_IO\n");
+		DDbgPrint("    FSCTL_ALLOW_EXTENDED_DASD_IO");
 		break;
 
 	case FSCTL_FIND_FILES_BY_SID:
-		DDbgPrint("    FSCTL_FIND_FILES_BY_SID\n");
+		DDbgPrint("    FSCTL_FIND_FILES_BY_SID");
 		break;
 
 	case FSCTL_SET_OBJECT_ID:
-		DDbgPrint("    FSCTL_SET_OBJECT_ID\n");
+		DDbgPrint("    FSCTL_SET_OBJECT_ID");
 		break;
 
 	case FSCTL_GET_OBJECT_ID:
-		DDbgPrint("    FSCTL_GET_OBJECT_ID\n");
+		DDbgPrint("    FSCTL_GET_OBJECT_ID");
 		break;
 
 	case FSCTL_DELETE_OBJECT_ID:
-		DDbgPrint("    FSCTL_DELETE_OBJECT_ID\n");
+		DDbgPrint("    FSCTL_DELETE_OBJECT_ID");
 		break;
 
 	case FSCTL_SET_REPARSE_POINT:
-		DDbgPrint("    FSCTL_SET_REPARSE_POINT\n");
+		DDbgPrint("    FSCTL_SET_REPARSE_POINT");
 		break;
 
 	case FSCTL_GET_REPARSE_POINT:
-		DDbgPrint("    FSCTL_GET_REPARSE_POINT\n");
+		DDbgPrint("    FSCTL_GET_REPARSE_POINT");
 		status = STATUS_NOT_A_REPARSE_POINT;
 		break;
 
 	case FSCTL_DELETE_REPARSE_POINT:
-		DDbgPrint("    FSCTL_DELETE_REPARSE_POINT\n");
+		DDbgPrint("    FSCTL_DELETE_REPARSE_POINT");
 		break;
 
 	case FSCTL_ENUM_USN_DATA:
-		DDbgPrint("    FSCTL_ENUM_USN_DATA\n");
+		DDbgPrint("    FSCTL_ENUM_USN_DATA");
 		break;
 
 	case FSCTL_SECURITY_ID_CHECK:
-		DDbgPrint("    FSCTL_SECURITY_ID_CHECK\n");
+		DDbgPrint("    FSCTL_SECURITY_ID_CHECK");
 		break;
 
 	case FSCTL_READ_USN_JOURNAL:
-		DDbgPrint("    FSCTL_READ_USN_JOURNAL\n");
+		DDbgPrint("    FSCTL_READ_USN_JOURNAL");
 		break;
 
 	case FSCTL_SET_OBJECT_ID_EXTENDED:
-		DDbgPrint("    FSCTL_SET_OBJECT_ID_EXTENDED\n");
+		DDbgPrint("    FSCTL_SET_OBJECT_ID_EXTENDED");
 		break;
 
 	case FSCTL_CREATE_OR_GET_OBJECT_ID:
-		DDbgPrint("    FSCTL_CREATE_OR_GET_OBJECT_ID\n");
+		DDbgPrint("    FSCTL_CREATE_OR_GET_OBJECT_ID");
 		break;
 
 	case FSCTL_SET_SPARSE:
-		DDbgPrint("    FSCTL_SET_SPARSE\n");
+		DDbgPrint("    FSCTL_SET_SPARSE");
 		break;
 
 	case FSCTL_SET_ZERO_DATA:
-		DDbgPrint("    FSCTL_SET_ZERO_DATA\n");
+		DDbgPrint("    FSCTL_SET_ZERO_DATA");
 		break;
 
 	case FSCTL_QUERY_ALLOCATED_RANGES:
-		DDbgPrint("    FSCTL_QUERY_ALLOCATED_RANGES\n");
+		DDbgPrint("    FSCTL_QUERY_ALLOCATED_RANGES");
 		break;
 
 	case FSCTL_SET_ENCRYPTION:
-		DDbgPrint("    FSCTL_SET_ENCRYPTION\n");
+		DDbgPrint("    FSCTL_SET_ENCRYPTION");
 		break;
 
 	case FSCTL_ENCRYPTION_FSCTL_IO:
-		DDbgPrint("    FSCTL_ENCRYPTION_FSCTL_IO\n");
+		DDbgPrint("    FSCTL_ENCRYPTION_FSCTL_IO");
 		break;
 
 	case FSCTL_WRITE_RAW_ENCRYPTED:
-		DDbgPrint("    FSCTL_WRITE_RAW_ENCRYPTED\n");
+		DDbgPrint("    FSCTL_WRITE_RAW_ENCRYPTED");
 		break;
 
 	case FSCTL_READ_RAW_ENCRYPTED:
-		DDbgPrint("    FSCTL_READ_RAW_ENCRYPTED\n");
+		DDbgPrint("    FSCTL_READ_RAW_ENCRYPTED");
 		break;
 
 	case FSCTL_CREATE_USN_JOURNAL:
-		DDbgPrint("    FSCTL_CREATE_USN_JOURNAL\n");
+		DDbgPrint("    FSCTL_CREATE_USN_JOURNAL");
 		break;
 
 	case FSCTL_READ_FILE_USN_DATA:
-		DDbgPrint("    FSCTL_READ_FILE_USN_DATA\n");
+		DDbgPrint("    FSCTL_READ_FILE_USN_DATA");
 		break;
 
 	case FSCTL_WRITE_USN_CLOSE_RECORD:
-		DDbgPrint("    FSCTL_WRITE_USN_CLOSE_RECORD\n");
+		DDbgPrint("    FSCTL_WRITE_USN_CLOSE_RECORD");
 		break;
 
 	case FSCTL_EXTEND_VOLUME:
-		DDbgPrint("    FSCTL_EXTEND_VOLUME\n");
+		DDbgPrint("    FSCTL_EXTEND_VOLUME");
 		break;
 
 	case FSCTL_QUERY_USN_JOURNAL:
-		DDbgPrint("    FSCTL_QUERY_USN_JOURNAL\n");
+		DDbgPrint("    FSCTL_QUERY_USN_JOURNAL");
 		break;
 
 	case FSCTL_DELETE_USN_JOURNAL:
-		DDbgPrint("    FSCTL_DELETE_USN_JOURNAL\n");
+		DDbgPrint("    FSCTL_DELETE_USN_JOURNAL");
 		break;
 
 	case FSCTL_MARK_HANDLE:
-		DDbgPrint("    FSCTL_MARK_HANDLE\n");
+		DDbgPrint("    FSCTL_MARK_HANDLE");
 		break;
 
 	case FSCTL_SIS_COPYFILE:
-		DDbgPrint("    FSCTL_SIS_COPYFILE\n");
+		DDbgPrint("    FSCTL_SIS_COPYFILE");
 		break;
 
 	case FSCTL_SIS_LINK_FILES:
-		DDbgPrint("    FSCTL_SIS_LINK_FILES\n");
+		DDbgPrint("    FSCTL_SIS_LINK_FILES");
 		break;
 
 	case FSCTL_RECALL_FILE:
-		DDbgPrint("    FSCTL_RECALL_FILE\n");
+		DDbgPrint("    FSCTL_RECALL_FILE");
 		break;
 
 	default:
@@ -300,7 +300,7 @@ DokanDispatchFileSystemControl(
 	__try {
 		FsRtlEnterFileSystem();
 
-		DDbgPrint("==> DokanFileSystemControl\n");
+		DDbgPrint("==> DokanFileSystemControl");
 		DDbgPrint("  ProcessId %lu\n", IoGetRequestorProcessId(Irp));
 
 		vcb = DeviceObject->DeviceExtension;
@@ -313,19 +313,19 @@ DokanDispatchFileSystemControl(
 
 		switch(irpSp->MinorFunction) {
 		case IRP_MN_KERNEL_CALL:
-			DDbgPrint("	 IRP_MN_KERNEL_CALL\n");
+			DDbgPrint("	 IRP_MN_KERNEL_CALL");
 			break;
 
 		case IRP_MN_LOAD_FILE_SYSTEM:
-			DDbgPrint("	 IRP_MN_LOAD_FILE_SYSTEM\n");
+			DDbgPrint("	 IRP_MN_LOAD_FILE_SYSTEM");
 			break;
 
 		case IRP_MN_MOUNT_VOLUME:
 			{
 				PVPB vpb;
-				DDbgPrint("	 IRP_MN_MOUNT_VOLUME\n");
+				DDbgPrint("	 IRP_MN_MOUNT_VOLUME");
 				if (irpSp->Parameters.MountVolume.DeviceObject != vcb->Dcb->DeviceObject) {
-					DDbgPrint("   Not DokanDiskDevice\n");
+					DDbgPrint("   Not DokanDiskDevice");
 					status = STATUS_INVALID_PARAMETER;
 				}
 				vpb = irpSp->Parameters.MountVolume.Vpb;
@@ -340,12 +340,12 @@ DokanDispatchFileSystemControl(
 			break;
 
 		case IRP_MN_USER_FS_REQUEST:
-			DDbgPrint("	 IRP_MN_USER_FS_REQUEST\n");
+			DDbgPrint("	 IRP_MN_USER_FS_REQUEST");
 			status = DokanUserFsRequest(DeviceObject, Irp);
 			break;
 
 		case IRP_MN_VERIFY_VOLUME:
-			DDbgPrint("	 IRP_MN_VERIFY_VOLUME\n");
+			DDbgPrint("	 IRP_MN_VERIFY_VOLUME");
 			break;
 
 		default:
@@ -362,7 +362,7 @@ DokanDispatchFileSystemControl(
 		IoCompleteRequest(Irp, IO_NO_INCREMENT);
 
 		DokanPrintNTStatus(status);
-		DDbgPrint("<== DokanFileSystemControl\n");
+		DDbgPrint("<== DokanFileSystemControl");
 
 		FsRtlExitFileSystem();
 	}

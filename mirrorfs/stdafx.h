@@ -13,3 +13,5 @@
 
 
 // TODO: reference additional headers your program requires here
+#define _MODULE_NAME L"MirrorFs"
+#include "../Common/Log/NdLog.h"

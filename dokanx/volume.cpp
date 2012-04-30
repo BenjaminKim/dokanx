@@ -18,7 +18,7 @@ You should have received a copy of the GNU Lesser General Public License along
 with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-
+#include "stdafx.h"
 #include "../dokani.h"
 #include "fileinfo.h"
 
@@ -330,7 +330,7 @@ DispatchQueryVolumeInformation(
     eventInfo->Status = STATUS_NOT_IMPLEMENTED;
     eventInfo->BufferLength = 0;
 
-    DbgPrint("###QueryVolumeInfo %04d\n", openInfo ? openInfo->EventId : -1);
+    logw(L"###QueryVolumeInfo %04d\n", openInfo ? openInfo->EventId : -1);
 
     switch (EventContext->Volume.FsInformationClass) {
     case FileFsVolumeInformation:
@@ -350,7 +350,7 @@ DispatchQueryVolumeInformation(
                                 eventInfo, EventContext, &fileInfo, DokanInstance->DokanOperations);
         break;
     default:
-        DbgPrint("error unknown volume info %d\n", EventContext->Volume.FsInformationClass);
+        logw(L"error unknown volume info %d\n", EventContext->Volume.FsInformationClass);
     }
 
     SendEventInformation(Handle, eventInfo, sizeOfEventInfo, NULL);

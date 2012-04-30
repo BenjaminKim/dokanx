@@ -19,7 +19,7 @@ with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
 
-
+#include "stdafx.h"
 #include "../dokani.h"
 #include "fileinfo.h"
 #include <winioctl.h>
@@ -34,25 +34,25 @@ VOID SendWriteRequest(
 	BOOL	status;
 	ULONG	returnedLength;
 
-	DbgPrint("SendWriteRequest\n");
+	logw(L"SendWriteRequest");
 
 	status = DeviceIoControl(
-					Handle,		            // Handle to device
-					IOCTL_EVENT_WRITE,		// IO Control code
-					EventInfo,			    // Input Buffer to driver.
-					EventLength,			// Length of input buffer in bytes.
-					Buffer,	                // Output Buffer from driver.
-					BufferLength,			// Length of output buffer in bytes.
-					&returnedLength,		// Bytes placed in buffer.
-					NULL                    // synchronous call
-							);
+        Handle,		            // Handle to device
+        IOCTL_EVENT_WRITE,		// IO Control code
+        EventInfo,			    // Input Buffer to driver.
+        EventLength,			// Length of input buffer in bytes.
+        Buffer,	                // Output Buffer from driver.
+        BufferLength,			// Length of output buffer in bytes.
+        &returnedLength,		// Bytes placed in buffer.
+        NULL                    // synchronous call
+        );
 
 	if ( !status ) {
 		DWORD errorCode = GetLastError();
-		DbgPrint("Ioctl failed with code %d\n", errorCode );
+		logw(L"Ioctl failed with code %d\n", errorCode );
 	}
 
-	DbgPrint("SendWriteRequest got %d bytes\n", returnedLength);
+	logw(L"SendWriteRequest got %d bytes\n", returnedLength);
 }
 
 
@@ -85,7 +85,7 @@ DispatchWrite(
 
 	CheckFileName(EventContext->Write.FileName);
 
-	DbgPrint("###WriteFile %04d\n", openInfo != NULL ? openInfo->EventId : -1);
+	logw(L"###WriteFile %04d\n", openInfo != NULL ? openInfo->EventId : -1);
 
 	if (DokanInstance->DokanOperations->WriteFile) {
 		status = DokanInstance->DokanOperations->WriteFile(

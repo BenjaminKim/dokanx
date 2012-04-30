@@ -59,7 +59,7 @@ Return Value:
 
 		FsRtlEnterFileSystem();
 
-		DDbgPrint("==> DokanCleanup\n");
+		DDbgPrint("==> DokanCleanup");
 	
 		irpSp = IoGetCurrentIrpStackLocation(Irp);
 		fileObject = irpSp->FileObject;
@@ -69,7 +69,7 @@ Return Value:
 
 		// Cleanup must be success in any case
 		if (fileObject == NULL) {
-			DDbgPrint("  fileObject == NULL\n");
+			DDbgPrint("  fileObject == NULL");
 			status = STATUS_SUCCESS;
 			__leave;
 		}
@@ -122,7 +122,7 @@ Return Value:
 			DokanPrintNTStatus(status);
 		}
 
-		DDbgPrint("<== DokanCleanup\n");
+		DDbgPrint("<== DokanCleanup");
 	
 		FsRtlExitFileSystem();
 	}
@@ -147,7 +147,7 @@ DokanCompleteCleanup(
 	PDokanVCB			vcb;
 	PFILE_OBJECT		fileObject;
 
-	DDbgPrint("==> DokanCompleteCleanup\n");
+	DDbgPrint("==> DokanCompleteCleanup");
 
 	irp   = IrpEntry->Irp;
 	irpSp = IrpEntry->IrpSp;
@@ -176,7 +176,7 @@ DokanCompleteCleanup(
 	irp->IoStatus.Information = 0;
 	IoCompleteRequest(irp, IO_NO_INCREMENT);
 
-	DDbgPrint("<== DokanCompleteCleanup\n");
+	DDbgPrint("<== DokanCompleteCleanup");
 }
 
 
