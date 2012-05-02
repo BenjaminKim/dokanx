@@ -8,8 +8,6 @@
 #include "../misc.h"
 #include "../HelperMacros.h"
 #include "../String/UnicodeHelper.h"
-#include "../ProcMonDebugOutput/include/ProcMonDebugOutput.h"
-#include "../ndrive/Foundation.h"
 #include "../WinNT/Registry.h"
 
 #ifdef _DEBUG
