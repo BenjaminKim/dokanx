@@ -21,3 +21,5 @@ WDK 8.0 are not supported yet. But this doesn't mean dokan can't run on Windows8
 * Using precompiled header for driver.
 * The Usermode filesystem implementations should return their result code as NTSTATUS(Not the win32 statua code anymore).
 This gives your application more control.
+* Use better logger.
+* Applied prefast analyzer(static analyze driver source code)
