@@ -6,6 +6,8 @@
 #pragma once
 
 
+#undef _VARIADIC_MAX 
+#define _VARIADIC_MAX  10
 
 #define WIN32_LEAN_AND_MEAN             // Exclude rarely-used stuff from Windows headers
 // Windows Header Files:
@@ -21,3 +23,4 @@
 // TODO: reference additional headers your program requires here
 #define _MODULE_NAME L"dokan_user_lib"
 #include "../Common/Log/NdLog.h"
+

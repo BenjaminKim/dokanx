@@ -4,7 +4,8 @@
 //
 
 #pragma once
-
+#undef _VARIADIC_MAX 
+#define _VARIADIC_MAX  10
 #include "targetver.h"
 
 #include <stdio.h>

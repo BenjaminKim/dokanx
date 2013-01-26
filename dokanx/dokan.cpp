@@ -28,8 +28,9 @@ with this program. If not, see <http://www.gnu.org/licenses/>.
 #include <process.h>
 #include <locale.h>
 #include "fileinfo.h"
-#include "../dokani.h"
 #include "list.h"
+#include "../dokani.h"
+
 
 // DokanOptions->DebugMode is ON?
 BOOL	g_DebugMode = TRUE;

@@ -64,7 +64,7 @@ bool UpdateFileFolderIcon(
 	)
 {
 	// Update the icon cache
-	SHFILEINFO sfi;
+	SHFILEINFO sfi = { 0 };
 	if (SHGetFileInfo(filePath.c_str(), 0, &sfi, sizeof(sfi), SHGFI_ICONLOCATION))
 	{
 		int iIconIndex = Shell_GetCachedImageIndex(sfi.szDisplayName, sfi.iIcon, 0);

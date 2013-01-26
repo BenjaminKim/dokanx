@@ -25,18 +25,18 @@ with this program. If not, see <http://www.gnu.org/licenses/>.
 #include <winioctl.h>
 
 VOID SendWriteRequest(
-	HANDLE				Handle,
-	PEVENT_INFORMATION	EventInfo,
-	ULONG				EventLength,
-	PVOID				Buffer,
-	ULONG				BufferLength)
+    HANDLE				Handle,
+    PEVENT_INFORMATION	EventInfo,
+    ULONG				EventLength,
+    PVOID				Buffer,
+    ULONG				BufferLength)
 {
-	BOOL	status;
-	ULONG	returnedLength;
+    BOOL	status;
+    ULONG	returnedLength;
 
-	logw(L"SendWriteRequest");
+    logw(L"SendWriteRequest");
 
-	status = DeviceIoControl(
+    status = DeviceIoControl(
         Handle,		            // Handle to device
         IOCTL_EVENT_WRITE,		// IO Control code
         EventInfo,			    // Input Buffer to driver.
@@ -47,76 +47,76 @@ VOID SendWriteRequest(
         NULL                    // synchronous call
         );
 
-	if ( !status ) {
-		DWORD errorCode = GetLastError();
-		logw(L"Ioctl failed with code %d\n", errorCode );
-	}
+    if ( !status ) {
+        DWORD errorCode = GetLastError();
+        logw(L"Ioctl failed with code %d\n", errorCode );
+    }
 
-	logw(L"SendWriteRequest got %d bytes\n", returnedLength);
+    logw(L"SendWriteRequest got %d bytes\n", returnedLength);
 }
 
 
 VOID
 DispatchWrite(
-	HANDLE				Handle,
-	PEVENT_CONTEXT		EventContext,
-	PDOKAN_INSTANCE		DokanInstance)
+    HANDLE				Handle,
+    PEVENT_CONTEXT		EventContext,
+    PDOKAN_INSTANCE		DokanInstance)
 {
-	PEVENT_INFORMATION		eventInfo;
-	PDOKAN_OPEN_INFO		openInfo;
-	ULONG					writtenLength = 0;
-	int						status;
-	DOKAN_FILE_INFO			fileInfo;
-	BOOL					bufferAllocated = FALSE;
-	ULONG					sizeOfEventInfo = sizeof(EVENT_INFORMATION);
+    PEVENT_INFORMATION		eventInfo;
+    PDOKAN_OPEN_INFO		openInfo;
+    ULONG					writtenLength = 0;
+    int						status;
+    DOKAN_FILE_INFO			fileInfo;
+    BOOL					bufferAllocated = FALSE;
+    ULONG					sizeOfEventInfo = sizeof(EVENT_INFORMATION);
 
-	eventInfo = DispatchCommon(
-		EventContext, sizeOfEventInfo, DokanInstance, &fileInfo, &openInfo);
+    eventInfo = DispatchCommon(
+        EventContext, sizeOfEventInfo, DokanInstance, &fileInfo, &openInfo);
 
-	// Since driver requested bigger memory,
-	// allocate enough memory and send it to driver
-	if (EventContext->Write.RequestLength > 0) {
-		ULONG contextLength = EventContext->Write.RequestLength;
-		PEVENT_CONTEXT	contextBuf = (PEVENT_CONTEXT)malloc(contextLength);
-		SendWriteRequest(Handle, eventInfo, sizeOfEventInfo, contextBuf, contextLength);
-		EventContext = contextBuf;
-		bufferAllocated = TRUE;
-	}
+    // Since driver requested bigger memory,
+    // allocate enough memory and send it to driver
+    if (EventContext->Write.RequestLength > 0) {
+        ULONG contextLength = EventContext->Write.RequestLength;
+        PEVENT_CONTEXT	contextBuf = (PEVENT_CONTEXT)malloc(contextLength);
+        SendWriteRequest(Handle, eventInfo, sizeOfEventInfo, contextBuf, contextLength);
+        EventContext = contextBuf;
+        bufferAllocated = TRUE;
+    }
 
-	CheckFileName(EventContext->Write.FileName);
+    CheckFileName(EventContext->Write.FileName);
 
-	logw(L"###WriteFile %04d\n", openInfo != NULL ? openInfo->EventId : -1);
+    logw(L"###WriteFile %04d\n", openInfo != NULL ? openInfo->EventId : -1);
 
-	if (DokanInstance->DokanOperations->WriteFile) {
-		status = DokanInstance->DokanOperations->WriteFile(
-						EventContext->Write.FileName,
-						(PCHAR)EventContext + EventContext->Write.BufferOffset,
-						EventContext->Write.BufferLength,
-						&writtenLength,
-						EventContext->Write.ByteOffset.QuadPart,
-						&fileInfo);
-	} else {
-		status = -1;
-	}
+    if (DokanInstance->DokanOperations->WriteFile) {
+        status = DokanInstance->DokanOperations->WriteFile(
+                        EventContext->Write.FileName,
+                        (PCHAR)EventContext + EventContext->Write.BufferOffset,
+                        EventContext->Write.BufferLength,
+                        &writtenLength,
+                        EventContext->Write.ByteOffset.QuadPart,
+                        &fileInfo);
+    } else {
+        status = -1;
+    }
 
-	openInfo->UserContext = fileInfo.Context;
-	eventInfo->BufferLength = 0;
+    openInfo->UserContext = fileInfo.Context;
+    eventInfo->BufferLength = 0;
 
-	if (status < 0) {
-		eventInfo->Status = STATUS_INVALID_PARAMETER;
-	
-	} else {
-		eventInfo->Status = STATUS_SUCCESS;
-		eventInfo->BufferLength = writtenLength;
-		eventInfo->Write.CurrentByteOffset.QuadPart =
-			EventContext->Write.ByteOffset.QuadPart + writtenLength;
-	}
+    if (status < 0) {
+        eventInfo->Status = STATUS_INVALID_PARAMETER;
+    
+    } else {
+        eventInfo->Status = STATUS_SUCCESS;
+        eventInfo->BufferLength = writtenLength;
+        eventInfo->Write.CurrentByteOffset.QuadPart =
+            EventContext->Write.ByteOffset.QuadPart + writtenLength;
+    }
 
-	SendEventInformation(Handle, eventInfo, sizeOfEventInfo, DokanInstance);
-	free(eventInfo);
+    SendEventInformation(Handle, eventInfo, sizeOfEventInfo, DokanInstance);
+    free(eventInfo);
 
-	if (bufferAllocated)
-		free(EventContext);
+    if (bufferAllocated)
+        free(EventContext);
 
-	return;
+    return;
 }
