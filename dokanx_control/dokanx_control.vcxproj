@@ -93,6 +93,9 @@
     <ProjectReference Include="..\Common\Common.vcxproj">
       <Project>{6053d32f-0c6b-4a75-a5fd-d8143785abb0}</Project>
     </ProjectReference>
+    <ProjectReference Include="..\dokanx\dokanx.vcxproj">
+      <Project>{f25ba22f-2ab8-4859-9b89-8fe1e774b472}</Project>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
