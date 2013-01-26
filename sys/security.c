@@ -59,7 +59,7 @@ DokanDispatchQuerySecurity(
 
 		vcb = DeviceObject->DeviceExtension;
 		if (GetIdentifierType(vcb) != VCB) {
-			logw(L"    DeviceExtension != VCB");
+			//logw(L"    DeviceExtension != VCB");
 			status = STATUS_INVALID_PARAMETER;
 			__leave;
 		}
@@ -251,7 +251,7 @@ DokanDispatchSetSecurity(
 
 		vcb = DeviceObject->DeviceExtension;
 		if (GetIdentifierType(vcb) != VCB) {
-			logw(L"    DeviceExtension != VCB");
+			//logw(L"    DeviceExtension != VCB");
 			status = STATUS_INVALID_PARAMETER;
 			__leave;
 		}

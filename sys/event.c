@@ -189,7 +189,7 @@ DokanRegisterPendingIrp(
 	NTSTATUS status;
 
 	if (GetIdentifierType(vcb) != VCB) {
-		logw(L"  Type != VCB");
+		//logw(L"  Type != VCB");
 		return STATUS_INVALID_PARAMETER;
 	}
 
@@ -220,7 +220,7 @@ DokanRegisterPendingIrpForEvent(
 	PDokanVCB vcb = DeviceObject->DeviceExtension;
 
 	if (GetIdentifierType(vcb) != VCB) {
-		logw(L"  Type != VCB");
+		//logw(L"  Type != VCB");
 		return STATUS_INVALID_PARAMETER;
 	}
 

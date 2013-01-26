@@ -22,6 +22,7 @@
 dokanx_control/Debug
 dokanx_control/ipch
 dokanx_mount/ipch
+dokanx_mount/Debug
 mirrorfs/Debug
 sys/obj*
 sys/prefast*
@@ -29,3 +30,7 @@ dokan_sshfs
 dokan_net
 dokan_install
 dokan_np
+*.unsuccessfulbuild
+*.cache
+ipch\
+*.ipch
