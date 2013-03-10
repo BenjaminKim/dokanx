@@ -60,6 +60,8 @@ IOCTL_EVENT_INFO:
 
 #include "dokan.h"
 
+#pragma warning (disable: 4057 4127)
+
 VOID
 SetCommonEventContext(
 	__in PDokanDCB		Dcb,
@@ -250,7 +252,7 @@ NotificationLoop(
 	PLIST_ENTRY	listHead;
 	PIRP_ENTRY	irpEntry;
 	LIST_ENTRY	completeList;
-	NTSTATUS	status;
+//	NTSTATUS	status;
 	KIRQL	irpIrql;
 	KIRQL	notifyIrql;
 	PIRP	irp;
@@ -518,3 +520,5 @@ DokanEventRelease(
 
 	return status;
 }
+
+#pragma warning (default: 4057 4127)

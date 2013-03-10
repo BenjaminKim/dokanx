@@ -18,9 +18,12 @@
 #include <malloc.h>
 #include <memory.h>
 #include <tchar.h>
-
+#include <string>
 
 // TODO: reference additional headers your program requires here
 #define _MODULE_NAME L"dokan_user_lib"
 #include "../Common/Log/NdLog.h"
 
+
+// Create a string with last error message
+std::wstring GetLastErrorStdStr();

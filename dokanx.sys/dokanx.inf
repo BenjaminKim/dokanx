@@ -1,0 +1,91 @@
+;
+; dokanx.inf
+;
+
+[Version]
+Signature="$WINDOWS NT$"
+Class=Sample ; TODO: edit Class
+ClassGuid={78A1C341-4539-11d3-B88D-00C04FAD5171} ; TODO: edit ClassGuid
+Provider=%ManufacturerName%
+CatalogFile=dokanx.cat
+DriverVer= ; TODO: set DriverVer in stampinf property pages
+
+[DestinationDirs]
+DefaultDestDir = 12
+
+; ================= Class section =====================
+
+[ClassInstall32]
+Addreg=SampleClassReg
+
+[SampleClassReg]
+HKR,,,0,%ClassName%
+HKR,,Icon,,-5
+
+[SourceDisksNames]
+1 = %DiskName%,,,""
+
+[SourceDisksFiles]
+dokanx.sys  = 1,,
+
+;*****************************************
+; Install Section
+;*****************************************
+
+[Manufacturer]
+%ManufacturerName%=Standard,NT$ARCH$
+
+[Standard.NT$ARCH$]
+%sys.DeviceDesc%=sys_Device, Root\sys ; TODO: edit hw-id
+
+[sys_Device.NT]
+CopyFiles=Drivers_Dir
+
+[Drivers_Dir]
+dokanx.sys
+
+;-------------- Service installation
+[sys_Device.NT.Services]
+AddService = sys,%SPSVCINST_ASSOCSERVICE%, sys_Service_Inst
+
+; -------------- sys driver install sections
+[sys_Service_Inst]
+DisplayName    = %sys.SVCDESC%
+ServiceType    = 1               ; SERVICE_KERNEL_DRIVER
+StartType      = 3               ; SERVICE_DEMAND_START
+ErrorControl   = 1               ; SERVICE_ERROR_NORMAL
+ServiceBinary  = %12%\dokanx.sys
+LoadOrderGroup = Extended Base
+
+;
+;--- sys_Device Coinstaller installation ------
+;
+
+[DestinationDirs]
+sys_Device_CoInstaller_CopyFiles = 11
+
+[sys_Device.NT.CoInstallers]
+AddReg=sys_Device_CoInstaller_AddReg
+CopyFiles=sys_Device_CoInstaller_CopyFiles
+
+[sys_Device_CoInstaller_AddReg]
+HKR,,CoInstallers32,0x00010000, "WdfCoInstaller$KMDFCOINSTALLERVERSION$.dll,WdfCoInstaller"
+
+[sys_Device_CoInstaller_CopyFiles]
+WdfCoInstaller$KMDFCOINSTALLERVERSION$.dll
+
+[SourceDisksFiles]
+WdfCoInstaller$KMDFCOINSTALLERVERSION$.dll=1 ; make sure the number matches with SourceDisksNames
+
+[sys_Device.NT.Wdf]
+KmdfService =  sys, sys_wdfsect
+[sys_wdfsect]
+KmdfLibraryVersion = $KMDFVERSION$
+
+[Strings]
+SPSVCINST_ASSOCSERVICE= 0x00000002
+ManufacturerName="" ; TODO: add ManufacturerName
+ClassName="Samples" ; TODO: edit ClassName
+DiskName = "sys Installation Disk"
+sys.DeviceDesc = "sys Device"
+sys.SVCDESC = "sys Service"

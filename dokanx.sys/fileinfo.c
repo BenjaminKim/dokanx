@@ -20,6 +20,9 @@ with this program. If not, see <http://www.gnu.org/licenses/>.
 #include "precomp.h"
 #pragma hdrstop
 
+#pragma warning( disable: 4701 4703 )
+
+
 NTSTATUS
 DokanDispatchQueryInformation(
 	__in PDEVICE_OBJECT DeviceObject,
@@ -28,10 +31,10 @@ DokanDispatchQueryInformation(
 {
 	NTSTATUS				status = STATUS_NOT_IMPLEMENTED;
 	PIO_STACK_LOCATION		irpSp;
-	PVOID					buffer;
-	ULONG					remainingLength;
+//	PVOID					buffer;
+//	ULONG					remainingLength;
 	PFILE_OBJECT			fileObject;
-	FILE_INFORMATION_CLASS	fileInfo;
+//	FILE_INFORMATION_CLASS	fileInfo;
 	PDokanCCB				ccb;
 	PDokanFCB				fcb;
 	PDokanVCB				vcb;
@@ -311,9 +314,9 @@ DokanDispatchSetInformation(
 	NTSTATUS			status = STATUS_NOT_IMPLEMENTED;
 	PIO_STACK_LOCATION  irpSp;
 	PVOID				buffer;
-	ULONG				remainingLength;
+//	ULONG				remainingLength;
 	PFILE_OBJECT		fileObject;
-	FILE_INFORMATION_CLASS fileInfo;
+//	FILE_INFORMATION_CLASS fileInfo;
 	PDokanCCB			ccb;
 	PDokanFCB			fcb;
 	PDokanVCB			vcb;
@@ -498,7 +501,6 @@ DokanDispatchSetInformation(
 
 
 
-
 VOID
 DokanCompleteSetInformation(
 	__in PIRP_ENTRY		IrpEntry,
@@ -668,3 +670,5 @@ DokanCompleteSetInformation(
 		DDbgPrint("<== DokanCompleteSetInformation");
 	}
 }
+
+#pragma warning( default: 4701 4703 )
