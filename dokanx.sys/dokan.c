@@ -22,6 +22,7 @@ with this program. If not, see <http://www.gnu.org/licenses/>.
 
 #include "dokan.h"
 
+#pragma warning (disable: 4100)
 
 #ifdef ALLOC_PRAGMA
 #pragma alloc_text (INIT, DriverEntry)
@@ -154,10 +155,10 @@ Return Value:
 --*/
 
 {
-    PDEVICE_OBJECT		deviceObject;
+//    PDEVICE_OBJECT		deviceObject;
     NTSTATUS			status;
     PFAST_IO_DISPATCH	fastIoDispatch;
-    UNICODE_STRING		functionName;
+//    UNICODE_STRING		functionName;
     FS_FILTER_CALLBACKS filterCallbacks;
     PDOKAN_GLOBAL		dokanGlobal = NULL;
 
@@ -587,3 +588,5 @@ DokanFreeMdl(
         Irp->MdlAddress = NULL;
     }
 }
+
+#pragma warning (default: 4100)

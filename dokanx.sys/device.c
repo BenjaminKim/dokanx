@@ -24,6 +24,7 @@ with this program. If not, see <http://www.gnu.org/licenses/>.
 #include <mountmgr.h>
 #include <ntddvol.h>
 
+#pragma warning (disable: 4701)
 
 VOID
 PrintUnknownDeviceIoctlCode(
@@ -32,7 +33,9 @@ PrintUnknownDeviceIoctlCode(
 {
 	PCHAR baseCodeStr = "unknown";
 	ULONG baseCode = DEVICE_TYPE_FROM_CTL_CODE(IoctlCode);
+#ifdef _DEBUG
 	ULONG functionCode = (IoctlCode & (~0xffffc003)) >> 2;
+#endif
 
 	DDbgPrint("   Unknown Code 0x%x\n", IoctlCode);
 
@@ -318,7 +321,9 @@ DiskDeviceControl(
 		break;
 	case IOCTL_MOUNTDEV_LINK_CREATED:
 		{
+#ifdef _DEBUG
 			PMOUNTDEV_NAME	mountdevName = Irp->AssociatedIrp.SystemBuffer;
+#endif
 			DDbgPrint("   IOCTL_MOUNTDEV_LINK_CREATED");
 			DDbgPrint("     Name: %ws\n", mountdevName->Name); 
 			status = STATUS_SUCCESS;
@@ -417,8 +422,8 @@ Return Value:
 	NTSTATUS			status = STATUS_NOT_IMPLEMENTED;
 	ULONG				controlCode;
 	// {DCA0E0A5-D2CA-4f0f-8416-A6414657A77A}
-	GUID dokanGUID = 
-		{ 0xdca0e0a5, 0xd2ca, 0x4f0f, { 0x84, 0x16, 0xa6, 0x41, 0x46, 0x57, 0xa7, 0x7a } };
+//	GUID dokanGUID = 
+//		{ 0xdca0e0a5, 0xd2ca, 0x4f0f, { 0x84, 0x16, 0xa6, 0x41, 0x46, 0x57, 0xa7, 0x7a } };
 
 
 	__try {
@@ -523,3 +528,5 @@ Return Value:
 
 	return status;
 }
+
+#pragma warning (default: 4701)

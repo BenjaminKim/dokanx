@@ -1,0 +1,299 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Win8Debug|Win32">
+      <Configuration>Win8Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Win8Release|Win32">
+      <Configuration>Win8Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Win7Debug|Win32">
+      <Configuration>Win7Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Win7Release|Win32">
+      <Configuration>Win7Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="VistaDebug|Win32">
+      <Configuration>VistaDebug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="VistaRelease|Win32">
+      <Configuration>VistaRelease</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Win8Debug|x64">
+      <Configuration>Win8Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Win8Release|x64">
+      <Configuration>Win8Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Win7Debug|x64">
+      <Configuration>Win7Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Win7Release|x64">
+      <Configuration>Win7Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="VistaDebug|x64">
+      <Configuration>VistaDebug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="VistaRelease|x64">
+      <Configuration>VistaRelease</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="access.c" />
+    <ClCompile Include="cleanup.c" />
+    <ClCompile Include="close.c" />
+    <ClCompile Include="create.c" />
+    <ClCompile Include="device.c" />
+    <ClCompile Include="directory.c" />
+    <ClCompile Include="dokan.c" />
+    <ClCompile Include="event.c" />
+    <ClCompile Include="fileinfo.c" />
+    <ClCompile Include="flush.c" />
+    <ClCompile Include="fscontrol.c" />
+    <ClCompile Include="init.c" />
+    <ClCompile Include="lock.c" />
+    <ClCompile Include="notification.c" />
+    <ClCompile Include="read.c" />
+    <ClCompile Include="security.c" />
+    <ClCompile Include="timeout.c" />
+    <ClCompile Include="volume.c" />
+    <ClCompile Include="write.c" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="dokan.h" />
+    <ClInclude Include="precomp.h" />
+    <ClInclude Include="Trace.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Inf Include="dokanx.inf" />
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{50F8BFEF-B524-46D8-9FE6-896D33FB3BA0}</ProjectGuid>
+    <TemplateGuid>{497e31cb-056b-4f31-abb8-447fd55ee5a5}</TemplateGuid>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <MinimumVisualStudioVersion>11.0</MinimumVisualStudioVersion>
+    <Configuration>Win8 Debug</Configuration>
+    <Platform Condition="'$(Platform)' == ''">Win32</Platform>
+  </PropertyGroup>
+  <PropertyGroup Label="Globals">
+    <RootNamespace>sys</RootNamespace>
+    <VCTargetsPath Condition="'$(VCTargetsPath11)' != '' and '$(VisualStudioVersion)' == '11.0'">$(VCTargetsPath11)</VCTargetsPath>
+    <ProjectName>dokanx.sys</ProjectName>
+  </PropertyGroup>
+  <PropertyGroup Label="PropertySheets">
+    <PlatformToolset>WindowsKernelModeDriver8.0</PlatformToolset>
+    <ConfigurationType>Driver</ConfigurationType>
+    <DriverType>KMDF</DriverType>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Win8Debug|Win32'" Label="Configuration">
+    <TargetVersion>Windows8</TargetVersion>
+    <UseDebugLibraries>true</UseDebugLibraries>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Win8Release|Win32'" Label="Configuration">
+    <TargetVersion>Windows8</TargetVersion>
+    <UseDebugLibraries>false</UseDebugLibraries>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Win7Debug|Win32'" Label="Configuration">
+    <TargetVersion>Windows7</TargetVersion>
+    <UseDebugLibraries>true</UseDebugLibraries>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Win7Release|Win32'" Label="Configuration">
+    <TargetVersion>Windows7</TargetVersion>
+    <UseDebugLibraries>false</UseDebugLibraries>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='VistaDebug|Win32'" Label="Configuration">
+    <TargetVersion>Vista</TargetVersion>
+    <UseDebugLibraries>true</UseDebugLibraries>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='VistaRelease|Win32'" Label="Configuration">
+    <TargetVersion>Vista</TargetVersion>
+    <UseDebugLibraries>false</UseDebugLibraries>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Win8Debug|x64'" Label="Configuration">
+    <TargetVersion>Windows8</TargetVersion>
+    <UseDebugLibraries>true</UseDebugLibraries>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Win8Release|x64'" Label="Configuration">
+    <TargetVersion>Windows8</TargetVersion>
+    <UseDebugLibraries>false</UseDebugLibraries>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Win7Debug|x64'" Label="Configuration">
+    <TargetVersion>Windows7</TargetVersion>
+    <UseDebugLibraries>true</UseDebugLibraries>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Win7Release|x64'" Label="Configuration">
+    <TargetVersion>Windows7</TargetVersion>
+    <UseDebugLibraries>false</UseDebugLibraries>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='VistaDebug|x64'" Label="Configuration">
+    <TargetVersion>Vista</TargetVersion>
+    <UseDebugLibraries>true</UseDebugLibraries>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='VistaRelease|x64'" Label="Configuration">
+    <TargetVersion>Vista</TargetVersion>
+    <UseDebugLibraries>false</UseDebugLibraries>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='VistaDebug|Win32'">
+    <TargetName>dokanx</TargetName>
+    <OutDir>$(SolutionDir)$(PlatformTarget)\$(Configuration)\</OutDir>
+    <IntDir>$(Platform)\$(ConfigurationName)\</IntDir>
+  </PropertyGroup>
+  <PropertyGroup>
+    <DebuggerFlavor>DbgengKernelDebugger</DebuggerFlavor>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Win8Debug|Win32'">
+    <TargetName>dokanx</TargetName>
+    <OutDir>$(SolutionDir)$(PlatformTarget)\$(Configuration)\</OutDir>
+    <IntDir>$(Platform)\$(ConfigurationName)\</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='VistaRelease|Win32'">
+    <TargetName>dokanx</TargetName>
+    <OutDir>$(SolutionDir)$(PlatformTarget)\$(Configuration)\</OutDir>
+    <IntDir>$(Platform)\$(ConfigurationName)\</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Win7Debug|Win32'">
+    <TargetName>dokanx</TargetName>
+    <OutDir>$(SolutionDir)$(PlatformTarget)\$(Configuration)\</OutDir>
+    <IntDir>$(Platform)\$(ConfigurationName)\</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Win7Release|Win32'">
+    <TargetName>dokanx</TargetName>
+    <OutDir>$(SolutionDir)$(PlatformTarget)\$(Configuration)\</OutDir>
+    <IntDir>$(Platform)\$(ConfigurationName)\</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Win8Release|Win32'">
+    <TargetName>dokanx</TargetName>
+    <OutDir>$(SolutionDir)$(PlatformTarget)\$(Configuration)\</OutDir>
+    <IntDir>$(Platform)\$(ConfigurationName)\</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='VistaDebug|x64'">
+    <TargetName>dokanx</TargetName>
+    <OutDir>$(SolutionDir)$(PlatformTarget)\$(Configuration)\</OutDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Win8Debug|x64'">
+    <TargetName>dokanx</TargetName>
+    <OutDir>$(SolutionDir)$(PlatformTarget)\$(Configuration)\</OutDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='VistaRelease|x64'">
+    <TargetName>dokanx</TargetName>
+    <OutDir>$(SolutionDir)$(PlatformTarget)\$(Configuration)\</OutDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Win7Debug|x64'">
+    <TargetName>dokanx</TargetName>
+    <OutDir>$(SolutionDir)$(PlatformTarget)\$(Configuration)\</OutDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Win7Release|x64'">
+    <TargetName>dokanx</TargetName>
+    <OutDir>$(SolutionDir)$(PlatformTarget)\$(Configuration)\</OutDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Win8Release|x64'">
+    <TargetName>dokanx</TargetName>
+    <OutDir>$(SolutionDir)$(PlatformTarget)\$(Configuration)\</OutDir>
+  </PropertyGroup>
+  <ItemDefinitionGroup>
+    <ClCompile>
+      <WppEnabled>true</WppEnabled>
+      <WppScanConfigurationData Condition="'%(ClCompile. ScanConfigurationData)'  == ''">trace.h</WppScanConfigurationData>
+      <WppKernelMode>true</WppKernelMode>
+      <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='VistaDebug|Win32'">_DEBUG;_X86_=1;i386=1;STD_CALL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Win8Debug|Win32'">_DEBUG;_X86_=1;i386=1;STD_CALL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='VistaRelease|Win32'">_X86_=1;i386=1;STD_CALL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Win7Debug|Win32'">_DEBUG;_X86_=1;i386=1;STD_CALL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Win7Release|Win32'">_X86_=1;i386=1;STD_CALL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Win8Release|Win32'">_X86_=1;i386=1;STD_CALL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='VistaDebug|x64'">_DEBUG;_WIN64;_AMD64_;AMD64;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Win8Debug|x64'">_DEBUG;_WIN64;_AMD64_;AMD64;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='VistaRelease|x64'">_WIN64;_AMD64_;AMD64;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Win7Debug|x64'">_DEBUG;_WIN64;_AMD64_;AMD64;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Win7Release|x64'">_WIN64;_AMD64_;AMD64;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Win8Release|x64'">_WIN64;_AMD64_;AMD64;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <WppOutputDirectory Condition="'$(Configuration)|$(Platform)'=='VistaDebug|Win32'">$(InfArch)\$(IntDir)</WppOutputDirectory>
+      <WppOutputDirectory Condition="'$(Configuration)|$(Platform)'=='Win8Debug|Win32'">$(InfArch)\$(IntDir)</WppOutputDirectory>
+      <WppOutputDirectory Condition="'$(Configuration)|$(Platform)'=='VistaRelease|Win32'">$(InfArch)\$(IntDir)</WppOutputDirectory>
+      <WppOutputDirectory Condition="'$(Configuration)|$(Platform)'=='Win7Debug|Win32'">$(InfArch)\$(IntDir)</WppOutputDirectory>
+      <WppOutputDirectory Condition="'$(Configuration)|$(Platform)'=='Win7Release|Win32'">$(InfArch)\$(IntDir)</WppOutputDirectory>
+      <WppOutputDirectory Condition="'$(Configuration)|$(Platform)'=='Win8Release|Win32'">$(InfArch)\$(IntDir)</WppOutputDirectory>
+      <WppOutputDirectory Condition="'$(Configuration)|$(Platform)'=='VistaDebug|x64'">$(InfArch)\$(IntDir)</WppOutputDirectory>
+      <WppOutputDirectory Condition="'$(Configuration)|$(Platform)'=='Win8Debug|x64'">$(InfArch)\$(IntDir)</WppOutputDirectory>
+      <WppOutputDirectory Condition="'$(Configuration)|$(Platform)'=='VistaRelease|x64'">$(InfArch)\$(IntDir)</WppOutputDirectory>
+      <WppOutputDirectory Condition="'$(Configuration)|$(Platform)'=='Win7Debug|x64'">$(InfArch)\$(IntDir)</WppOutputDirectory>
+      <WppOutputDirectory Condition="'$(Configuration)|$(Platform)'=='Win7Release|x64'">$(InfArch)\$(IntDir)</WppOutputDirectory>
+      <WppOutputDirectory Condition="'$(Configuration)|$(Platform)'=='Win8Release|x64'">$(InfArch)\$(IntDir)</WppOutputDirectory>
+    </ClCompile>
+    <Link>
+      <AdditionalDependencies Condition="'$(Configuration)|$(Platform)'=='VistaDebug|Win32'">wdmsec.lib;$(DDK_LIB_PATH)\memcmp.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <OutputFile Condition="'$(Configuration)|$(Platform)'=='VistaDebug|Win32'">$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
+    </Link>
+    <Link>
+      <AdditionalDependencies Condition="'$(Configuration)|$(Platform)'=='VistaRelease|Win32'">wdmsec.lib;$(DDK_LIB_PATH)\memcmp.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <OutputFile Condition="'$(Configuration)|$(Platform)'=='VistaRelease|Win32'">$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
+    </Link>
+    <Link>
+      <AdditionalDependencies Condition="'$(Configuration)|$(Platform)'=='Win7Debug|Win32'">wdmsec.lib;$(DDK_LIB_PATH)\memcmp.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <OutputFile Condition="'$(Configuration)|$(Platform)'=='Win7Debug|Win32'">$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
+    </Link>
+    <Link>
+      <AdditionalDependencies Condition="'$(Configuration)|$(Platform)'=='Win7Release|Win32'">wdmsec.lib;$(DDK_LIB_PATH)\memcmp.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <OutputFile Condition="'$(Configuration)|$(Platform)'=='Win7Release|Win32'">$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
+    </Link>
+    <Link>
+      <AdditionalDependencies Condition="'$(Configuration)|$(Platform)'=='Win8Debug|Win32'">wdmsec.lib</AdditionalDependencies>
+      <OutputFile Condition="'$(Configuration)|$(Platform)'=='Win8Debug|Win32'">$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
+    </Link>
+    <Link>
+      <AdditionalDependencies Condition="'$(Configuration)|$(Platform)'=='Win8Release|Win32'">wdmsec.lib</AdditionalDependencies>
+      <OutputFile Condition="'$(Configuration)|$(Platform)'=='Win8Release|Win32'">$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
+    </Link>
+    <Link>
+      <AdditionalDependencies Condition="'$(Configuration)|$(Platform)'=='VistaDebug|x64'">wdmsec.lib</AdditionalDependencies>
+      <OutputFile Condition="'$(Configuration)|$(Platform)'=='VistaDebug|x64'">$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
+    </Link>
+    <Link>
+      <AdditionalDependencies Condition="'$(Configuration)|$(Platform)'=='VistaRelease|x64'">wdmsec.lib</AdditionalDependencies>
+      <OutputFile Condition="'$(Configuration)|$(Platform)'=='VistaRelease|x64'">$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
+    </Link>
+    <Link>
+      <AdditionalDependencies Condition="'$(Configuration)|$(Platform)'=='Win7Debug|x64'">wdmsec.lib</AdditionalDependencies>
+      <OutputFile Condition="'$(Configuration)|$(Platform)'=='Win7Debug|x64'">$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
+    </Link>
+    <Link>
+      <AdditionalDependencies Condition="'$(Configuration)|$(Platform)'=='Win7Release|x64'">wdmsec.lib</AdditionalDependencies>
+      <OutputFile Condition="'$(Configuration)|$(Platform)'=='Win7Release|x64'">$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
+    </Link>
+    <Link>
+      <AdditionalDependencies Condition="'$(Configuration)|$(Platform)'=='Win8Debug|x64'">wdmsec.lib</AdditionalDependencies>
+      <OutputFile Condition="'$(Configuration)|$(Platform)'=='Win8Debug|x64'">$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
+    </Link>
+    <Link>
+      <AdditionalDependencies Condition="'$(Configuration)|$(Platform)'=='Win8Release|x64'">wdmsec.lib</AdditionalDependencies>
+      <OutputFile Condition="'$(Configuration)|$(Platform)'=='Win8Release|x64'">$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <FilesToPackage Include="$(TargetPath)" />
+    <FilesToPackage Include="@(Inf->'%(CopyOutput)')" Condition="'@(Inf)'!=''" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

@@ -54,6 +54,8 @@ static HANDLE s_hLogMutex = INVALID_HANDLE_VALUE;
 //	return szLogFilePath;
 //}
 
+#include <iostream>
+
 VOID NdLogVar(LOG_OUTPUT_FLAG outputLogFlag, __in __format_string LPCWSTR fmt, ...)
 {
 	va_list argList;
@@ -64,6 +66,7 @@ VOID NdLogVar(LOG_OUTPUT_FLAG outputLogFlag, __in __format_string LPCWSTR fmt, .
 
 	if (outputLogFlag & LOF_DEBUG_VIEW)
 	{
+		std::wcout<<szMsg<<std::endl;
 		OutputDebugStringW(szMsg);
 	}
 

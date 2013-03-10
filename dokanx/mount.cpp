@@ -34,7 +34,7 @@ DokanServiceCheck(
     controlHandle = OpenSCManager(NULL, NULL, SC_MANAGER_CONNECT);
 
     if (controlHandle == NULL) {
-        logw(L"failed to open SCM: %d\n", GetLastError());
+        logw(L"failed to open SCM: %ws (%d)\n", GetLastErrorStdStr().c_str(), GetLastError());
         return FALSE;
     }
 
@@ -66,7 +66,7 @@ DokanServiceControl(
     controlHandle = OpenSCManager(NULL, NULL, SC_MANAGER_CONNECT);
 
     if (controlHandle == NULL) {
-        logw(L"failed to open SCM: %d\n", GetLastError());
+        logw(L"failed to open SCM: %ws (%d)\n", GetLastErrorStdStr().c_str(), GetLastError());
         return FALSE;
     }
 
@@ -74,7 +74,7 @@ DokanServiceControl(
         SERVICE_START | SERVICE_STOP | SERVICE_QUERY_STATUS | DELETE);
 
     if (serviceHandle == NULL) {
-        logw(L"failed to open Service (%s): %d\n", ServiceName, GetLastError());
+        logw(L"failed to open Service (%ws): %ws (%d)\n", ServiceName, GetLastErrorStdStr().c_str(), GetLastError());
         CloseServiceHandle(controlHandle);
         return FALSE;
     }
@@ -83,29 +83,29 @@ DokanServiceControl(
 
     if (Type == DOKAN_SERVICE_DELETE) {
         if (DeleteService(serviceHandle)) {
-            logw(L"Service (%s) deleted\n", ServiceName);
+            logw(L"Service (%ws) deleted\n", ServiceName);
             result = TRUE;
         } else {
-            logw(L"failed to delete service (%s): %d\n", ServiceName, GetLastError());
+            logw(L"failed to delete service (%ws): %ws (%d)\n", ServiceName, GetLastErrorStdStr().c_str(), GetLastError());
             result = FALSE;
         }
 
     } else if (ss.dwCurrentState == SERVICE_STOPPED && Type == DOKAN_SERVICE_START) {
         if (StartService(serviceHandle, 0, NULL)) {
-            logw(L"Service (%s) started\n", ServiceName);
+            logw(L"Service (%ws) started\n", ServiceName);
             result = TRUE;
         } else {
-            logw(L"failed to start service (%s): %d\n", ServiceName, GetLastError());
+            logw(L"failed to start service (%ws): %ws (%d)\n", ServiceName, GetLastErrorStdStr().c_str(), GetLastError());
             result = FALSE;
         }
     
     } else if (ss.dwCurrentState == SERVICE_RUNNING && Type == DOKAN_SERVICE_STOP) {
 
         if (ControlService(serviceHandle, SERVICE_CONTROL_STOP, &ss)) {
-            logw(L"Service (%s) stopped\n", ServiceName);
+            logw(L"Service (%ws) stopped\n", ServiceName);
             result = TRUE;
         } else {
-            logw(L"failed to stop service (%s): %d\n", ServiceName, GetLastError());
+            logw(L"failed to stop service (%ws): %ws (%d)\n", ServiceName, GetLastErrorStdStr().c_str(), GetLastError());
             result = FALSE;
         }
     }
@@ -145,7 +145,7 @@ DokanMountControl(PDOKAN_CONTROL Control)
             logw(L"failed to connect DokanMounter service: access denied");
             return FALSE;
         } else {
-            logw(L"failed to connect DokanMounter service: %d\n", GetLastError());
+            logw(L"failed to connect DokanMounter service: %ws (%d)\n", GetLastErrorStdStr().c_str(), GetLastError());
             return FALSE;
         }
     }
@@ -153,14 +153,14 @@ DokanMountControl(PDOKAN_CONTROL Control)
     pipeMode = PIPE_READMODE_MESSAGE|PIPE_WAIT;
 
     if(!SetNamedPipeHandleState(pipe, &pipeMode, NULL, NULL)) {
-        logw(L"failed to set named pipe state: %d\n", GetLastError());
+        logw(L"failed to set named pipe state: %ws (%d)\n", GetLastErrorStdStr().c_str(), GetLastError());
         CloseHandle(pipe);
         return FALSE;
     }
 
     if(!TransactNamedPipe(pipe, Control, sizeof(DOKAN_CONTROL),
         Control, sizeof(DOKAN_CONTROL), &readBytes, NULL)) {
-        logw(L"failed to transact named pipe: %d\n", GetLastError());
+        logw(L"failed to transact named pipe: %ws (%d)\n", GetLastErrorStdStr().c_str(), GetLastError());
     }
 
     CloseHandle(pipe);
@@ -184,7 +184,7 @@ DokanServiceInstall(
     
     controlHandle = OpenSCManager(NULL, NULL, SC_MANAGER_CREATE_SERVICE);
     if (controlHandle == NULL) {
-        logw(L"failed to open SCM");
+        logw(L"failed to open SCM (%ws): %ws (%d)\n", ServiceName, GetLastErrorStdStr().c_str(), GetLastError());
         return FALSE;
     }
 
@@ -194,9 +194,9 @@ DokanServiceInstall(
     
     if (serviceHandle == NULL) {
         if (GetLastError() == ERROR_SERVICE_EXISTS) {
-            logw(L"Service (%s) is already installed\n", ServiceName);
+            logw(L"Service (%ws) is already installed\n", ServiceName);
         } else {
-            logw(L"failted to install service (%s): %d\n", ServiceName, GetLastError());
+            logw(L"failted to install service (%ws): %ws (%d)\n", ServiceName, GetLastErrorStdStr().c_str(), GetLastError());
         }
         CloseServiceHandle(controlHandle);
         return FALSE;
@@ -205,13 +205,13 @@ DokanServiceInstall(
     CloseServiceHandle(serviceHandle);
     CloseServiceHandle(controlHandle);
 
-    logw(L"Service (%s) installed\n", ServiceName);
+    logw(L"Service (%ws) installed\n", ServiceName);
 
     if (DokanServiceControl(ServiceName, DOKAN_SERVICE_START)) {
-        logw(L"Service (%s) started\n", ServiceName);
+        logw(L"Service (%ws) started\n", ServiceName);
         return TRUE;
     } else {
-        logw(L"Service (%s) start failed\n", ServiceName);
+        logw(L"Service (%ws) start failed\n", ServiceName);
         return FALSE;
     }
 }
@@ -258,7 +258,7 @@ DokanRemoveMountPoint(
 
     result = DokanMountControl(&control);
     if (result) {
-        logw(L"DokanControl recieved DeviceName:%ws\n", control.DeviceName);
+        logw(L"DokanControl recieved DeviceName: %ws\n", control.DeviceName);
         SendReleaseIRP(control.DeviceName);
     } else {
         logw(L"DokanRemoveMountPoint failed");

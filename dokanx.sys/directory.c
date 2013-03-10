@@ -41,7 +41,7 @@ DokanDispatchDirectoryControl(
 	NTSTATUS			status		= STATUS_NOT_IMPLEMENTED;
 	PFILE_OBJECT		fileObject;
 	PIO_STACK_LOCATION	irpSp;
-	PDokanCCB			ccb;
+//	PDokanCCB			ccb;
 	PDokanVCB			vcb;
 
 	//PAGED_CODE();
@@ -109,7 +109,7 @@ DokanQueryDirectory(
 	PDokanCCB			ccb;
 	PDokanFCB			fcb;
 	NTSTATUS			status;
-	PUNICODE_STRING		searchPattern;
+//	PUNICODE_STRING		searchPattern;
 	ULONG				eventLength;
 	PEVENT_CONTEXT		eventContext;
 	ULONG				index;
@@ -370,7 +370,7 @@ DokanCompleteDirectoryControl(
 	} else {
 
 		PDokanCCB ccb	= IrpEntry->FileObject->FsContext2;
-		ULONG	 orgLen = irpSp->Parameters.QueryDirectory.Length;
+//		ULONG	 orgLen = irpSp->Parameters.QueryDirectory.Length;
 
 		//
 		// set the information recieved from user mode

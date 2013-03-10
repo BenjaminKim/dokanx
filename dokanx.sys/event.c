@@ -20,6 +20,8 @@ with this program. If not, see <http://www.gnu.org/licenses/>.
 #include "precomp.h"
 #pragma hdrstop
 
+#pragma warning (disable: 4057 4100 4701 4703)
+
 VOID
 DokanIrpCancelRoutine(
     __in PDEVICE_OBJECT   DeviceObject,
@@ -406,7 +408,7 @@ DokanEventStart(
 {
     ULONG				outBufferLen;
     ULONG				inBufferLen;
-    PVOID				buffer;
+//    PVOID				buffer;
     PIO_STACK_LOCATION	irpSp;
     EVENT_START			eventStart;
     PEVENT_DRIVER_INFO	driverInfo;
@@ -662,3 +664,4 @@ DokanEventWrite(
    return STATUS_SUCCESS;
 }
 
+#pragma warning (default: 4057 4100 4701 4703)
