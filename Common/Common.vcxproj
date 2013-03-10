@@ -139,14 +139,11 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <Text Include="ReadMe.txt" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="..\misc.h" />
-    <ClInclude Include="..\stlhelper.h" />
     <ClInclude Include="HelperMacros.h" />
     <ClInclude Include="Log\NdLog.h" />
     <ClInclude Include="Log\NtLogString.h" />
+    <ClInclude Include="misc.h" />
+    <ClInclude Include="stlhelper.h" />
     <ClInclude Include="String\StringHelper.h" />
     <ClInclude Include="String\StringHelperEx.h" />
     <ClInclude Include="String\UnicodeHelper.h" />
@@ -159,9 +156,9 @@
     <ClInclude Include="WinNT\Registry.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\misc.cpp" />
     <ClCompile Include="Log\NdLog.cpp" />
     <ClCompile Include="Log\NtLogString.cpp" />
+    <ClCompile Include="misc.cpp" />
     <ClCompile Include="String\StringHelper.cpp" />
     <ClCompile Include="String\StringHelperEx.cpp" />
     <ClCompile Include="String\UnicodeHelper.cpp" />
