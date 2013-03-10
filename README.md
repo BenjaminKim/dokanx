@@ -8,7 +8,8 @@ If you don't know about dokan, you should read this document. http://dokan-dev.n
 * Download and install the [WDK 7.1.0](http://www.microsoft.com/en-us/download/details.aspx?id=11800)
 * You should set the Windows environment variables DOKANX_PATH and WIN7BASE before compile driver.
 
-```
+```bash
+# Note. Do not enclose WIN7BASE environment value in double quotes. ddkbuild can't recognize it, I think.
 DOKANX_PATH=D:\dokanx
 WIN7BASE=C:\WinDDK\7600.16385.1
 ```
