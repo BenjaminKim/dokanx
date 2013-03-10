@@ -130,7 +130,7 @@ Return Value:
 	return status;
 }
 
-
+#pragma warning (disable: 4189)
 
 VOID
 DokanCompleteCleanup(
@@ -179,4 +179,5 @@ DokanCompleteCleanup(
 	DDbgPrint("<== DokanCompleteCleanup");
 }
 
+#pragma warning (default: 4189)
 

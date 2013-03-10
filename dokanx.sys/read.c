@@ -50,7 +50,7 @@ Return Value:
 	PFILE_OBJECT		fileObject;
 	ULONG				bufferLength;
 	LARGE_INTEGER		byteOffset;
-	PVOID				buffer;
+//	PVOID				buffer;
 	NTSTATUS			status = STATUS_INVALID_PARAMETER;
 	ULONG				readLength = 0;
 	PDokanCCB			ccb;

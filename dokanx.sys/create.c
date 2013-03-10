@@ -24,6 +24,7 @@ with this program. If not, see <http://www.gnu.org/licenses/>.
 #pragma alloc_text (PAGE, DokanDispatchCreate)
 #endif
 
+#pragma warning(disable: 4057 4101)
 
 // We must NOT call without VCB lcok
 PDokanFCB
@@ -652,3 +653,4 @@ DokanCompleteCreate(
 	DDbgPrint("<== DokanCompleteCreate");
 }
 
+#pragma warning(default: 4057 4101)

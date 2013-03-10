@@ -22,6 +22,7 @@ with this program. If not, see <http://www.gnu.org/licenses/>.
 
 #include "dokan.h"
 
+#pragma warning (disable: 4100 4244 4267)
 
 NTSTATUS
 DokanUserFsRequest(
@@ -370,3 +371,4 @@ DokanDispatchFileSystemControl(
 	return status;
 }
 
+#pragma warning (default: 4100 4244 4267)

@@ -208,6 +208,7 @@ typedef struct _SET_SECURITY_CONTEXT {
 	WCHAR	FileName[1];
 } SET_SECURITY_CONTEXT, *PSET_SECURITY_CONTEXT;
 
+#pragma warning (disable: 4201)
 
 typedef struct _EVENT_CONTEXT {
 	ULONG	Length;
@@ -275,6 +276,8 @@ typedef struct _EVENT_INFORMATION {
 
 } EVENT_INFORMATION, *PEVENT_INFORMATION;
 
+
+#pragma warning (default: 4201)
 
 #define DOKAN_EVENT_ALTERNATIVE_STREAM_ON	1
 #define DOKAN_EVENT_KEEP_ALIVE_ON			2

@@ -23,6 +23,8 @@ with this program. If not, see <http://www.gnu.org/licenses/>.
 
 #include "dokan.h"
 
+#pragma warning (disable: 4127 4100)
+
 VOID
 DokanUnmount(
 	__in PDokanDCB Dcb
@@ -83,10 +85,10 @@ DokanCheckKeepAlive(
 	)
 {
 	LARGE_INTEGER		tickCount;
-	ULONG				eventLength;
-	PEVENT_CONTEXT		eventContext;
+//	ULONG				eventLength;
+//	PEVENT_CONTEXT		eventContext;
 	ULONG				mounted;
-	PDokanVCB			vcb = Dcb->Vcb;
+//	PDokanVCB			vcb = Dcb->Vcb;
 
 	//DDbgPrint("==> DokanCheckKeepAlive");
 
@@ -244,8 +246,8 @@ DokanResetPendingIrpTimeout(
 
     for (thisEntry = listHead->Flink; thisEntry != listHead; thisEntry = nextEntry) {
 
-		PIRP				irp;
-		PIO_STACK_LOCATION	irpSp;
+//		PIRP				irp;
+//		PIO_STACK_LOCATION	irpSp;
 
         nextEntry = thisEntry->Flink;
 
@@ -392,3 +394,6 @@ DokanUpdateTimeout(
 	KeQueryTickCount(TickCount);
 	TickCount->QuadPart += Timeout * 1000 * 10 / KeQueryTimeIncrement();
 }
+
+#pragma warning (default: 4127 4100)
+

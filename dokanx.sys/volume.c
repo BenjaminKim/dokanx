@@ -22,6 +22,7 @@ with this program. If not, see <http://www.gnu.org/licenses/>.
 
 #include "dokan.h"
 
+#pragma warning (disable: 4100)
 
 NTSTATUS
 DokanDispatchQueryVolumeInformation(
@@ -274,3 +275,4 @@ DokanDispatchSetVolumeInformation(
 	return status;
 }
 
+#pragma warning (default: 4100)

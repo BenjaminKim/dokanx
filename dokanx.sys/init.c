@@ -26,6 +26,7 @@ with this program. If not, see <http://www.gnu.org/licenses/>.
 #include <mountmgr.h>
 #include <ntddstor.h>
 
+#pragma warning ( disable: 4244 4267 )
 
 NTSTATUS
 DokanSendIoContlToMountManager(
@@ -399,7 +400,7 @@ DokanCreateDiskDevice(
 	PDokanVCB			vcb;
 	UNICODE_STRING		diskDeviceName;
 	NTSTATUS			status;
-	PUNICODE_STRING		symbolicLinkTarget;
+//	PUNICODE_STRING		symbolicLinkTarget;
 	BOOLEAN				isNetworkFileSystem = (DeviceType == FILE_DEVICE_NETWORK_FILE_SYSTEM);
 
 	// make DeviceName and SymboliLink
@@ -629,8 +630,8 @@ VOID
 DokanDeleteDeviceObject(
 	__in PDokanDCB Dcb)
 {
-	UNICODE_STRING		symbolicLinkName;
-	WCHAR				symbolicLinkBuf[MAXIMUM_FILENAME_LENGTH];
+//	UNICODE_STRING		symbolicLinkName;
+//	WCHAR				symbolicLinkBuf[MAXIMUM_FILENAME_LENGTH];
 	PDokanVCB			vcb;
 
 	ASSERT(GetIdentifierType(Dcb) == DCB);
@@ -673,3 +674,4 @@ DokanDeleteDeviceObject(
 	IoDeleteDevice(Dcb->DeviceObject);
 }
 
+#pragma warning ( default: 4244 4267 )

@@ -20,6 +20,8 @@ with this program. If not, see <http://www.gnu.org/licenses/>.
 #include "precomp.h"
 #pragma hdrstop
 
+#pragma warning (disable: 4701 4703)
+
 NTSTATUS
 DokanGetAccessToken(
    __in PDEVICE_OBJECT	DeviceObject,
@@ -126,3 +128,5 @@ DokanGetAccessToken(
     DDbgPrint("<== DokanGetAccessToken");
     return status;
 }
+
+#pragma warning (default: 4701 4703)
