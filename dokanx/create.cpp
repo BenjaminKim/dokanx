@@ -21,11 +21,11 @@ with this program. If not, see <http://www.gnu.org/licenses/>.
 #include "stdafx.h"
 #include "../dokani.h"
 #include "fileinfo.h"
-
+íŒŒì¼ì— ëŒ€í•œ í•¸ë“¤ì´ ì•„ë‹ˆë¼ Dokan ìž¥ì¹˜ ë“œë¼ì´ë²„ì—(EVENT_WAITì„ í•˜ëŠ”) ëŒ€í•œ í•¸ë“¤ì´ë‹¤.
 
 VOID
 DispatchCreate(
-    HANDLE				Handle, // ÆÄÀÏ¿¡ ´ëÇÑ ÇÚµéÀÌ ¾Æ´Ï¶ó Dokan ÀåÄ¡ µå¶óÀÌ¹ö¿¡(EVENT_WAITÀ» ÇÏ´Â) ´ëÇÑ ÇÚµéÀÌ´Ù.
+    HANDLE				Handle, // This handle is not for a file. It is for Dokan Device Driver(which is doing EVENT_WAIT).
     PEVENT_CONTEXT		EventContext,
     PDOKAN_INSTANCE		DokanInstance)
 {
@@ -189,7 +189,7 @@ DispatchCreate(
             free(openInfo);
             eventInfo->Context = 0;
         }
-        // ERROR_ALREADY_EXISTSÀÏ °æ¿ì´Â µû·Î Ã³¸® ÇØ¾ß ÇÑ´Ù.
+        // TODO: handling ERROR_ALREADY_EXISTS case
     }
     else
     {
