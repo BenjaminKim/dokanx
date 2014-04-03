@@ -15,9 +15,6 @@
 //
 // Miscellaneous functions.
 //
-// 잡다한 함수들을 모아놓는 곳이다. 아직 관련한 함수들의 덩어리들이 너무 작기 때문에 새로운 모듈을 추가하는 것이 부담스러울 경우가 있다.
-// 그런 함수들은 이 곳에 잠시 넣어뒀다가 나중에 어느 정도 적당한 모임이 생기게 되면 새로운 모듈로 분리해내야 한다.
-//
 
 VOID TrimFileTime(__inout FILETIME* ft);
 FILETIME TrimFileTime(__in const FILETIME& ft);
