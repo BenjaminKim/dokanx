@@ -14,13 +14,13 @@ DOKANX_PATH=D:\dokanx
 WIN7BASE=C:\WinDDK\7600.16385.1
 ```
 
-WDK 8.0 are not supported yet. But this doesn't mean dokan can't run on Windows8. 
+WDK 8.x are not supported yet. But this doesn't mean dokan can't run on Windows 8 or later. 
 
 ## Improved
-* Visual Studio 2012 solution file is provided with makefile and ddkbuild. Now you can compile filesystem driver very easily.
+* Visual Studio 2013 solution file is provided with makefile and ddkbuild. Now you can compile filesystem driver very easily.
 * All dokan library dll code has been recompiled in C++
-* Using precompiled header for driver.
-* The Usermode filesystem implementations should return their result code as NTSTATUS(Not the win32 statua code anymore).
+* Using precompiled header for driver. It makes building driver much faster.
+* Your usermode filesystem implementation should return their result code as NTSTATUS(Not the win32 status code).
 This gives your application more control.
 * Use better logger.
 * Applied prefast analyzer(static analyze driver source code)
