@@ -43,7 +43,7 @@ public:
 		__in REGSAM samDesired = KEY_ALL_ACCESS
 		); // NS
 	//
-	// strData가 "" 이면 삭제한다.
+	// Delete if strData is ""
 	//
 	static BOOL RegSetSimpleStringW(
 		__in HKEY hKey,
@@ -52,7 +52,7 @@ public:
 		__in const std::wstring& strData,
 		__in BOOL fPermanently,
 		__in REGSAM samDesired = KEY_ALL_ACCESS
-		); // NS
+		);
 	static BOOL RegSetSimpleStringVolatileW(
 		__in HKEY hKey,
 		__in const std::wstring& strOpenKey,
@@ -67,7 +67,7 @@ public:
 		__in BOOL fPermanently,
 		__in BOOL bDelete,
 		__in REGSAM samDesired = KEY_ALL_ACCESS
-		); // NS
+		);
 	static BOOL RegSetSimpleBinary(
 		__in HKEY hKey,
 		__in const std::wstring& strOpenKey,
@@ -75,7 +75,7 @@ public:
 		__in const void* pData,
 		__in int nDataSize,
 		__in REGSAM samDesired = KEY_ALL_ACCESS
-		); // NS
+		);
 	static BOOL RegSetExpandString(
 		__in HKEY hKey,
 		__in const std::wstring& sOpenKey,

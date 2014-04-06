@@ -15,8 +15,6 @@
 #include "Registry.h"
 #include "OsVersion.h"
 
-// 아래 함수는 윈도우에서 전처리 되어 잇는 W/A 방식을 따라가서는 안된다. 이러한 구분은 Vista이상에서만 지원되기
-// 때문에 XP에서 제대로 동작하지 않는다.
 #undef Shell_GetCachedImageIndex
 
 bool OpenWindowsExplorer(
@@ -57,22 +55,6 @@ bool OpenWindowsExplorer(
 	sei.lpFile = L"explorer";
 
 	return !!ShellExecuteExW(&sei);
-}
-
-bool UpdateFileFolderIcon(
-	__in const std::wstring& filePath
-	)
-{
-	// Update the icon cache
-	SHFILEINFO sfi = { 0 };
-	if (SHGetFileInfo(filePath.c_str(), 0, &sfi, sizeof(sfi), SHGFI_ICONLOCATION))
-	{
-		int iIconIndex = Shell_GetCachedImageIndex(sfi.szDisplayName, sfi.iIcon, 0);
-		SHUpdateImage(PathFindFileName(sfi.szDisplayName), sfi.iIcon, 0, iIconIndex);
-		return true;
-	}
-
-	return false;
 }
 
 std::wstring GetSpecialFolderPath(
@@ -130,32 +112,6 @@ bool IsExplorerProcess(
 	)
 {
 	return ProcessNameMatched(L"explorer.exe", pid);
-}
-
-bool ShellDeleteFile(
-	__in const std::wstring& sFilePath
-	)
-{
-	//SHFileOperation 으로 폴더 삭제에 bug(?) 있음. 메모리 초기화한 곳에 경로명을 copy하여 shfo.pFrom 에 대입한다.
-	TCHAR szRemovePath[MAX_PATH];
-	StringCchPrintf(szRemovePath, _countof(szRemovePath), L"%s", sFilePath.c_str());
-
-	bool bRet = true;
-
-	SHFILEOPSTRUCT shfo;
-	ZeroMemory(&shfo, sizeof(SHFILEOPSTRUCT));
-	shfo.wFunc = FO_DELETE; 
-	shfo.pFrom = szRemovePath;
-	shfo.fFlags = FOF_NOCONFIRMATION | FOF_NOERRORUI | FOF_ALLOWUNDO | FOF_SILENT;
-	int nDeleteRes = SHFileOperation(&shfo);
-
-	// return value 2 means that the file was not found.
-	if (0 != nDeleteRes && 2 != nDeleteRes)
-	{
-		bRet = false;
-	}
-
-	return bRet;
 }
 
 bool SetVolumeIcon(

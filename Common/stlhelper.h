@@ -5,7 +5,7 @@
 #include <algorithm>
 
 template <typename Map, typename Fn1>
-inline void map_erase_if(Map& m, Fn1 pred) // NS
+inline void map_erase_if(Map& m, Fn1 pred)
 {
 	typename Map::iterator it = m.begin();
 	while ((it = std::find_if(it, m.end(), pred)) != m.end())
@@ -14,11 +14,10 @@ inline void map_erase_if(Map& m, Fn1 pred) // NS
 	}
 }
 
-
 /**
 * A unary functor for accumulation.
 * NOTE:
-*	std::remove_if 와는 함께 사용하면 안됨.
+*	Don't use this macro with std::remove_if
 */
 struct Accumulator
 	: std::unary_function<std::pair<std::wstring, int>, void>

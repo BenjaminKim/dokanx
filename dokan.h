@@ -65,11 +65,11 @@ typedef struct _DOKAN_OPTIONS {
 
 typedef struct _DOKAN_FILE_INFO {
     //
-    // 파일에 대한 실제 핸들 값이 여기에 저장된다.
+    // It saves a handle of real file.
     //
     ULONG64	Context;      // FileSystem can use this variable
     //
-    // OPEN_INFO가 여기에 저장되며 유저모드 파일 시스템은 이 필드에 접근해서는 안된다.
+    // It saves OPEN_INFO struct, and User mode implemantation should not access this field.
     //
     ULONG64	DokanContext; // Don't touch this
     PDOKAN_OPTIONS DokanOptions; // A pointer to DOKAN_OPTIONS which was  passed to DokanMain.

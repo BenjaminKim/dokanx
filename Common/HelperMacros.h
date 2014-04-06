@@ -47,7 +47,7 @@
 
 
 
-#define _NDRIVE_DEPRECATE(_AlternativeFunc) __declspec(deprecated("This function or variable has been deprecated."\
+#define _DOKAN_DEPRECATE(_AlternativeFunc) __declspec(deprecated("This function or variable has been deprecated."\
 										" Consider using " #_AlternativeFunc " instead."))
 
 

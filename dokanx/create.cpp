@@ -21,7 +21,6 @@ with this program. If not, see <http://www.gnu.org/licenses/>.
 #include "stdafx.h"
 #include "../dokani.h"
 #include "fileinfo.h"
-파일에 대한 핸들이 아니라 Dokan 장치 드라이버에(EVENT_WAIT을 하는) 대한 핸들이다.
 
 VOID
 DispatchCreate(

@@ -275,7 +275,7 @@ typedef struct _DokanContextControlBlock
 
 	ULONG				Flags;
 
-	// CCB에 있을 필요가 있는가?
+	// I think it doesn't need to be in CCB.
 	//int					FileCount;
 	ULONG				MountId;
 } DokanCCB, *PDokanCCB;
