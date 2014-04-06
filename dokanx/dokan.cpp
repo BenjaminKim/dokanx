@@ -434,7 +434,7 @@ CheckFileName(
 
 
 //
-// IRP_MJ_CREATE를 제외한 다른 Irp들에서 공통적으로 모두 이 루틴을 호출한다.
+// All IRPs(except IRP_MJ_CREATE) routines call this dispatch function.
 //
 PEVENT_INFORMATION
 DispatchCommon(

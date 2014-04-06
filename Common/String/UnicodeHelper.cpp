@@ -189,19 +189,7 @@ std::string UTF16ToUTF8(
 	// Consider also terminating \0
 	++cchUTF16;
 
-	//
-	// WC_ERR_INVALID_CHARS flag is set to fail if invalid input character
-	// is encountered.
-	// This flag is supported on Windows Vista and later.
-	// Don't use it on Windows XP and previous.
-	// 타겟 버전을 설정 안하고 Vista이상에서 그냥 빌드해버리는 경우가 있을 수 있으므로
-	// 전처리로 처리 하지 않고 무조건 0으로 넣었다.
-	// XP에서 0 이 아닌 값으로 들어가면 변환에 항상 실패한다.
-	//#if (WINVER >= 0x0600)
-	//DWORD dwConversionFlags = WC_ERR_INVALID_CHARS;
-	//#else
 	DWORD dwConversionFlags = 0;
-	//#endif
 
 	//
 	// Get size of destination UTF-8 buffer, in CHAR's (= bytes)

@@ -73,7 +73,7 @@ std::wstring Registry::RegGetSimpleString(
 
 	std::wstring strRet = strDefaultData;
 
-	if (r == ERROR_SUCCESS) // 오픈 성공하면...
+	if (r == ERROR_SUCCESS)
 	{
 		WCHAR sz[MAX_PATH];
 		DWORD dwType;
@@ -107,7 +107,7 @@ DWORD Registry::RegGetSimpleDword(
 	long r = ::RegOpenKeyEx(hKey, strOpenKey.c_str(), 0, samDesired, &hSubKey);
 
 	DWORD dwRet = dwDefaultData;
-	if(r == ERROR_SUCCESS) // 오픈 성공하면...
+	if(r == ERROR_SUCCESS)
 	{
 		DWORD dwBuff;
 		DWORD dwType;
@@ -137,7 +137,7 @@ BOOL Registry::RegSetSimpleStringA(
 	__in const std::string& strData,
 	__in BOOL fPermanently,
 	__in REGSAM samDesired
-	) // NS
+	)
 {
 	std::wstring wOpenKey       = ToUniStr(strOpenKey.c_str());
 	std::wstring wValueName     = ToUniStr(strValueName.c_str());
@@ -153,7 +153,7 @@ BOOL Registry::RegSetSimpleStringW(
 	__in const std::wstring& strData,
 	__in BOOL fPermanently,
 	__in REGSAM samDesired
-	) // NS
+	)
 {
 	BOOL bResult = FALSE;
 	if (hKey == NULL || strOpenKey == L"")
@@ -214,7 +214,7 @@ BOOL Registry::RegSetSimpleDword(
 	__in BOOL fPermanently,
 	__in BOOL bDelete,
 	__in REGSAM samDesired
-	) // NS
+	)
 {
 	BOOL bResult = FALSE;
 	if (hKey == NULL || strOpenKey == L"" || strValueName == L"")
@@ -257,7 +257,7 @@ BOOL Registry::RegSetSimpleBinary(
 	__in const void* pData,
 	__in int nDataSize,
 	__in REGSAM samDesired
-	) // NS
+	)
 {
 	BOOL bResult = FALSE;
 	if(hKey == NULL || strOpenKey == L"" || strValueName == L"")

@@ -22,10 +22,9 @@ with this program. If not, see <http://www.gnu.org/licenses/>.
 #include "../dokani.h"
 #include "fileinfo.h"
 
-
 VOID
 DispatchCreate(
-    HANDLE				Handle, // 파일에 대한 핸들이 아니라 Dokan 장치 드라이버에(EVENT_WAIT을 하는) 대한 핸들이다.
+    HANDLE				Handle, // This handle is not for a file. It is for Dokan Device Driver(which is doing EVENT_WAIT).
     PEVENT_CONTEXT		EventContext,
     PDOKAN_INSTANCE		DokanInstance)
 {
@@ -189,7 +188,7 @@ DispatchCreate(
             free(openInfo);
             eventInfo->Context = 0;
         }
-        // ERROR_ALREADY_EXISTS일 경우는 따로 처리 해야 한다.
+        // TODO: handling ERROR_ALREADY_EXISTS case
     }
     else
     {

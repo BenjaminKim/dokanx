@@ -58,6 +58,3 @@ inline VOID SetOutputLogFlag(LOG_OUTPUT_FLAG flag)
 std::wstring GetWin32FormatMessage(DWORD dwWin32Error);
 VOID PrintFormatMessage(DWORD dwWin32Error);
 VOID PrintFormatMessage_Dbg(DWORD dwWin32Error);
-
-// 일정 기간이 지난 로그 파일을 삭제한다.
-BOOL CleanOutOfDateLog();

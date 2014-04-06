@@ -11,7 +11,6 @@ using namespace std;
 
 wstring AddComma(const wstring& source)
 {
-	// 콤마가 들어가기 때문에 버퍼를 좀 넉넉하게 잡는다.
 	PWCHAR pBuf = (PWCHAR)malloc(source.size() * 4);
 	if (pBuf == NULL)
 	{
@@ -250,7 +249,7 @@ wstring TrimLastRightPathSeperator(
 	__in_opt WCHAR pathSeperator
 	)
 {
-	// '/'만 넘어올 경우 trim 하지 않는다.
+	// if only '/' characer is passed to str, dont' trim it.
 	if (str.size() > 1)
 	{
 		wstring s = str.substr(1);

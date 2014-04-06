@@ -52,14 +52,14 @@ RemoveEntryList(
     PLIST_ENTRY Blink;
     PLIST_ENTRY Flink;
 
-	if (Entry != NULL) {
-    	Flink = Entry->Flink;
-    	Blink = Entry->Blink;
-    	Blink->Flink = Flink;
-    	Flink->Blink = Blink;
-		return (BOOLEAN)(Flink == Blink);
-	}
-	/* Assumes the list is empty */
+    if (Entry != NULL) {
+        Flink = Entry->Flink;
+        Blink = Entry->Blink;
+        Blink->Flink = Flink;
+        Flink->Blink = Blink;
+        return (BOOLEAN)(Flink == Blink);
+    }
+    /* Assumes the list is empty */
     return TRUE;
 }
 

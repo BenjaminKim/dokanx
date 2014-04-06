@@ -1,6 +1,4 @@
-#ifndef _STRINGHELPER_H_
-#define _STRINGHELPER_H_
-
+#pragma once
 #include <Windows.h>
 
 #pragma warning(push)
@@ -77,9 +75,4 @@ bool CiStringCompare(const std::wstring& s1, const std::wstring& s2);
 bool StringEqualNoCase(const std::wstring& s1, const std::wstring& s2);
 std::wstring ConvertNtPathToUnixPath(const std::wstring& sNtPath);
 std::wstring ConvertUnixPathToNtPath(const std::wstring& sNdPath, WCHAR chVolume);
-//std::wstring __cdecl FormatV(
-//	__in const std::wstring& originStr,
-//	__in const std::wstring& sFormat,
-//	__in ...);
 std::wstring __cdecl FormatV(PCWSTR pszFormat, ...);
-#endif//_STRINGHELPER_H_
