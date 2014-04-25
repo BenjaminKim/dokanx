@@ -1,6 +1,8 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
+VisualStudioVersion = 12.0.30324.0
+MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "sys", "sys\sys.vcxproj", "{6A6C3D11-9740-4A70-AB15-96CA3B47DE10}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "dokanx", "dokanx\dokanx.vcxproj", "{F25BA22F-2AB8-4859-9B89-8FE1E774B472}"
@@ -61,6 +63,7 @@ Global
 		{F25BA22F-2AB8-4859-9B89-8FE1E774B472}.debug_win7|Win32.ActiveCfg = Debug|Win32
 		{F25BA22F-2AB8-4859-9B89-8FE1E774B472}.debug_win7|Win32.Build.0 = Debug|Win32
 		{F25BA22F-2AB8-4859-9B89-8FE1E774B472}.debug_win7|x64.ActiveCfg = Debug|Win32
+		{F25BA22F-2AB8-4859-9B89-8FE1E774B472}.debug_win7|x64.Build.0 = Debug|Win32
 		{F25BA22F-2AB8-4859-9B89-8FE1E774B472}.Debug|Win32.ActiveCfg = Debug|Win32
 		{F25BA22F-2AB8-4859-9B89-8FE1E774B472}.Debug|Win32.Build.0 = Debug|Win32
 		{F25BA22F-2AB8-4859-9B89-8FE1E774B472}.Debug|x64.ActiveCfg = Debug|Win32
