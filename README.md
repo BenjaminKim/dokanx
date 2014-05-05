@@ -29,3 +29,9 @@ This gives your application more control.
 ## Driver Installation
 Did you build the driver well? Then you can *install* and *start* the driver easily by [OSR driver loader](http://www.osronline.com/article.cfm?article=157)   
 If you want to check whether dokanx.sys installed successfully, you can check it from registry path `HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services`. There should be the `dokanx` key.
+
+## Mount your filesystem.
+Not written yet.
+
+## Test your filesystem.
+Not written yet.
