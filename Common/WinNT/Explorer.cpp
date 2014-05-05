@@ -77,7 +77,6 @@ bool ProcessNameMatched(
 	)
 {
 	std::wstring sProcessImageName = ProcessImageName(pid);
-	logw(L"ProcessImageName(%d)<%s>", pid, sProcessImageName.c_str());
 	if (sProcessImageName.size() < imageFileName.size())
 	{
 		return false;
@@ -119,7 +118,6 @@ bool SetVolumeIcon(
 	__in const std::wstring& canonicalIconPath
 	)
 {
-	logw(L"Start<%s>(%c:)", canonicalIconPath.c_str(), volumeDesignator);
 	WCHAR defaultIconBase[MAX_PATH];
 	StringCchPrintf(
 		defaultIconBase,
@@ -130,7 +128,6 @@ bool SetVolumeIcon(
 
 	if (canonicalIconPath.empty())
 	{
-		logw(L"Delete the key<%s>", defaultIconBase);
 		return (Registry::RegDeleteKeyNT(HKEY_LOCAL_MACHINE, defaultIconBase) == ERROR_SUCCESS);
 	}
 	else
@@ -170,48 +167,6 @@ bool IsRecycleBin(const std::wstring& path)
 {
 	SHDESCRIPTIONID did;
 	return (SUCCEEDED(GetFolderDescriptionId(path.c_str(), &did)) && did.clsid == CLSID_RecycleBin);
-}
-
-void MarkShortcutRunAs(const std::wstring& sShortcut)
-{
-	CoInitialize(NULL);
-
-	do
-	{
-		CComPtr<IPersistFile> sppf;
-		if (FAILED(sppf.CoCreateInstance(CLSID_ShellLink)))
-		{
-			break;
-		}
-		if (FAILED(sppf->Load(sShortcut.c_str(), STGM_READWRITE)))
-		{
-			break;
-		}
-		CComQIPtr<IShellLinkDataList> spdl(sppf);
-		if (!spdl)
-		{
-			break;
-		}
-		DWORD dwFlags;
-		if (FAILED(spdl->GetFlags(&dwFlags)))
-		{
-			break;
-		}
-		dwFlags |= SLDF_RUNAS_USER;
-		if (FAILED(spdl->SetFlags(dwFlags)))
-		{
-			break;
-		}
-		if (FAILED(sppf->Save(NULL, TRUE)))
-		{
-			break;
-		}
-#pragma warning(push)
-#pragma warning(disable:4127)
-	} while (0);
-#pragma warning(pop)
-	
-	CoUninitialize();
 }
 
 void BroadcastDeviceChange(WPARAM message, int nDosDriveNo, DWORD driveMap)

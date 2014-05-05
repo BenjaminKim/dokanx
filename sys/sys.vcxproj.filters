@@ -87,12 +87,6 @@
     <ClInclude Include="dokan.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\DokanStatus.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="precomp.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="dokan.rc">

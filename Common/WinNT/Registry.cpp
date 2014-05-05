@@ -351,7 +351,7 @@ BOOL Registry::HasRegisterdValue(
 	DWORD dwSize = sizeof(buff);
 	long r = ::RegOpenKeyEx(hKey, strOpenKey.c_str(), 0, samDesired, &hSubKey);
 
-	if(r == ERROR_SUCCESS) // 오픈 성공하면...
+	if(r == ERROR_SUCCESS)
 	{
 		r = RegQueryValueEx(hSubKey, strValueName.c_str(), NULL, &dwType, (LPBYTE)buff, &dwSize);
 		if(r == ERROR_SUCCESS)

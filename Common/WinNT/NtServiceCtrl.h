@@ -15,7 +15,7 @@ DWORD InstallService(
 	__in_opt    LPCWSTR lpDependencies,
 	__in_opt    LPCWSTR lpServiceStartName,
 	__in_opt    LPCWSTR lpPassword
-	); // NS
+	);
 
 BOOL LoadDriver(
 	__in LPCWSTR lpServiceName

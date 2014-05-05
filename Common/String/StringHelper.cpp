@@ -347,7 +347,7 @@ wstring AbbreviateFileName(__in const wstring& fileName, __in size_t cchMaxFileN
 	wstring abbreviatedFileNameOnly;
 	if (n != fileName.npos)
 	{
-		// 확장자가 있는 경우
+		// a case the filaName includes extension.
 		ext = fileName.substr(n + 1);
 		abbreviatedFileNameOnly = fileName.substr(0, cchMaxFileName - ext.size());
 	}

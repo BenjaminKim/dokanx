@@ -7,7 +7,6 @@
 #include <ShlObj.h>
 #include <Dbt.h>
 
-
 bool OpenWindowsExplorer(
 	__in const std::wstring& filePath,
 	__in bool withSelectingFileItem
@@ -36,12 +35,11 @@ bool ShellDeleteFile(
 	);
 
 //
-// HKML 위치의 레지스트리를 건드리므로 호출하는 컨텍스트에서 관리자 토큰이 필요하다.
+// Because this function writes to registry at HKLM location, the function should be called on adminitrator context.
 //
 bool SetVolumeIcon(
 	__in wchar_t volumeDesignator,
 	__in const std::wstring& canonicalIconPath
 	);
 bool IsRecycleBin(const std::wstring& path);
-void MarkShortcutRunAs(const std::wstring& sShortcut);
 void BroadcastDeviceChange(WPARAM message, int nDosDriveNo, DWORD driveMap);

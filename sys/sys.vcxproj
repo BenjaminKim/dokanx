@@ -92,7 +92,7 @@ copy "$(ProjectDir)objchk_win7_amd64\amd64\dokanx.map" "$(DOKANX_PATH)\bin\x64\d
     <NMakeCleanCommandLine Condition="'$(Configuration)|$(Platform)'=='debug_win7|x64'" />
     <NMakeOutput Condition="'$(Configuration)|$(Platform)'=='debug_win7|x64'">dokanx.sys</NMakeOutput>
     <NMakePreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='debug_win7|x64'">WIN32;_DEBUG;$(NMakePreprocessorDefinitions)</NMakePreprocessorDefinitions>
-    <NMakeIncludeSearchPath Condition="'$(Configuration)|$(Platform)'=='debug_win7|x64'">$(NMakeIncludeSearchPath)</NMakeIncludeSearchPath>
+    <NMakeIncludeSearchPath Condition="'$(Configuration)|$(Platform)'=='debug_win7|x64'">$(WIN7BASE)/inc/ddk;$(NMakeIncludeSearchPath)</NMakeIncludeSearchPath>
     <NMakeForcedIncludes Condition="'$(Configuration)|$(Platform)'=='debug_win7|x64'">$(NMakeForcedIncludes)</NMakeForcedIncludes>
     <NMakeAssemblySearchPath Condition="'$(Configuration)|$(Platform)'=='debug_win7|x64'">$(NMakeAssemblySearchPath)</NMakeAssemblySearchPath>
     <NMakeForcedUsingAssemblies Condition="'$(Configuration)|$(Platform)'=='debug_win7|x64'">$(NMakeForcedUsingAssemblies)</NMakeForcedUsingAssemblies>

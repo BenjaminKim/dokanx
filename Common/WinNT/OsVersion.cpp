@@ -86,8 +86,8 @@ BOOL IsVistaOrLater( void )
 
 	osvi.dwOSVersionInfoSize = sizeof ( OSVERSIONINFO );
 
-	//메이져 5 XP
-	//메이져 6 VISTA
+	// Major 5 is XP
+	// Major 6 is VISTA
 	if (::GetVersionEx( &osvi ) && 
 		osvi.dwPlatformId == VER_PLATFORM_WIN32_NT && 
 		(osvi.dwMajorVersion >= 6 ))
@@ -102,12 +102,10 @@ BOOL IsVistaOrLater( void )
 
 BOOL IsVistaOrWinServer2008Basic()
 {
-	// 2008R2가 아니라 처음 나온 2008 버전인지만 확인한다.
+	// If OS is 2008 R2 version, the function returns FALSE.
 	OSVERSIONINFO osvi;
 	osvi.dwOSVersionInfoSize = sizeof ( OSVERSIONINFO );
 
-	//메이져 5 XP
-	//메이져 6 VISTA
 	if (::GetVersionEx( &osvi ) && 
 		osvi.dwPlatformId == VER_PLATFORM_WIN32_NT && 
 		(osvi.dwMajorVersion == 6 ) &&

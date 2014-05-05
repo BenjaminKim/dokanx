@@ -13,7 +13,7 @@ DWORD InstallService(
 	__in_opt    LPCWSTR     lpDependencies,
 	__in_opt    LPCWSTR     lpServiceStartName,
 	__in_opt    LPCWSTR     lpPassword
-	) // NS
+	)
 {
 	SC_HANDLE sch;
 	SC_HANDLE service;
