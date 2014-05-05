@@ -14,6 +14,7 @@ DOKANX_PATH=D:\dokanx
 WIN7BASE=C:\WinDDK\7600.16385.1
 ```
 
+Even if you don't have Visual Studio, you can also build `dokanx` from WDK toolkit.  
 WDK 8.x are not supported yet. But this doesn't mean dokan can't run on Windows 8 or later. 
 
 ## Improved
