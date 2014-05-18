@@ -168,6 +168,35 @@ DeleteMountPoint(
 }
 
 BOOL
+CheckDriveLetterAvailability(
+WCHAR       DriveLetter)
+{
+    DWORD result = 0;
+    WCHAR buffer[MAX_PATH];
+    WCHAR driveName[] = L"C:";
+    WCHAR driveLetter = towupper(DriveLetter);
+    driveName[0] = driveLetter;
+
+    ZeroMemory(buffer, MAX_PATH);
+    result = QueryDosDevice(driveName, buffer, MAX_PATH);
+    if (result > 0)
+    {
+        logw(L"QueryDosDevice detected drive \"%c\"\n", DriveLetter);
+        return FALSE;
+    }
+
+    DWORD drives = GetLogicalDrives();
+    result = (drives >> (driveLetter - L'A') & 0x00000001);
+    if (result > 0)
+    {
+        logw(L"GetLogicalDrives detected drive \"%c\"\n", DriveLetter);
+        return FALSE;
+    }
+
+    return TRUE;
+}
+
+BOOL
 CreateDriveLetter(
     WCHAR		DriveLetter,
     LPCWSTR	DeviceName)
@@ -197,6 +226,10 @@ CreateDriveLetter(
     if (device != INVALID_HANDLE_VALUE) {
         logw(L"DokanControl Mount failed: %c: is alredy used\n", DriveLetter);
         CloseHandle(device);
+        return FALSE;
+    }
+
+    if (!CheckDriveLetterAvailability(DriveLetter)) {
         return FALSE;
     }
 
