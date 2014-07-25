@@ -369,8 +369,6 @@ NTSTATUS MirrorReadFile(
     BOOL	opened = FALSE;
     std::wstring filePath = GetFilePath(FileName);
 
-    offset.QuadPart = Offset;
-
     logw(L"ReadFile : %s", filePath.c_str());
 
     if (!handle || handle == INVALID_HANDLE_VALUE) {
@@ -391,7 +389,8 @@ NTSTATUS MirrorReadFile(
         opened = TRUE;
     }
     
-    if (SetFilePointer(handle, offset.LowPart, &offset.HighPart, FILE_BEGIN) == 0xFFFFFFFF) {
+    offset.QuadPart = Offset;
+    if (SetFilePointerEx(handle, offset, NULL, FILE_BEGIN) == 0xFFFFFFFF) {
         DWORD dwError = GetLastError();
         logw(L"seek error, offset = %lld", offset.QuadPart);
         if (opened)
@@ -435,8 +434,6 @@ NTSTATUS MirrorWriteFile(
     BOOL	opened = FALSE;
     std::wstring filePath = GetFilePath(FileName);
 
-    offset.QuadPart = Offset;
-
     logw(L"WriteFile : %s, offset %I64d, length %d", filePath.c_str(), Offset, NumberOfBytesToWrite);
 
     // reopen the file
@@ -458,15 +455,17 @@ NTSTATUS MirrorWriteFile(
         opened = TRUE;
     }
 
+    offset.QuadPart = Offset;
     if (DokanFileInfo->WriteToEndOfFile) {
-        if (SetFilePointer(handle, 0, NULL, FILE_END) == INVALID_SET_FILE_POINTER) {
+        offset.QuadPart = 0;
+        if (SetFilePointerEx(handle, offset, NULL, FILE_END) == INVALID_SET_FILE_POINTER) {
             DWORD dwError = GetLastError();
             
             logw(L"seek error, offset = EOF, error = %d", GetLastError());
             logw(L"failed(%d)", dwError);
             return ToNtStatus(dwError);
         }
-    } else if (SetFilePointer(handle, offset.LowPart, &offset.HighPart, FILE_BEGIN) == INVALID_SET_FILE_POINTER) {
+    } else if (SetFilePointerEx(handle, offset, NULL, FILE_BEGIN) == INVALID_SET_FILE_POINTER) {
         DWORD dwError = GetLastError();
         logw(L"seek error, offset = %lld, error = %d", offset.QuadPart, GetLastError());
         logw(L"failed(%d)", dwError);
