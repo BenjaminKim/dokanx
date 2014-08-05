@@ -1,0 +1,176 @@
+﻿Build started 8/4/2014 11:36:33 PM.
+     1>Project "C:\Users\Dr. Devil\Documents\Visual Studio 2013\Projects\DokanXSys\DokanXSys\DokanXSys.vcxproj" on node 3 (Rebuild target(s)).
+     1>StampInf:
+         C:\Program Files (x86)\Windows Kits\8.1\bin\x86\stampinf.exe -d "*" -a "x86" -v "*" -k "1.11" -u "1.11.0" -f Win7Debug\Dokanx.inf 
+         Stamping Win7Debug\Dokanx.inf [Version] section with DriverVer=08/04/2014,23.36.33.945
+       ClCompile:
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /IWin7Debug\ /Zi /nologo /W4 /WX- /Od /Oi /Oy- /D _X86_=1 /D i386=1 /D STD_CALL /D DEPRECATE_DDK_FUNCTIONS=1 /D MSC_NOOPT /D _WIN32_WINNT=0x0601 /D WINVER=0x0601 /D WINNT=1 /D NTDDI_VERSION=0x06010000 /D DBG=1 /GF /Gm- /Zp8 /GS /Gy /fp:precise /Zc:wchar_t- /Zc:forScope- /GR- /Fo"Win7Debug\\" /Fd"Win7Debug\vc120.pdb" /Gz /wd4748 /wd4603 /wd4627 /wd4986 /wd4987 /wd4996 /FI"C:\Program Files (x86)\Windows Kits\8.1\Include\Shared\warning.h" /analyze- /errorReport:prompt /kernel -cbstring /d1import_no_registry /d2AllowCompatibleILVersions /d2Zi+ access.c cleanup.c close.c create.c device.c directory.c dokan.c event.c fileinfo.c flush.c fscontrol.c init.c lock.c notification.c read.c security.c timeout.c volume.c write.c
+         access.c
+     1>c:\users\dr. devil\documents\visual studio 2013\projects\dokanxsys\dokanxsys\../public.h(237): warning C4201: nonstandard extension used : nameless struct/union
+     1>c:\users\dr. devil\documents\visual studio 2013\projects\dokanxsys\dokanxsys\../public.h(271): warning C4201: nonstandard extension used : nameless struct/union
+         cleanup.c
+     1>c:\users\dr. devil\documents\visual studio 2013\projects\dokanxsys\dokanxsys\../public.h(237): warning C4201: nonstandard extension used : nameless struct/union
+     1>c:\users\dr. devil\documents\visual studio 2013\projects\dokanxsys\dokanxsys\../public.h(271): warning C4201: nonstandard extension used : nameless struct/union
+     1>cleanup.c(144): warning C4189: 'info' : local variable is initialized but not referenced
+         close.c
+     1>c:\users\dr. devil\documents\visual studio 2013\projects\dokanxsys\dokanxsys\../public.h(237): warning C4201: nonstandard extension used : nameless struct/union
+     1>c:\users\dr. devil\documents\visual studio 2013\projects\dokanxsys\dokanxsys\../public.h(271): warning C4201: nonstandard extension used : nameless struct/union
+         create.c
+     1>c:\users\dr. devil\documents\visual studio 2013\projects\dokanxsys\dokanxsys\../public.h(237): warning C4201: nonstandard extension used : nameless struct/union
+     1>c:\users\dr. devil\documents\visual studio 2013\projects\dokanxsys\dokanxsys\../public.h(271): warning C4201: nonstandard extension used : nameless struct/union
+     1>create.c(80): warning C4057: 'function' : 'volatile LONG *' differs in indirection to slightly different base types from 'ULONG *'
+     1>create.c(154): warning C4057: 'function' : 'volatile LONG *' differs in indirection to slightly different base types from 'ULONG *'
+     1>create.c(197): warning C4057: 'function' : 'volatile LONG *' differs in indirection to slightly different base types from 'ULONG *'
+     1>create.c(247): warning C4057: 'function' : 'volatile LONG *' differs in indirection to slightly different base types from 'ULONG *'
+     1>create.c(279): warning C4057: 'function' : 'volatile LONG *' differs in indirection to slightly different base types from 'ULONG *'
+     1>create.c(341): warning C4101: 'processImageName' : unreferenced local variable
+     1>create.c(340): warning C4101: 'process' : unreferenced local variable
+     1>create.c(350): warning C4101: 'accessTokenHandle' : unreferenced local variable
+         device.c
+     1>c:\users\dr. devil\documents\visual studio 2013\projects\dokanxsys\dokanxsys\../public.h(237): warning C4201: nonstandard extension used : nameless struct/union
+     1>c:\users\dr. devil\documents\visual studio 2013\projects\dokanxsys\dokanxsys\../public.h(271): warning C4201: nonstandard extension used : nameless struct/union
+     1>device.c(420): warning C4189: 'dokanGUID' : local variable is initialized but not referenced
+         directory.c
+     1>c:\users\dr. devil\documents\visual studio 2013\projects\dokanxsys\dokanxsys\../public.h(237): warning C4201: nonstandard extension used : nameless struct/union
+     1>c:\users\dr. devil\documents\visual studio 2013\projects\dokanxsys\dokanxsys\../public.h(271): warning C4201: nonstandard extension used : nameless struct/union
+     1>directory.c(44): warning C4101: 'ccb' : unreferenced local variable
+     1>directory.c(112): warning C4101: 'searchPattern' : unreferenced local variable
+     1>directory.c(373): warning C4189: 'orgLen' : local variable is initialized but not referenced
+         dokan.c
+     1>c:\users\dr. devil\documents\visual studio 2013\projects\dokanxsys\dokanxsys\../public.h(237): warning C4201: nonstandard extension used : nameless struct/union
+     1>c:\users\dr. devil\documents\visual studio 2013\projects\dokanxsys\dokanxsys\../public.h(271): warning C4201: nonstandard extension used : nameless struct/union
+     1>dokan.c(54): warning C4100: 'DeviceObject' : unreferenced formal parameter
+     1>dokan.c(53): warning C4100: 'IoStatus' : unreferenced formal parameter
+     1>dokan.c(52): warning C4100: 'CheckForReadOperation' : unreferenced formal parameter
+     1>dokan.c(51): warning C4100: 'LockKey' : unreferenced formal parameter
+     1>dokan.c(50): warning C4100: 'Wait' : unreferenced formal parameter
+     1>dokan.c(49): warning C4100: 'Length' : unreferenced formal parameter
+     1>dokan.c(48): warning C4100: 'FileOffset' : unreferenced formal parameter
+     1>dokan.c(47): warning C4100: 'FileObject' : unreferenced formal parameter
+     1>dokan.c(71): warning C4100: 'DeviceObject' : unreferenced formal parameter
+     1>dokan.c(70): warning C4100: 'IoStatus' : unreferenced formal parameter
+     1>dokan.c(69): warning C4100: 'Buffer' : unreferenced formal parameter
+     1>dokan.c(68): warning C4100: 'LockKey' : unreferenced formal parameter
+     1>dokan.c(67): warning C4100: 'Wait' : unreferenced formal parameter
+     1>dokan.c(66): warning C4100: 'Length' : unreferenced formal parameter
+     1>dokan.c(65): warning C4100: 'FileOffset' : unreferenced formal parameter
+     1>dokan.c(64): warning C4100: 'FileObject' : unreferenced formal parameter
+     1>dokan.c(112): warning C4100: 'CompletionContext' : unreferenced formal parameter
+     1>dokan.c(135): warning C4100: 'RegistryPath' : unreferenced formal parameter
+     1>dokan.c(156): warning C4101: 'deviceObject' : unreferenced local variable
+     1>dokan.c(159): warning C4101: 'functionName' : unreferenced local variable
+     1>dokan.c(303): warning C4100: 'DeviceObject' : unreferenced formal parameter
+     1>dokan.c(323): warning C4100: 'DeviceObject' : unreferenced formal parameter
+         event.c
+     1>c:\users\dr. devil\documents\visual studio 2013\projects\dokanxsys\dokanxsys\../public.h(237): warning C4201: nonstandard extension used : nameless struct/union
+     1>c:\users\dr. devil\documents\visual studio 2013\projects\dokanxsys\dokanxsys\../public.h(271): warning C4201: nonstandard extension used : nameless struct/union
+     1>event.c(25): warning C4100: 'DeviceObject' : unreferenced formal parameter
+     1>event.c(483): warning C4057: 'function' : 'volatile LONG *' differs in indirection to slightly different base types from 'ULONG *'
+     1>event.c(409): warning C4101: 'buffer' : unreferenced local variable
+         fileinfo.c
+     1>c:\users\dr. devil\documents\visual studio 2013\projects\dokanxsys\dokanxsys\../public.h(237): warning C4201: nonstandard extension used : nameless struct/union
+     1>c:\users\dr. devil\documents\visual studio 2013\projects\dokanxsys\dokanxsys\../public.h(271): warning C4201: nonstandard extension used : nameless struct/union
+     1>fileinfo.c(34): warning C4101: 'fileInfo' : unreferenced local variable
+     1>fileinfo.c(32): warning C4101: 'remainingLength' : unreferenced local variable
+     1>fileinfo.c(31): warning C4101: 'buffer' : unreferenced local variable
+     1>fileinfo.c(316): warning C4101: 'fileInfo' : unreferenced local variable
+     1>fileinfo.c(314): warning C4101: 'remainingLength' : unreferenced local variable
+         flush.c
+     1>c:\users\dr. devil\documents\visual studio 2013\projects\dokanxsys\dokanxsys\../public.h(237): warning C4201: nonstandard extension used : nameless struct/union
+     1>c:\users\dr. devil\documents\visual studio 2013\projects\dokanxsys\dokanxsys\../public.h(271): warning C4201: nonstandard extension used : nameless struct/union
+     1>flush.c(32): warning C4101: 'buffer' : unreferenced local variable
+     1>flush.c(125): warning C4101: 'fcb' : unreferenced local variable
+     1>flush.c(123): warning C4189: 'info' : local variable is initialized but not referenced
+         fscontrol.c
+     1>c:\users\dr. devil\documents\visual studio 2013\projects\dokanxsys\dokanxsys\../public.h(237): warning C4201: nonstandard extension used : nameless struct/union
+     1>c:\users\dr. devil\documents\visual studio 2013\projects\dokanxsys\dokanxsys\../public.h(271): warning C4201: nonstandard extension used : nameless struct/union
+     1>fscontrol.c(28): warning C4100: 'DeviceObject' : unreferenced formal parameter
+     1>fscontrol.c(335): warning C4244: '=' : conversion from 'size_t' to 'USHORT', possible loss of data
+         init.c
+     1>c:\users\dr. devil\documents\visual studio 2013\projects\dokanxsys\dokanxsys\../public.h(237): warning C4201: nonstandard extension used : nameless struct/union
+     1>c:\users\dr. devil\documents\visual studio 2013\projects\dokanxsys\dokanxsys\../public.h(271): warning C4201: nonstandard extension used : nameless struct/union
+     1>init.c(562): warning C4244: '=' : conversion from 'size_t' to 'USHORT', possible loss of data
+     1>init.c(402): warning C4101: 'symbolicLinkTarget' : unreferenced local variable
+     1>init.c(633): warning C4101: 'symbolicLinkBuf' : unreferenced local variable
+     1>init.c(632): warning C4101: 'symbolicLinkName' : unreferenced local variable
+         lock.c
+     1>c:\users\dr. devil\documents\visual studio 2013\projects\dokanxsys\dokanxsys\../public.h(237): warning C4201: nonstandard extension used : nameless struct/union
+     1>c:\users\dr. devil\documents\visual studio 2013\projects\dokanxsys\dokanxsys\../public.h(271): warning C4201: nonstandard extension used : nameless struct/union
+         notification.c
+     1>c:\users\dr. devil\documents\visual studio 2013\projects\dokanxsys\dokanxsys\../public.h(237): warning C4201: nonstandard extension used : nameless struct/union
+     1>c:\users\dr. devil\documents\visual studio 2013\projects\dokanxsys\dokanxsys\../public.h(271): warning C4201: nonstandard extension used : nameless struct/union
+     1>notification.c(127): warning C4057: 'function' : 'volatile LONG *' differs in indirection to slightly different base types from 'ULONG *'
+     1>notification.c(253): warning C4101: 'status' : unreferenced local variable
+     1>notification.c(382): warning C4127: conditional expression is constant
+         read.c
+     1>c:\users\dr. devil\documents\visual studio 2013\projects\dokanxsys\dokanxsys\../public.h(237): warning C4201: nonstandard extension used : nameless struct/union
+     1>c:\users\dr. devil\documents\visual studio 2013\projects\dokanxsys\dokanxsys\../public.h(271): warning C4201: nonstandard extension used : nameless struct/union
+     1>read.c(53): warning C4101: 'buffer' : unreferenced local variable
+         security.c
+     1>c:\users\dr. devil\documents\visual studio 2013\projects\dokanxsys\dokanxsys\../public.h(237): warning C4201: nonstandard extension used : nameless struct/union
+     1>c:\users\dr. devil\documents\visual studio 2013\projects\dokanxsys\dokanxsys\../public.h(271): warning C4201: nonstandard extension used : nameless struct/union
+     1>security.c(34): warning C4101: 'dummySecurityDesc' : unreferenced local variable
+     1>security.c(36): warning C4101: 'securityDesc' : unreferenced local variable
+     1>security.c(35): warning C4101: 'descLength' : unreferenced local variable
+     1>security.c(233): warning C4189: 'selfRelativesScurityDescriptor' : local variable is initialized but not referenced
+         timeout.c
+     1>c:\users\dr. devil\documents\visual studio 2013\projects\dokanxsys\dokanxsys\../public.h(237): warning C4201: nonstandard extension used : nameless struct/union
+     1>c:\users\dr. devil\documents\visual studio 2013\projects\dokanxsys\dokanxsys\../public.h(271): warning C4201: nonstandard extension used : nameless struct/union
+     1>timeout.c(87): warning C4101: 'eventContext' : unreferenced local variable
+     1>timeout.c(86): warning C4101: 'eventLength' : unreferenced local variable
+     1>timeout.c(89): warning C4189: 'vcb' : local variable is initialized but not referenced
+     1>timeout.c(247): warning C4101: 'irp' : unreferenced local variable
+     1>timeout.c(248): warning C4101: 'irpSp' : unreferenced local variable
+     1>timeout.c(293): warning C4127: conditional expression is constant
+     1>timeout.c(379): warning C4100: 'Irp' : unreferenced formal parameter
+     1>timeout.c(378): warning C4100: 'DeviceObject' : unreferenced formal parameter
+         volume.c
+     1>c:\users\dr. devil\documents\visual studio 2013\projects\dokanxsys\dokanxsys\../public.h(237): warning C4201: nonstandard extension used : nameless struct/union
+     1>c:\users\dr. devil\documents\visual studio 2013\projects\dokanxsys\dokanxsys\../public.h(271): warning C4201: nonstandard extension used : nameless struct/union
+     1>volume.c(254): warning C4100: 'DeviceObject' : unreferenced formal parameter
+         write.c
+     1>c:\users\dr. devil\documents\visual studio 2013\projects\dokanxsys\dokanxsys\../public.h(237): warning C4201: nonstandard extension used : nameless struct/union
+     1>c:\users\dr. devil\documents\visual studio 2013\projects\dokanxsys\dokanxsys\../public.h(271): warning C4201: nonstandard extension used : nameless struct/union
+     1>write.c(38): warning C4101: 'bufferLength' : unreferenced local variable
+     1>write.c(242): warning C4189: 'readLength' : local variable is initialized but not referenced
+     1>write.c(244): warning C4189: 'buffer' : local variable is initialized but not referenced
+     1>write.c(243): warning C4189: 'bufferLen' : local variable is initialized but not referenced
+         Generating Code...
+     1>c:\users\dr. devil\documents\visual studio 2013\projects\dokanxsys\dokanxsys\fileinfo.c(662): warning C4701: potentially uninitialized local variable 'status' used
+     1>c:\users\dr. devil\documents\visual studio 2013\projects\dokanxsys\dokanxsys\event.c(85): warning C4701: potentially uninitialized local variable 'serialNumber' used
+     1>c:\users\dr. devil\documents\visual studio 2013\projects\dokanxsys\dokanxsys\device.c(515): warning C4701: potentially uninitialized local variable 'controlCode' used
+     1>c:\users\dr. devil\documents\visual studio 2013\projects\dokanxsys\dokanxsys\access.c(123): warning C4701: potentially uninitialized local variable 'oldIrql' used
+       ResourceCompile:
+         C:\Program Files (x86)\Windows Kits\8.1\bin\x86\rc.exe /D _X86_=1 /D i386=1 /D STD_CALL /D DEPRECATE_DDK_FUNCTIONS=1 /D MSC_NOOPT /D _WIN32_WINNT=0x0601 /D WINVER=0x0601 /D WINNT=1 /D NTDDI_VERSION=0x06010000 /D DBG=1 /D "SMP_ID=\\\"{dd38f7fc-d7bd-488b-9242-7d8754cde80d}\\\"" /l"0x0409" /I"C:\Program Files (x86)\Windows Kits\8.1\Include\UM" /IWin7Debug\ /nologo /fo"Win7Debug\dokan.res" dokan.rc 
+       Link:
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\Dr. Devil\Documents\Visual Studio 2013\Projects\DokanXSys\Win7Debug\dokanx.sys" /VERSION:"6.3" /INCREMENTAL:NO /NOLOGO /WX:NO /SECTION:"INIT,d" wdmsec.lib "C:\Program Files (x86)\Windows Kits\8.1\lib\win7\KM\x86\memcmp.lib" "C:\Program Files (x86)\Windows Kits\8.1\lib\win7\KM\x86\BufferOverflowK.lib" "C:\Program Files (x86)\Windows Kits\8.1\lib\win7\KM\x86\ntoskrnl.lib" "C:\Program Files (x86)\Windows Kits\8.1\lib\win7\KM\x86\hal.lib" "C:\Program Files (x86)\Windows Kits\8.1\lib\win7\KM\x86\wmilib.lib" /NODEFAULTLIB /MANIFEST:NO /DEBUG /PDB:"C:\Users\Dr. Devil\Documents\Visual Studio 2013\Projects\DokanXSys\Win7Debug\dokanx.pdb" /SUBSYSTEM:NATIVE,"6.01" /Driver /OPT:REF /OPT:ICF /ENTRY:"GsDriverEntry@8" /RELEASE /IMPLIB:"C:\Users\Dr. Devil\Documents\Visual Studio 2013\Projects\DokanXSys\Win7Debug\dokanx.lib" /MERGE:"_TEXT=.text;_PAGE=PAGE" /MACHINE:X86 /PROFILE /kernel /IGNORE:4198,4010,4037,4039,4065,4070,4078,4087,4089,4221 /osversion:6.3 /pdbcompress /debugtype:pdata Win7Debug\dokan.res
+         Win7Debug\access.obj
+         Win7Debug\cleanup.obj
+         Win7Debug\close.obj
+         Win7Debug\create.obj
+         Win7Debug\device.obj
+         Win7Debug\directory.obj
+         Win7Debug\dokan.obj
+         Win7Debug\event.obj
+         Win7Debug\fileinfo.obj
+         Win7Debug\flush.obj
+         Win7Debug\fscontrol.obj
+         Win7Debug\init.obj
+         Win7Debug\lock.obj
+         Win7Debug\notification.obj
+         Win7Debug\read.obj
+         Win7Debug\security.obj
+         Win7Debug\timeout.obj
+         Win7Debug\volume.obj
+         Win7Debug\write.obj
+         DokanXSys.vcxproj -> C:\Users\Dr. Devil\Documents\Visual Studio 2013\Projects\DokanXSys\Win7Debug\dokanx.sys
+       DriverTestSign:
+         C:\Program Files (x86)\Windows Kits\8.1\bin\x86\signtool.exe sign /ph /sha1 "654417FCC201F5460FB6E2B20C5825BCC0199A49" 
+         Done Adding Additional Store
+         Successfully signed: C:\Users\Dr. Devil\Documents\Visual Studio 2013\Projects\DokanXSys\Win7Debug\dokanx.sys
+         
+     1>Done Building Project "C:\Users\Dr. Devil\Documents\Visual Studio 2013\Projects\DokanXSys\DokanXSys\DokanXSys.vcxproj" (Rebuild target(s)).
+
+Build succeeded.
+
+Time Elapsed 00:00:03.71

@@ -1,0 +1,48 @@
+﻿Build started 8/5/2014 1:13:56 AM.
+     1>Project "D:\Dokan(Github)\dokanx\Common\Common.vcxproj" on node 2 (Rebuild target(s)).
+     1>C:\Program Files (x86)\MSBuild\Microsoft.Cpp\v4.0\V120\Microsoft.CppClean.targets(76,5): warning : The process cannot access the file 'd:\dokan(github)\dokanx\common\debug\ntserviceinfo.obj' because it is being used by another process.
+     1>ClCompile:
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /Zi /nologo /W4 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _LIB /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MTd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt misc.cpp WinNT\Explorer.cpp WinNT\NtServiceCtrl.cpp WinNT\NtServiceInfo.cpp WinNT\NtVolume.cpp WinNT\OsVersion.cpp WinNT\PipeClient.cpp WinNT\Registry.cpp String\StringHelper.cpp String\UnicodeHelper.cpp Log\NdLog.cpp Log\NtLogString.cpp
+         NtLogString.cpp
+         NdLog.cpp
+         Log\NdLog.cpp(94): --------Add synchronization--------
+         UnicodeHelper.cpp
+         StringHelper.cpp
+         Registry.cpp
+         PipeClient.cpp
+         OsVersion.cpp
+     1>WinNT\OsVersion.cpp(48): warning C4996: 'GetVersionExW': was declared deprecated
+                 C:\Program Files (x86)\Windows Kits\8.1\Include\um\sysinfoapi.h(442) : see declaration of 'GetVersionExW'
+     1>WinNT\OsVersion.cpp(64): warning C4996: 'GetVersionExW': was declared deprecated
+                 C:\Program Files (x86)\Windows Kits\8.1\Include\um\sysinfoapi.h(442) : see declaration of 'GetVersionExW'
+     1>WinNT\OsVersion.cpp(93): warning C4996: 'GetVersionExW': was declared deprecated
+                 C:\Program Files (x86)\Windows Kits\8.1\Include\um\sysinfoapi.h(442) : see declaration of 'GetVersionExW'
+     1>WinNT\OsVersion.cpp(112): warning C4996: 'GetVersionExW': was declared deprecated
+                 C:\Program Files (x86)\Windows Kits\8.1\Include\um\sysinfoapi.h(442) : see declaration of 'GetVersionExW'
+     1>WinNT\OsVersion.cpp(126): warning C4996: 'GetVersionExA': was declared deprecated
+                 C:\Program Files (x86)\Windows Kits\8.1\Include\um\sysinfoapi.h(433) : see declaration of 'GetVersionExA'
+         NtVolume.cpp
+         NtServiceInfo.cpp
+         NtServiceCtrl.cpp
+         Explorer.cpp
+         misc.cpp
+         Generating Code...
+       Lib:
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\Lib.exe /OUT:"D:\Dokan(Github)\dokanx\\lib\debug\Common.lib" Shlwapi.lib /NOLOGO Debug\misc.obj
+         Debug\Explorer.obj
+         Debug\NtServiceCtrl.obj
+         Debug\NtServiceInfo.obj
+         Debug\NtVolume.obj
+         Debug\OsVersion.obj
+         Debug\PipeClient.obj
+         Debug\Registry.obj
+         Debug\StringHelper.obj
+         Debug\UnicodeHelper.obj
+         Debug\NdLog.obj
+         Debug\NtLogString.obj
+         Common.vcxproj -> D:\Dokan(Github)\dokanx\\lib\debug\Common.lib
+     1>Done Building Project "D:\Dokan(Github)\dokanx\Common\Common.vcxproj" (Rebuild target(s)).
+
+Build succeeded.
+
+Time Elapsed 00:00:10.18

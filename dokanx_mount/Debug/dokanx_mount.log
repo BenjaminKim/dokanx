@@ -1,0 +1,34 @@
+﻿Build started 8/5/2014 1:14:06 AM.
+     1>Project "D:\Dokan(Github)\dokanx\dokanx_mount\dokanx_mount.vcxproj" on node 3 (Rebuild target(s)).
+     1>ClCompile:
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /Zi /nologo /W4 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _WINDOWS /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MTd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Yc"stdafx.h" /Fp"Debug\dokanx_mount.pch" /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt stdafx.cpp
+         stdafx.cpp
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /Zi /nologo /W4 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _WINDOWS /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MTd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Yu"stdafx.h" /Fp"Debug\dokanx_mount.pch" /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt mount.cpp mounter.cpp
+         mounter.cpp
+     1>mounter.cpp(165): warning C4189: 'index' : local variable is initialized but not referenced
+     1>mounter.cpp(166): warning C4189: 'written' : local variable is initialized but not referenced
+     1>mounter.cpp(248): warning C4100: 'lpContext' : unreferenced formal parameter
+     1>mounter.cpp(246): warning C4100: 'lpEventData' : unreferenced formal parameter
+     1>mounter.cpp(245): warning C4100: 'dwEventType' : unreferenced formal parameter
+     1>mounter.cpp(292): warning C4100: 'lpszArgv' : unreferenced formal parameter
+     1>mounter.cpp(292): warning C4100: 'dwArgc' : unreferenced formal parameter
+     1>mounter.cpp(439): warning C4100: 'nCmdShow' : unreferenced formal parameter
+     1>mounter.cpp(437): warning C4100: 'lpszCmdLine' : unreferenced formal parameter
+     1>mounter.cpp(436): warning C4100: 'hinstPrev' : unreferenced formal parameter
+     1>mounter.cpp(435): warning C4100: 'hinst' : unreferenced formal parameter
+         mount.cpp
+         Generating Code...
+       ResourceCompile:
+         C:\Program Files (x86)\Windows Kits\8.1\bin\x86\rc.exe /D _UNICODE /D UNICODE /l"0x0409" /nologo /fo"Debug\dokanx_mount.res" dokanx_mount.rc 
+       Link:
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"D:\Dokan(Github)\dokanx\Debug\dokanx_mount.exe" /INCREMENTAL /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"D:\Dokan(Github)\dokanx\Debug\dokanx_mount.pdb" /SUBSYSTEM:WINDOWS /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"D:\Dokan(Github)\dokanx\Debug\dokanx_mount.lib" /MACHINE:X86 Debug\dokanx_mount.res
+         Debug\mount.obj
+         Debug\mounter.obj
+         Debug\stdafx.obj
+         "D:\Dokan(Github)\dokanx\lib\debug\Common.lib"
+         dokanx_mount.vcxproj -> D:\Dokan(Github)\dokanx\Debug\dokanx_mount.exe
+     1>Done Building Project "D:\Dokan(Github)\dokanx\dokanx_mount\dokanx_mount.vcxproj" (Rebuild target(s)).
+
+Build succeeded.
+
+Time Elapsed 00:00:01.73
