@@ -1,0 +1,18 @@
+﻿Build started 8/4/2014 11:36:37 PM.
+     1>Project "C:\Users\Dr. Devil\Documents\Visual Studio 2013\Projects\DokanXSys\DokanXSys Package\DokanXSys Package.vcxproj" on node 4 (Rebuild target(s)).
+     1>Inf2Cat:
+         C:\Program Files (x86)\Windows Kits\8.1\bin\x86\inf2cat.exe /os:7_x86 /driver:"C:\Users\Dr. Devil\Documents\Visual Studio 2013\Projects\DokanXSys\Win7Debug\DokanXSys Package\\" 
+         ........................
+         Signability test failed.
+         
+         Errors:
+         22.9.4: Bad file name for catalogfile from [Version] section in \dokanx.inf
+         
+         Warnings:
+         None
+     1>Win7Debug\inf2catOutput.log : Inf2Cat error -2: "Inf2Cat, signability test failed." Double click to see the tool output.
+     1>Done Building Project "C:\Users\Dr. Devil\Documents\Visual Studio 2013\Projects\DokanXSys\DokanXSys Package\DokanXSys Package.vcxproj" (Rebuild target(s)) -- FAILED.
+
+Build FAILED.
+
+Time Elapsed 00:00:00.34

@@ -1,0 +1,2 @@
+#TargetFrameworkVersion=v4.5:PlatformToolSet=WindowsKernelModeDriver8.1:EnableManagedIncrementalBuild=false:VCToolArchitecture=Native32Bit
+Win8.1 Debug|Win32|D:\Dokan(Github)\dokanx\|

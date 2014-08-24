@@ -1,0 +1,24 @@
+﻿Build started 8/5/2014 1:14:09 AM.
+     1>Project "D:\Dokan(Github)\dokanx\mirrorfs\mirrorfs.vcxproj" on node 2 (Rebuild target(s)).
+     1>ClCompile:
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /Zi /nologo /W4 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _CONSOLE /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MTd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Yc"stdafx.h" /Fp"Debug\mirrorfs.pch" /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt stdafx.cpp
+         stdafx.cpp
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /Zi /nologo /W4 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _CONSOLE /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MTd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Yu"stdafx.h" /Fp"Debug\mirrorfs.pch" /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt mirrorfs.cpp
+         mirrorfs.cpp
+     1>mirrorfs.cpp(245): warning C4100: 'DokanFileInfo' : unreferenced formal parameter
+     1>mirrorfs.cpp(630): warning C4189: 'handle' : local variable is initialized but not referenced
+     1>mirrorfs.cpp(647): warning C4101: 'cchFilePath' : unreferenced local variable
+     1>mirrorfs.cpp(644): warning C4189: 'handle' : local variable is initialized but not referenced
+     1>mirrorfs.cpp(823): warning C4100: 'DokanFileInfo' : unreferenced formal parameter
+     1>mirrorfs.cpp(983): warning C4100: 'DokanFileInfo' : unreferenced formal parameter
+       Link:
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"D:\Dokan(Github)\dokanx\Debug\mirrorfs.exe" /INCREMENTAL /NOLOGO /LIBPATH:../debug kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib dokanx.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"D:\Dokan(Github)\dokanx\Debug\mirrorfs.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"D:\Dokan(Github)\dokanx\Debug\mirrorfs.lib" /MACHINE:X86 Debug\mirrorfs.obj
+         Debug\stdafx.obj
+         "D:\Dokan(Github)\dokanx\lib\debug\Common.lib"
+         "D:\Dokan(Github)\dokanx\Debug\dokanx.lib"
+         mirrorfs.vcxproj -> D:\Dokan(Github)\dokanx\Debug\mirrorfs.exe
+     1>Done Building Project "D:\Dokan(Github)\dokanx\mirrorfs\mirrorfs.vcxproj" (Rebuild target(s)).
+
+Build succeeded.
+
+Time Elapsed 00:00:02.00

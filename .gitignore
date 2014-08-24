@@ -1,37 +1,36 @@
-# git ignore file
-*.map
-*.pdb
-*.sys
-*.exe
-*.filters
-*.user
-*.tlog
-*.log
-*.obj
-*.lastbuildstate
-*.idb
-*.dll
-*.lib
-*.exp
-*.ilk
-*.manifest
-*.opensdf
-*.suo
-*.sdf
-*.pch
-dokanx_control/Debug
-dokanx_control/ipch
-dokanx_mount/ipch
-dokanx_mount/Debug
-Common/Debug
-mirrorfs/Debug
-sys/obj*
-sys/prefast*
-dokan_sshfs
-dokan_net
-dokan_install
-dokan_np
-*.unsuccessfulbuild
-*.cache
-ipch\
-*.ipch
+# Windows image file caches
+Thumbs.db
+ehthumbs.db
+
+# Folder config file
+Desktop.ini
+
+# Recycle Bin used on file shares
+$RECYCLE.BIN/
+
+# Windows Installer files
+*.cab
+*.msi
+*.msm
+*.msp
+
+# =========================
+# Operating System Files
+# =========================
+
+# OSX
+# =========================
+
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Icon must ends with two \r.
+Icon
+
+# Thumbnails
+._*
+
+# Files that might appear on external disk
+.Spotlight-V100
+.Trashes

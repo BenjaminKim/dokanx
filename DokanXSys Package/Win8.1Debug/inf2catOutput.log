@@ -1,0 +1,9 @@
+Inf2Cat Tool Output:
+........................
+Signability test failed.
+
+Errors:
+22.9.4: Bad file name for catalogfile from [Version] section in \dokanx.inf
+
+Warnings:
+None
