@@ -9,8 +9,8 @@ If you don't know about dokan, you should read this document. http://dokan-dev.n
 * You should set the Windows environment variables DOKANX_PATH and WIN7BASE before compile driver.
 
 ```bash
-# Note. Do not enclose WIN7BASE environment value in double quotes. ddkbuild can't recognize it, I think.
-DOKANX_PATH=D:\dokanx
+# Note. Do not enclose WIN7BASE environment value in double quotes. I guess ddkbuild can't recognize it.
+DOKANX_PATH=YOURWORKSPACE\dokanx
 WIN7BASE=C:\WinDDK\7600.16385.1
 ```
 
@@ -23,4 +23,4 @@ WDK 8.x are not supported yet. But this doesn't mean dokan can't run on Windows 
 * Your usermode filesystem implementation should return their result code as NTSTATUS(Not the win32 status code).
 This gives your application more control.
 * Use better logger.
-* Applied prefast analyzer(static analyze driver source code)
+* Applied PREfast analyzer(static analyzing driver source code)
