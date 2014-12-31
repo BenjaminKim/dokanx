@@ -14,6 +14,8 @@ DOKANX_PATH=YOURWORKSPACE\dokanx
 WIN7BASE=C:\WinDDK\7600.16385.1
 ```
 
+* Choose build configuration `debug_win7` or `release_win7` regardless your target. The driver binary(.sys) will works on any targets. 
+
 WDK 8.x are not supported yet. But this doesn't mean dokan can't run on Windows 8 or later. 
 
 ## Improved
