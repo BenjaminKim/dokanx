@@ -242,8 +242,9 @@ NTSTATUS MirrorCreateFile(
 
 NTSTATUS MirrorCreateDirectory(
     LPCWSTR					FileName,
-    PDOKAN_FILE_INFO		DokanFileInfo)
+    PDOKAN_FILE_INFO	    DokanFileInfo)
 {
+    UNREFERENCED_PARAMETER(DokanFileInfo);
     logw(L"Start<%s>", FileName);
     std::wstring filePath = GetFilePath(FileName);
 
@@ -355,7 +356,6 @@ void MirrorCleanup(
     }
 }
 
-
 NTSTATUS MirrorReadFile(
     LPCWSTR				FileName,
     LPVOID				Buffer,
@@ -365,9 +365,9 @@ NTSTATUS MirrorReadFile(
     PDOKAN_FILE_INFO	DokanFileInfo)
 {
     HANDLE	handle = (HANDLE)DokanFileInfo->Context;
-    ULONG	offset = (ULONG)Offset;
     BOOL	opened = FALSE;
     std::wstring filePath = GetFilePath(FileName);
+    NTSTATUS status = STATUS_SUCCESS;
 
     logw(L"ReadFile : %s", filePath.c_str());
 
@@ -389,9 +389,12 @@ NTSTATUS MirrorReadFile(
         opened = TRUE;
     }
     
-    if (SetFilePointer(handle, offset, NULL, FILE_BEGIN) == 0xFFFFFFFF) {
+    LARGE_INTEGER distanceToMove;
+    distanceToMove.QuadPart = Offset;
+    if (!SetFilePointerEx(handle, distanceToMove, nullptr, FILE_BEGIN))
+    {
         DWORD dwError = GetLastError();
-        logw(L"seek error, offset = %d", offset);
+        logw(L"seek error, offset = %I64d", Offset);
         if (opened)
             CloseHandle(handle);
         
@@ -399,41 +402,37 @@ NTSTATUS MirrorReadFile(
         return ToNtStatus(dwError);
     }
         
-    if (!ReadFile(handle, Buffer, BufferLength, ReadLength,NULL)) {
+    if (!ReadFile(handle, Buffer, BufferLength, ReadLength, nullptr))
+    {
         DWORD dwError = GetLastError();
-        logw(L"read error = %u, buffer length = %d, read length = %d",
-            dwError, BufferLength, *ReadLength);
-        if (opened)
-            CloseHandle(handle);
-        
-        logw(L"failed(%d)", dwError);
-        return ToNtStatus(dwError);
-
-    } else {
-        logw(L"read %d, offset %d", *ReadLength, offset);
+        logw(L"read error = %u, buffer length = %d, read length = %d", dwError, BufferLength, *ReadLength);
+        status = ToNtStatus(dwError);
+    }
+    else
+    {
+        logw(L"read %d, offset %I64d", *ReadLength, Offset);
     }
 
     if (opened)
         CloseHandle(handle);
 
-    return STATUS_SUCCESS;
+    return status;
 }
-
 
 NTSTATUS MirrorWriteFile(
     LPCWSTR		FileName,
     LPCVOID		Buffer,
     DWORD		NumberOfBytesToWrite,
-    LPDWORD		NumberOfBytesWritten,
+    LPDWORD		pNumberOfBytesWritten,
     LONGLONG			Offset,
     PDOKAN_FILE_INFO	DokanFileInfo)
 {
     HANDLE	handle = (HANDLE)DokanFileInfo->Context;
-    ULONG	offset = (ULONG)Offset;
-    BOOL	opened = FALSE;
+    bool	opened = false;
     std::wstring filePath = GetFilePath(FileName);
-
-    logw(L"WriteFile : %s, offset %I64d, length %d", filePath.c_str(), Offset, NumberOfBytesToWrite);
+    LARGE_INTEGER distanceToMove;
+    distanceToMove.QuadPart = Offset;
+    logw(L"WriteFile : <%s>, offset %I64d, NumberOfBytesToWrite: %d", filePath.c_str(), Offset, NumberOfBytesToWrite);
 
     // reopen the file
     if (!handle || handle == INVALID_HANDLE_VALUE) {
@@ -451,33 +450,36 @@ NTSTATUS MirrorWriteFile(
             logw(L"failed(%d)", dwError);
             return ToNtStatus(dwError);
         }
-        opened = TRUE;
+        opened = true;
     }
 
-    if (DokanFileInfo->WriteToEndOfFile) {
-        if (SetFilePointer(handle, 0, NULL, FILE_END) == INVALID_SET_FILE_POINTER) {
+    if (DokanFileInfo->WriteToEndOfFile)
+    {
+        LARGE_INTEGER z;
+        z.QuadPart = 0;
+        if (!SetFilePointerEx(handle, z, nullptr, FILE_END))
+        {
             DWORD dwError = GetLastError();
-            
-            logw(L"seek error, offset = EOF, error = %d", GetLastError());
-            logw(L"failed(%d)", dwError);
+            logw(L"seek error, offset = EOF, error = %d", dwError);
             return ToNtStatus(dwError);
         }
-    } else if (SetFilePointer(handle, offset, NULL, FILE_BEGIN) == INVALID_SET_FILE_POINTER) {
+    }
+    else if (!SetFilePointerEx(handle, distanceToMove, nullptr, FILE_BEGIN))
+    {
         DWORD dwError = GetLastError();
-        logw(L"seek error, offset = %d, error = %d", offset, GetLastError());
-        logw(L"failed(%d)", dwError);
+        logw(L"seek error, offset = %I64d, error = %d", Offset, dwError);
         return ToNtStatus(dwError);
     }
         
-    if (!WriteFile(handle, Buffer, NumberOfBytesToWrite, NumberOfBytesWritten, NULL)) {
+    if (!WriteFile(handle, Buffer, NumberOfBytesToWrite, pNumberOfBytesWritten, nullptr))
+    {
         DWORD dwError = GetLastError();
-        logw(L"write error = %u, buffer length = %d, write length = %d",
-            GetLastError(), NumberOfBytesToWrite, *NumberOfBytesWritten);
-        logw(L"failed(%d)", dwError);
+        logw(L"write error = %u, buffer length = %d, write length = %d", dwError, NumberOfBytesToWrite, *pNumberOfBytesWritten);
         return ToNtStatus(dwError);
-
-    } else {
-        logw(L"write %d, offset %d", *NumberOfBytesWritten, offset);
+    }
+    else
+    {
+        logw(L"write %d, offset %I64d", *pNumberOfBytesWritten, Offset);
     }
 
     // close the file when it is reopened
@@ -627,7 +629,8 @@ NTSTATUS MirrorDeleteFile(
     LPCWSTR				FileName,
     PDOKAN_FILE_INFO	DokanFileInfo)
 {
-    HANDLE	handle = (HANDLE)DokanFileInfo->Context;
+    UNREFERENCED_PARAMETER(DokanFileInfo);
+    //HANDLE	handle = (HANDLE)DokanFileInfo->Context;
 
     std::wstring filePath = GetFilePath(FileName);
 
@@ -640,12 +643,11 @@ NTSTATUS MirrorDeleteDirectory(
     LPCWSTR				FileName,
     PDOKAN_FILE_INFO	DokanFileInfo)
 {
+    UNREFERENCED_PARAMETER(DokanFileInfo);
     logw(L"Start<%s>", FileName);
-    HANDLE	handle = (HANDLE)DokanFileInfo->Context;
+//    HANDLE	handle = (HANDLE)DokanFileInfo->Context;
     HANDLE	hFind;
     WIN32_FIND_DATAW findData;
-    ULONG	cchFilePath;
-
     std::wstring filePath = GetFilePath(FileName);
 
     logw(L"DeleteDirectory %s", filePath.c_str());
@@ -822,6 +824,8 @@ NTSTATUS MirrorSetFileAttributes(
     DWORD				FileAttributes,
     PDOKAN_FILE_INFO	DokanFileInfo)
 {
+    UNREFERENCED_PARAMETER(DokanFileInfo);
+
     std::wstring filePath = GetFilePath(FileName);
 
     logw(L"SetFileAttributes %s", filePath.c_str());
@@ -965,7 +969,7 @@ NTSTATUS MirrorGetVolumeInformation(
     DWORD		FileSystemNameSize,
     PDOKAN_FILE_INFO	/*DokanFileInfo*/)
 {
-    wcscpy_s(VolumeNameBuffer, VolumeNameSize / sizeof(WCHAR), L"DOKAN");
+    wcscpy_s(VolumeNameBuffer, VolumeNameSize / sizeof(WCHAR), L"DOKANX");
     *VolumeSerialNumber = 0x19831116;
     *MaximumComponentLength = 256;
     *FileSystemFlags = FILE_CASE_SENSITIVE_SEARCH | 
@@ -979,9 +983,9 @@ NTSTATUS MirrorGetVolumeInformation(
     return STATUS_SUCCESS;
 }
 
-NTSTATUS MirrorUnmount(
-    PDOKAN_FILE_INFO	DokanFileInfo)
+NTSTATUS MirrorUnmount(PDOKAN_FILE_INFO	DokanFileInfo)
 {
+    UNREFERENCED_PARAMETER(DokanFileInfo);
     logw(L"Unmount");
     return STATUS_SUCCESS;
 }
