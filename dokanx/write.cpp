@@ -85,7 +85,7 @@ DispatchWrite(
 
     CheckFileName(EventContext->Write.FileName);
 
-    logw(L"###WriteFile %04d\n", openInfo != NULL ? openInfo->EventId : -1);
+    logw(L"###WriteFile %04d", openInfo != NULL ? openInfo->EventId : -1);
 
     if (DokanInstance->DokanOperations->WriteFile) {
         status = DokanInstance->DokanOperations->WriteFile(

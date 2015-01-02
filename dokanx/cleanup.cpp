@@ -41,7 +41,7 @@ DispatchCleanup(
 	
 	eventInfo->Status = STATUS_SUCCESS; // return success at any case
 
-	logw(L"###Cleanup %04d\n", openInfo != NULL ? openInfo->EventId : -1);
+	logw(L"###Cleanup %04d", openInfo != NULL ? openInfo->EventId : -1);
 
 	if (DokanInstance->DokanOperations->Cleanup) {
 		// ignore return value

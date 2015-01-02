@@ -270,7 +270,7 @@ DispatchQueryInformation(
     
     eventInfo->BufferLength = EventContext->File.BufferLength;
 
-    logw(L"###GetFileInfo %04d\n", openInfo != NULL ? openInfo->EventId : -1);
+    logw(L"###GetFileInfo %04d", openInfo != NULL ? openInfo->EventId : -1);
 
     if (DokanInstance->DokanOperations->GetFileInformation) {
         result = DokanInstance->DokanOperations->GetFileInformation(

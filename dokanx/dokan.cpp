@@ -393,7 +393,7 @@ SendEventInformation(
     BOOL	status;
     ULONG	returnedLength;
 
-    //DbgPrint("###EventInfo->Context %X\n", EventInfo->Context);
+    //DbgPrint("###EventInfo->Context %X", EventInfo->Context);
     if (DokanInstance != NULL) {
         ReleaseDokanOpenInfo(EventInfo, DokanInstance);
     }

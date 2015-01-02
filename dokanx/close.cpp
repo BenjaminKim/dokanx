@@ -43,7 +43,7 @@ DispatchClose(
 
 	eventInfo->Status = STATUS_SUCCESS; // return success at any case
 
-	logw(L"###Close %04d\n", openInfo != NULL ? openInfo->EventId : -1);
+	logw(L"###Close %04d", openInfo != NULL ? openInfo->EventId : -1);
 
 	if (DokanInstance->DokanOperations->CloseFile) {
 		// ignore return value

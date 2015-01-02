@@ -28,7 +28,7 @@ DokanDispatchWrite(
 {
 	PIO_STACK_LOCATION	irpSp;
 	PFILE_OBJECT		fileObject;
-	NTSTATUS			status =STATUS_INVALID_PARAMETER;
+	NTSTATUS			status = STATUS_INVALID_PARAMETER;
 	PEVENT_CONTEXT		eventContext;
 	ULONG				eventLength;
 	PDokanCCB			ccb;

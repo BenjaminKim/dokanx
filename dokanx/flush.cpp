@@ -40,7 +40,7 @@ DispatchFlush(
 	eventInfo = DispatchCommon(
 		EventContext, sizeOfEventInfo, DokanInstance, &fileInfo, &openInfo);
 
-	logw(L"###Flush %04d\n", openInfo != NULL ? openInfo->EventId : -1);
+	logw(L"###Flush %04d", openInfo != NULL ? openInfo->EventId : -1);
 
 	eventInfo->Status = STATUS_SUCCESS;
 

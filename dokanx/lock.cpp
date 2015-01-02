@@ -40,7 +40,7 @@ DispatchLock(
 	eventInfo = DispatchCommon(
 		EventContext, sizeOfEventInfo, DokanInstance, &fileInfo, &openInfo);
 
-	logw(L"###Lock %04d\n", openInfo != NULL ? openInfo->EventId : -1);
+	logw(L"###Lock %04d", openInfo != NULL ? openInfo->EventId : -1);
 
 	eventInfo->Status = STATUS_NOT_IMPLEMENTED;
 

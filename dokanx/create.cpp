@@ -90,7 +90,7 @@ DispatchCreate(
     }
 
     logw(L"###Create %04d", eventId);
-    //DbgPrint("### OpenInfo %X\n", openInfo);
+    //DbgPrint("### OpenInfo %X", openInfo);
     openInfo->EventId = eventId++;
 
     // make a directory or open

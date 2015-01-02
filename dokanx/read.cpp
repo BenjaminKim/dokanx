@@ -43,7 +43,7 @@ DispatchRead(
     eventInfo = DispatchCommon(
         EventContext, sizeOfEventInfo, DokanInstance, &fileInfo, &openInfo);
 
-    logw(L"###Read %04d\n", openInfo != NULL ? openInfo->EventId : -1);
+    logw(L"###Read %04d", openInfo != NULL ? openInfo->EventId : -1);
 
     if (DokanInstance->DokanOperations->ReadFile) {
         status = DokanInstance->DokanOperations->ReadFile(
