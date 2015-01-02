@@ -36,15 +36,25 @@ WIN7BASE=C:\WinDDK\7600.16385.1
 WDK 8.x are not supported yet. But this doesn't mean dokan can't run on Windows 8 or later. 
 
 ## How to mount mirrorfs?
-Before mounting a filesystem, you need to *register* and *start* the filesystem driver.  
-This can be done with [CreateService](http://msdn.microsoft.com/en-us/library/windows/desktop/ms682450(v=vs.85).aspx) and [StartService](http://msdn.microsoft.com/en-us/library/windows/desktop/ms686321(v=vs.85).aspx) function. You could write your own code for registering/starting driver if you want -maybe when your product is ready to deploy for end-user. At that time, [this simple wrapper](https://github.com/BenjaminKim/dokanx/blob/master/Common/WinNT/NtServiceCtrl.cpp) could be helpful to you.  
-But just for testing, you don't need to know the much things like that. [There is a tool for them.](http://www.osronline.com/article.cfm?article=157)
-You can easily *registering* and *starting* dokanx driver by osrloader.
+### Registering and Starting DokanX filesystem driver.
+Before mounting a volume to filesystem, you need to *register* and *start* the filesystem driver.  
+This can be done with [CreateService](http://msdn.microsoft.com/en-us/library/windows/desktop/ms682450(v=vs.85).aspx) and [StartService](http://msdn.microsoft.com/en-us/library/windows/desktop/ms686321(v=vs.85).aspx) function. You could write your own code for registering/starting driver if you want. -maybe when your product is ready to deploy for end-user. At that time, [this simple wrapper](https://github.com/BenjaminKim/dokanx/blob/master/Common/WinNT/NtServiceCtrl.cpp) could be helpful to you.  
+
+But just for testing, you don't need to know the much things like that. There is a tool for you.
+You can easily *registering* and *starting* dokanx driver by [osrloader](http://www.osronline.com/article.cfm?article=157).
 * Move `dokanx_win7.sys` to `%SystemRoot%\System32\drivers\dokanx.sys`
 * Set this path to osrloader's `Driver Path` and write `dokanx` to `Display Name`
 * Click `Register Service` and `Start Service`
 
 If there was no problem, you are ready to mount a volume.  
 Note that `Stop Service` function doesn't work. This maybe `dokanx.sys`'s problem. It is very hard to write stopping device-driver code in Windows world. You need to reboot to stop the driver.
+
+### Mounting a volume.
+```
+> dokanx_control.exe /i s
+> mirrorfs.exe /l m /r c:\your_actual_folder
+```
+
+You can see M:\ drive has beed mounted on Windows Explorer.
 
 ## How to test your own filesystem?
