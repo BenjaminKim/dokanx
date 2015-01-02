@@ -58,3 +58,6 @@ Note that `Stop Service` function doesn't work. This maybe `dokanx.sys`'s proble
 You can see M:\ drive has beed mounted on Windows Explorer.
 
 ## How to test your own filesystem?
+1. Use [FileTest](https://github.com/ladislav-zezula/FileTest). This is the best tool to check a single filesystem operation.
+2. Use [FileSystemTest](https://github.com/BenjaminKim/FileSystemTest). I made hundred of test cases for filesystem operations. If you run this program on *your file system volume* **and** *NTFS volume*, you can get input-output results for both file system and you can find what is wrong with your file system from diff those files. 
+3. Use [ProcessMonitor](http://technet.microsoft.com/en-us/sysinternals/bb896645.aspx). If you face to new problem, using  ProcessMonitor is your best bet. 
