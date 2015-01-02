@@ -22,7 +22,6 @@ with this program. If not, see <http://www.gnu.org/licenses/>.
 #include "../dokani.h"
 #include "fileinfo.h"
 
-
 int DOKAN_CALLBACK DokanGetDiskFreeSpace(
     PULONGLONG			FreeBytesAvailable,
     PULONGLONG			TotalNumberOfBytes,
@@ -30,13 +29,11 @@ int DOKAN_CALLBACK DokanGetDiskFreeSpace(
     PDOKAN_FILE_INFO	DokanFileInfo)
 {
     UNREFERENCED_PARAMETER(DokanFileInfo);
-    *FreeBytesAvailable = 512 * 1024 * 1024;
-    *TotalNumberOfBytes = 1024 * 1024 * 1024;
-    *TotalNumberOfFreeBytes = 512 * 1024 * 1024;
+    *TotalNumberOfBytes = 10LL * 1024 * 1024 * 1024;
+    *TotalNumberOfFreeBytes = *FreeBytesAvailable = *TotalNumberOfBytes / 2;
     
     return 0;
 }
-
 
 int DOKAN_CALLBACK DokanGetVolumeInformation(
     LPWSTR		VolumeNameBuffer,
@@ -81,7 +78,6 @@ DokanFsVolumeInformation(
 
     PFILE_FS_VOLUME_INFORMATION volumeInfo = 
         (PFILE_FS_VOLUME_INFORMATION)EventInfo->Buffer;
-
     
     if (!DokanOperations->GetVolumeInformation) {
         //return STATUS_NOT_IMPLEMENTED;
@@ -93,7 +89,6 @@ DokanFsVolumeInformation(
     if (remainingLength < sizeof(FILE_FS_VOLUME_INFORMATION)) {
         return STATUS_BUFFER_OVERFLOW;
     }
-
 
     RtlZeroMemory(volumeName, sizeof(volumeName));
     RtlZeroMemory(fsName, sizeof(fsName));
@@ -134,7 +129,6 @@ DokanFsVolumeInformation(
     return STATUS_SUCCESS;
 }
 
-
 NTSTATUS
 DokanFsSizeInformation(
     PEVENT_INFORMATION	EventInfo,
@@ -150,7 +144,6 @@ DokanFsSizeInformation(
 
     PFILE_FS_SIZE_INFORMATION sizeInfo = (PFILE_FS_SIZE_INFORMATION)EventInfo->Buffer;
 
-    
     if (!DokanOperations->GetDiskFreeSpace) {
         //return STATUS_NOT_IMPLEMENTED;
         DokanOperations->GetDiskFreeSpace = DokanGetDiskFreeSpace;
@@ -213,7 +206,6 @@ DokanFsAttributeInformation(
         return STATUS_BUFFER_OVERFLOW;
     }
 
-
     RtlZeroMemory(volumeName, sizeof(volumeName));
     RtlZeroMemory(fsName, sizeof(fsName));
 
@@ -231,7 +223,6 @@ DokanFsAttributeInformation(
     {
         return status;
     }
-
 
     attrInfo->FileSystemAttributes = fsFlags;
     attrInfo->MaximumComponentNameLength = maxComLength;
@@ -251,7 +242,6 @@ DokanFsAttributeInformation(
     
     return STATUS_SUCCESS;
 }
-
 
 NTSTATUS
 DokanFsFullSizeInformation(
@@ -300,7 +290,6 @@ DokanFsFullSizeInformation(
     return STATUS_SUCCESS;
 }
 
-
 VOID
 DispatchQueryVolumeInformation(
     HANDLE				Handle,
@@ -330,7 +319,7 @@ DispatchQueryVolumeInformation(
     eventInfo->Status = STATUS_NOT_IMPLEMENTED;
     eventInfo->BufferLength = 0;
 
-    logw(L"###QueryVolumeInfo %04d\n", openInfo ? openInfo->EventId : -1);
+    logw(L"###QueryVolumeInfo %04d", openInfo ? openInfo->EventId : -1);
 
     switch (EventContext->Volume.FsInformationClass) {
     case FileFsVolumeInformation:
