@@ -1,9 +1,4 @@
-#include "NdLog.h" // NS
-
-#pragma warning(push)
-#pragma warning(disable:4995)
-#include <atlbase.h>
-#pragma warning(pop)
+#include "NdLog.h"
 
 #include "../misc.h"
 #include "../HelperMacros.h"
