@@ -60,3 +60,8 @@ You should see that the M:\ drive has been mounted in Windows Explorer.
 1. Use [FileTest](https://github.com/ladislav-zezula/FileTest). This is the best tool to check a single filesystem operation.
 2. Use [FileSystemTest](https://github.com/BenjaminKim/FileSystemTest). I made hundreds of test cases for filesystem operations. If you run this program on *your file system volume* **and** an *NTFS volume*, you can get input-output results for both file systems and you can find what is wrong with your file system by diffing these files. 
 3. Use [ProcessMonitor](http://technet.microsoft.com/en-us/sysinternals/bb896645.aspx). If you are facing a new problem, ProcessMonitor is a great first tool to use. 
+
+## Contribution
+### How do I report an issue?
+You can ask about the problem you met. But don't ask it to me personally. Please make it as a github issue.  
+If you are not sure about the problem which you report, please run `Process Monitor` and `DebugView` and capture the logs. And gist or attatch the logs when you make new issue.
