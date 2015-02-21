@@ -555,9 +555,9 @@ Return Value:
 
 VOID
 DokanCompleteCreate(
-     __in PIRP_ENTRY			IrpEntry,
-     __in PEVENT_INFORMATION	EventInfo
-     )
+    __in PIRP_ENTRY			IrpEntry,
+    __in PEVENT_INFORMATION	EventInfo
+    )
 {
     PIRP				irp;
     PIO_STACK_LOCATION	irpSp;
@@ -583,10 +583,12 @@ DokanCompleteCreate(
     //DDbgPrint("   set Context %X\n", (ULONG)ccb->UserContext);
 
     status = EventInfo->Status;
-
     info = EventInfo->Create.Information;
 
     switch (info) {
+    case FILE_SUPERSEDED:
+        DDbgPrint("  FILE_SUPERSEDED");
+        break;
     case FILE_OPENED:
         DDbgPrint("  FILE_OPENED");
         break;
@@ -596,11 +598,11 @@ DokanCompleteCreate(
     case FILE_OVERWRITTEN:
         DDbgPrint("  FILE_OVERWRITTEN");
         break;
-    case FILE_DOES_NOT_EXIST:
-        DDbgPrint("  FILE_DOES_NOT_EXIST");
-        break;
     case FILE_EXISTS:
         DDbgPrint("  FILE_EXISTS");
+        break;
+    case FILE_DOES_NOT_EXIST:
+        DDbgPrint("  FILE_DOES_NOT_EXIST");
         break;
     default:
         DDbgPrint("  info = %d\n", info);
@@ -651,4 +653,3 @@ DokanCompleteCreate(
     DokanPrintNTStatus(status);
     DDbgPrint("<== DokanCompleteCreate");
 }
-
