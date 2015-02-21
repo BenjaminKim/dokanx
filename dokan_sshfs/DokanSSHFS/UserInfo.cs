@@ -15,8 +15,6 @@ namespace DokanSSHFS
             passphrase_ = passphrase;
         }
 
-        #region UserInfo ÉÅÉìÉo
-
         public string getPassphrase()
         {
             return passphrase_;
@@ -29,19 +27,19 @@ namespace DokanSSHFS
 
         public bool promptPassphrase(string message)
         {
-            System.Diagnostics.Debug.WriteLine(message);
+            Logger.WriteLine(message);
             return false;
         }
 
         public bool promptPassword(string message)
         {
-            System.Diagnostics.Debug.WriteLine(message);
+            Logger.WriteLine(message);
             return false;
         }
 
         public bool promptYesNo(string message)
         {
-            System.Diagnostics.Debug.WriteLine(message);
+            Logger.WriteLine(message);
             return true;
         }
 
@@ -50,15 +48,9 @@ namespace DokanSSHFS
             System.Windows.Forms.MessageBox.Show(message);
         }
 
-        #endregion
-
-        #region UIKeyboardInteractive ÉÅÉìÉo
-
         public string[] promptKeyboardInteractive(string destination, string name, string instruction, string[] prompt, bool[] echo)
         {
             return new string[] { password_ };
         }
-
-        #endregion
     }
 }

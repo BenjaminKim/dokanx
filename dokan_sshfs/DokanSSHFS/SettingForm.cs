@@ -182,17 +182,17 @@ namespace DokanSSHFS
         {
             if (opt != null && sshfs != null)
             {
-                Debug.WriteLine(string.Format("SSHFS Trying unmount : {0}", opt.MountPoint));
+                Logger.WriteLine(string.Format("SSHFS Trying unmount : {0}", opt.MountPoint));
 
                 if (DokanNet.DokanRemoveMountPoint(opt.MountPoint) < 0)
                 {
-                    Debug.WriteLine("DokanReveMountPoint failed\n");
+                    Logger.WriteLine("DokanReveMountPoint failed\n");
                     // If DokanUmount failed, call sshfs.Unmount to disconnect.
                     ;// sshfs.Unmount(null);
                 }
                 else
                 {
-                    Debug.WriteLine("DokanReveMountPoint success\n");
+                    Logger.WriteLine("DokanReveMountPoint success\n");
                 }
                 // This should be called from Dokan, but not called.
                 // Call here explicitly.
@@ -242,7 +242,7 @@ namespace DokanSSHFS
                     MessageBox.Show(msg, "Error");
                     Application.Exit();
                 }
-                Debug.WriteLine("DokanNet.Main end");
+                Logger.WriteLine("DokanNet.Main end");
             }
         }
 
@@ -253,21 +253,21 @@ namespace DokanSSHFS
 
             if (!isUnmounted_)
             {
-                Debug.WriteLine("unmount is visible");
+                Logger.WriteLine("unmount is visible");
                 unmount.Visible = false;
                 Unmount();
                 isUnmounted_ = true;
             }
 
-            Debug.WriteLine("SSHFS Thread Waitting");
+            Logger.WriteLine("SSHFS Thread Waitting");
 
             if (dokan != null && dokan.IsAlive)
             {
-                Debug.WriteLine("doka.Join");
+                Logger.WriteLine("doka.Join");
                 dokan.Join();
             }
             
-            Debug.WriteLine("SSHFS Thread End");
+            Logger.WriteLine("SSHFS Thread End");
 
             Application.Exit();
         }
@@ -275,7 +275,7 @@ namespace DokanSSHFS
         
         private void unmount_Click(object sender, EventArgs e)
         {
-            Debug.WriteLine("unmount_Click");          
+            Logger.WriteLine("unmount_Click");          
             this.Unmount();
             isUnmounted_ = true;
         }
@@ -311,8 +311,6 @@ namespace DokanSSHFS
             SettingLoad();
             SettingLoad(selectedIndex);
         }
-
-
 
         private void settingNames_SelectedIndexChanged(object sender, EventArgs e)
         {
