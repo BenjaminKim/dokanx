@@ -23,6 +23,8 @@ dokanx_control/Debug
 dokanx_control/ipch
 dokanx_mount/ipch
 dokanx_mount/Debug
+ProcMonDebugOutput/Release*/
+ProcMonDebugOutput/Debug*/
 Common/Debug
 mirrorfs/Debug
 sys/obj*

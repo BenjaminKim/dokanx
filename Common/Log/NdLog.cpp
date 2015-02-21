@@ -4,9 +4,10 @@
 #include "../HelperMacros.h"
 #include "../String/UnicodeHelper.h"
 #include "../WinNT/Registry.h"
+#include "../../ProcMonDebugOutput/ProcMonDebugOutput.h"
 
 #ifdef _DEBUG
-enum LOG_OUTPUT_FLAG g_OutputLogFlag = LOF_DEBUG_VIEW;
+enum LOG_OUTPUT_FLAG g_OutputLogFlag = LOF_PROCESS_MONITOR;
 #else
 enum LOG_OUTPUT_FLAG g_OutputLogFlag = LOF_NULL;
 #endif
@@ -31,7 +32,7 @@ VOID NdLogVar(LOG_OUTPUT_FLAG outputLogFlag, __in __format_string LPCWSTR fmt, .
 
 	if (outputLogFlag & LOF_PROCESS_MONITOR)
 	{
-		// ProcMonDebugOutput(szMsg);
+		ProcMonDebugOutput(szMsg);
 	}
 
 	if (outputLogFlag & LOF_FILE)

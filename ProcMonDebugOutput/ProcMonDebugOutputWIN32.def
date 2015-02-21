@@ -1,0 +1,5 @@
+LIBRARY	"ProcMonDebugOutputWin32"
+
+EXPORTS
+
+    ProcMonDebugOutput
