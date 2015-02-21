@@ -1,0 +1,74 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Sysinternals.Debug</name>
+    </assembly>
+    <members>
+        <member name="T:Sysinternals.Debug.NativeMethods">
+            <summary>
+            A class to wrap all the native code needed by this assembly.
+            </summary>
+        </member>
+        <member name="F:Sysinternals.Debug.NativeMethods.hProcMon">
+            <summary>
+            The handle to the Process Monitor log device.
+            </summary>
+        </member>
+        <member name="M:Sysinternals.Debug.NativeMethods.CTL_CODE(System.UInt32,System.UInt32,System.UInt32,System.UInt32)">
+            <summary>
+            Builds the control code for the Process Monitor driver access.
+            </summary>
+            <seealso href="http://msdn.microsoft.com/en-us/library/windows/hardware/ff543023(v=vs.85).aspx"/>
+        </member>
+        <member name="M:Sysinternals.Debug.NativeMethods.CreateFile(System.String,System.UInt32,System.UInt32,System.IntPtr,System.UInt32,System.UInt32,System.IntPtr)">
+            <summary>
+            Handles calling CreateFile.
+            </summary>
+            <remarks>
+            This is only used for opening the Process Monitor log handle, hence the default parameters.
+            </remarks>
+            <seealso href="http://msdn.microsoft.com/en-us/library/windows/desktop/aa363858(v=vs.85).aspx"/>
+        </member>
+        <member name="M:Sysinternals.Debug.NativeMethods.ProcMonDebugOutput(System.String,System.Object[])">
+            <summary>
+            Does the actual tracing to Process Monitor.
+            </summary>
+            <param name="message">
+            The message to display.
+            </param>
+            <param name="args">
+            The formatting arguments for the message
+            </param>
+            <returns>
+            True if the trace succeeded, false otherwise.
+            </returns>
+        </member>
+        <member name="P:Sysinternals.Debug.NativeMethods.IOCTL_EXTERNAL_LOG_DEBUGOUT">
+            <summary>
+            Gets the IO Control code for the ProcMon log.
+            </summary>
+        </member>
+        <member name="T:Sysinternals.Debug.ProcessMonitorTraceListener">
+            <summary>
+            Implements a <see cref="T:System.Diagnostics.TraceListener"/> that redirects output to 
+            Sysinternal's Process Monitor program.
+            </summary>
+        </member>
+        <member name="M:Sysinternals.Debug.ProcessMonitorTraceListener.Write(System.String)">
+            <summary>
+            Writes a trace message to Process Monitor.
+            </summary>
+            <param name="message">
+            A message to write.
+            </param>
+        </member>
+        <member name="M:Sysinternals.Debug.ProcessMonitorTraceListener.WriteLine(System.String)">
+            <summary>
+            Writes a trace message to Process Monitor.
+            </summary>
+            <param name="message">
+            A message to write.
+            </param>
+        </member>
+    </members>
+</doc>

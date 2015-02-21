@@ -1,0 +1,15 @@
+C:\Users\benjamin\workspace\ProcMonDebugOutput\Source\Debugx64\Sysinternals.Debug.XML
+C:\Users\benjamin\workspace\ProcMonDebugOutput\Source\Debugx64\Sysinternals.Debug.dll
+C:\Users\benjamin\workspace\ProcMonDebugOutput\Source\Debugx64\Sysinternals.Debug.pdb
+C:\Users\benjamin\workspace\ProcMonDebugOutput\Source\Debugx64\Sysinternals.Debug.dll.CodeAnalysisLog.xml
+C:\Users\benjamin\workspace\ProcMonDebugOutput\Source\Debugx64\Sysinternals.Debug.dll.lastcodeanalysissucceeded
+C:\Users\benjamin\workspace\ProcMonDebugOutput\Source\Sysinternals.Debug\obj\Debug\Sysinternals.Debug.csprojResolveAssemblyReference.cache
+C:\Users\benjamin\workspace\ProcMonDebugOutput\Source\Sysinternals.Debug\obj\Debug\Sysinternals.Debug.dll
+C:\Users\benjamin\workspace\ProcMonDebugOutput\Source\Sysinternals.Debug\obj\Debug\Sysinternals.Debug.pdb
+C:\Users\benjamin\workspace\dokanx\Debugx64\Sysinternals.Debug.XML
+C:\Users\benjamin\workspace\dokanx\Debugx64\Sysinternals.Debug.dll
+C:\Users\benjamin\workspace\dokanx\Debugx64\Sysinternals.Debug.pdb
+C:\Users\benjamin\workspace\dokanx\Debugx64\Sysinternals.Debug.dll.CodeAnalysisLog.xml
+C:\Users\benjamin\workspace\dokanx\Debugx64\Sysinternals.Debug.dll.lastcodeanalysissucceeded
+C:\Users\benjamin\workspace\dokanx\Sysinternals.Debug\obj\Debug\Sysinternals.Debug.dll
+C:\Users\benjamin\workspace\dokanx\Sysinternals.Debug\obj\Debug\Sysinternals.Debug.pdb
