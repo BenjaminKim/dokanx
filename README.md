@@ -46,7 +46,7 @@ You can easily *register* and *start* the Dokanx driver with the [osrloader](htt
 * Click `Register Service` and `Start Service`.
 
 If there was no problem, you are ready to mount a volume.  
-Note that the `Stop Service` function doesn't work. This may be `dokanx.sys`'s problem. (It is very hard to write device driver stopping code in Windows.) You need to reboot to stop the driver.
+Note that if you once do `Stop Service` then you can't restart service until you reboot. This may be `dokanx.sys`'s problem. (It is very hard to write device driver stopping code in Windows. I haven't found what is the problem in dokanx.sys code yet.)
 
 ### Mounting a Volume
 ```
