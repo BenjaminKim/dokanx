@@ -35,21 +35,29 @@ DokanOpenRequestorToken(PDOKAN_FILE_INFO FileInfo)
 	ULONG				eventInfoSize;
 	
 	openInfo = (PDOKAN_OPEN_INFO)(INT_PTR)FileInfo->DokanContext;
-	if (openInfo == NULL) {
+	if (openInfo == NULL)
+    {
+        logw(L"OpenInfo is null");
 		return INVALID_HANDLE_VALUE;
 	}
 
 	eventContext = openInfo->EventContext;
-	if (eventContext == NULL) {
+	if (eventContext == NULL)
+    {
+        logw(L"EventContext is null");
 		return INVALID_HANDLE_VALUE;
 	}
 
 	instance = openInfo->DokanInstance;
-	if (instance == NULL) {
+	if (instance == NULL)
+    {
+        logw(L"Dokan Instance is null");
 		return INVALID_HANDLE_VALUE;
 	}
 
-	if (eventContext->MajorFunction != IRP_MJ_CREATE) {
+	if (eventContext->MajorFunction != IRP_MJ_CREATE)
+    {
+        logw(L"MajorFunction isn't IRP_MJ_CREATE")
 		return INVALID_HANDLE_VALUE;
 	}
 
@@ -59,17 +67,27 @@ DokanOpenRequestorToken(PDOKAN_FILE_INFO FileInfo)
 
 	eventInfo->SerialNumber = eventContext->SerialNumber;
 
+    WCHAR rawDeviceName[MAX_PATH];
+    if (GetRawDeviceName(instance->DeviceName, rawDeviceName, _countof(rawDeviceName)))
+    {
+        logw(L"Failed to get raw device name from <%s>", instance->DeviceName);
+        return INVALID_HANDLE_VALUE;
+    }
+
 	status = SendToDevice(
-				GetRawDeviceName(instance->DeviceName),
-				IOCTL_GET_ACCESS_TOKEN,
-				eventInfo,
-				eventInfoSize,
-				eventInfo,
-				eventInfoSize,
-				&returnedLength);
-	if (status) {
+        rawDeviceName,
+        IOCTL_GET_ACCESS_TOKEN,
+        eventInfo,
+        eventInfoSize,
+        eventInfo,
+        eventInfoSize,
+        &returnedLength);
+	if (status)
+    {
 		handle = eventInfo->AccessToken.Handle;
-	} else {
+	}
+    else
+    {
 		logw(L"IOCTL_GET_ACCESS_TOKEN failed");
 	}
 	free(eventInfo);

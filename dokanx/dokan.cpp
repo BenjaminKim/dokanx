@@ -20,6 +20,7 @@ with this program. If not, see <http://www.gnu.org/licenses/>.
 #include "stdafx.h"
 #include <windows.h>
 #include <winioctl.h>
+#include <string>
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
@@ -245,143 +246,149 @@ DokanMain(PDOKAN_OPTIONS DokanOptions, PDOKAN_OPERATIONS DokanOperations)
 
     Sleep(1000);
     
-    logw(L"\nunload");
+    logw(L"unload");
 
     DeleteDokanInstance(instance);
 
     return DOKAN_SUCCESS;
 }
 
-LPCWSTR
-GetRawDeviceName(LPCWSTR	DeviceName)
+BOOL GetRawDeviceName(LPCWSTR pDeviceName, LPWSTR pRawDeviceNameBuffer, size_t cchBuffer)
 {
-    static WCHAR rawDeviceName[MAX_PATH];
-    wcscpy_s(rawDeviceName, MAX_PATH, L"\\\\.");
-    wcscat_s(rawDeviceName, MAX_PATH, DeviceName);
-    return rawDeviceName;
+    std::wstring raw = std::wstring(L"\\\\.") + std::wstring(pDeviceName);
+    HRESULT hr = StringCchCopyW(pRawDeviceNameBuffer, cchBuffer, raw.c_str());
+    return SUCCEEDED(hr);
 }
 
-UINT WINAPI
-DokanLoop(
-   PVOID pDokanInstance
-    )
+UINT WINAPI DokanLoop(PVOID pInstance)
 {
-    PDOKAN_INSTANCE DokanInstance = (PDOKAN_INSTANCE)pDokanInstance;
-    HANDLE	device;
-    char	buffer[EVENT_CONTEXT_MAX_SIZE];
-//	ULONG	count = 0;
-    BOOL	status;
-    ULONG	returnedLength;
-    DWORD	result = 0;
+    logw(L"Start");
+    PDOKAN_INSTANCE pDokanInstance = (PDOKAN_INSTANCE)pInstance;
+    CHAR buffer[EVENT_CONTEXT_MAX_SIZE] = { 0 };
+    ULONG returnedLength;
+    DWORD result = ERROR_SUCCESS;
+    WCHAR szRawDeviceName[MAX_PATH];
 
-    RtlZeroMemory(buffer, sizeof(buffer));
-
-    device = CreateFile(
-                GetRawDeviceName(DokanInstance->DeviceName), // lpFileName
-                GENERIC_READ | GENERIC_WRITE,       // dwDesiredAccess
-                FILE_SHARE_READ | FILE_SHARE_WRITE, // dwShareMode
-                NULL,                               // lpSecurityAttributes
-                OPEN_EXISTING,                      // dwCreationDistribution
-                0,                                  // dwFlagsAndAttributes
-                NULL                                // hTemplateFile
-            );
-
-    if (device == INVALID_HANDLE_VALUE) {
-        logw(L"Dokan Error: CreateFile failed %ws: %d\n",
-            GetRawDeviceName(DokanInstance->DeviceName), GetLastError());
-        result = (DWORD)-1;
+    if (!GetRawDeviceName(pDokanInstance->DeviceName, szRawDeviceName, _countof(szRawDeviceName)))
+    {
+        logw(L"Failed to get raw device name from <%s>", pDokanInstance->DeviceName);
+        result = ERROR_INVALID_PARAMETER;
         _endthreadex(result);
         return result;
     }
 
-    for ( ; ; ) {
+    logw(L"RawDeviceName: <%s>", szRawDeviceName);
 
-        status = DeviceIoControl(
-                    device,				// Handle to device
-                    IOCTL_EVENT_WAIT,	// IO Control code
-                    NULL,				// Input Buffer to driver.
-                    0,					// Length of input buffer in bytes.
-                    buffer,             // Output Buffer from driver.
-                    sizeof(buffer),		// Length of output buffer in bytes.
-                    &returnedLength,	// Bytes placed in buffer.
-                    NULL                // synchronous call
-                    );
+    HANDLE hDevice = CreateFile(
+        szRawDeviceName,
+        GENERIC_READ | GENERIC_WRITE,       // dwDesiredAccess
+        FILE_SHARE_READ | FILE_SHARE_WRITE, // dwShareMode
+        NULL,                               // lpSecurityAttributes
+        OPEN_EXISTING,                      // dwCreationDistribution
+        0,                                  // dwFlagsAndAttributes
+        NULL                                // hTemplateFile
+    );
 
-        if (!status) {
-            logw(L"Ioctl failed with code %d\n", GetLastError());
-            result = (DWORD)-1;
+    if (hDevice == INVALID_HANDLE_VALUE)
+    {
+        DWORD dwLastError = GetLastError();
+        logw(L"Dokan Error: CreateFile failed %s(%d)", szRawDeviceName, dwLastError);
+        result = dwLastError;
+        _endthreadex(result);
+        return result;
+    }
+
+    for ( ; ; )
+    {
+        BOOL fOk = DeviceIoControl(
+            hDevice,			// Handle to device
+            IOCTL_EVENT_WAIT,	// IO Control code
+            NULL,				// Input Buffer to driver.
+            0,					// Length of input buffer in bytes.
+            buffer,             // Output Buffer from driver.
+            sizeof(buffer),		// Length of output buffer in bytes.
+            &returnedLength,	// Bytes placed in buffer.
+            NULL                // synchronous call
+        );
+
+        if (!fOk)
+        {
+            DWORD dwLastError = GetLastError();
+            logw(L"Ioctl failed with code (%d). rawDeviceName is <%s>", dwLastError, szRawDeviceName);
+            result = dwLastError;
             break;
         }
 
         //printf("#%d got notification %d\n", (ULONG)Param, count++);
 
-        if(returnedLength > 0) {
+        if (returnedLength > 0)
+        {
             PEVENT_CONTEXT context = (PEVENT_CONTEXT)buffer;
-            if (context->MountId != DokanInstance->MountId) {
-                logw(L"Dokan Error: Invalid MountId (expected:%d, acctual:%d)\n",
-                        DokanInstance->MountId, context->MountId);
+            if (context->MountId != pDokanInstance->MountId)
+            {
+                logw(L"Dokan Error: Invalid MountId (expected:%d, acctual:%d)", pDokanInstance->MountId, context->MountId);
                 continue;
             }
 
-            switch (context->MajorFunction) {
+            switch (context->MajorFunction)
+            {
             case IRP_MJ_CREATE:
-                DispatchCreate(device, context, DokanInstance);
+                DispatchCreate(hDevice, context, pDokanInstance);
                 break;
             case IRP_MJ_CLEANUP:
-                DispatchCleanup(device, context, DokanInstance);
+                DispatchCleanup(hDevice, context, pDokanInstance);
                 break;
             case IRP_MJ_CLOSE:
-                DispatchClose(device, context, DokanInstance);
+                DispatchClose(hDevice, context, pDokanInstance);
                 break;
             case IRP_MJ_DIRECTORY_CONTROL:
-                DispatchDirectoryInformation(device, context, DokanInstance);
+                DispatchDirectoryInformation(hDevice, context, pDokanInstance);
                 break;
             case IRP_MJ_READ:
-                DispatchRead(device, context, DokanInstance);
+                DispatchRead(hDevice, context, pDokanInstance);
                 break;
             case IRP_MJ_WRITE:
-                DispatchWrite(device, context, DokanInstance);
+                DispatchWrite(hDevice, context, pDokanInstance);
                 break;
             case IRP_MJ_QUERY_INFORMATION:
-                DispatchQueryInformation(device, context, DokanInstance);
+                DispatchQueryInformation(hDevice, context, pDokanInstance);
                 break;
             case IRP_MJ_QUERY_VOLUME_INFORMATION:
-                DispatchQueryVolumeInformation(device ,context, DokanInstance);
+                DispatchQueryVolumeInformation(hDevice ,context, pDokanInstance);
                 break;
             case IRP_MJ_LOCK_CONTROL:
-                DispatchLock(device, context, DokanInstance);
+                DispatchLock(hDevice, context, pDokanInstance);
                 break;
             case IRP_MJ_SET_INFORMATION:
-                DispatchSetInformation(device, context, DokanInstance);
+                DispatchSetInformation(hDevice, context, pDokanInstance);
                 break;
             case IRP_MJ_FLUSH_BUFFERS:
-                DispatchFlush(device, context, DokanInstance);
+                DispatchFlush(hDevice, context, pDokanInstance);
                 break;
             case IRP_MJ_QUERY_SECURITY:
-                DispatchQuerySecurity(device, context, DokanInstance);
+                DispatchQuerySecurity(hDevice, context, pDokanInstance);
                 break;
             case IRP_MJ_SET_SECURITY:
-                DispatchSetSecurity(device, context, DokanInstance);
+                DispatchSetSecurity(hDevice, context, pDokanInstance);
                 break;
             case IRP_MJ_SHUTDOWN:
                 // this cass is used before unmount not shutdown
-                DispatchUnmount(device, context, DokanInstance);
+                DispatchUnmount(hDevice, context, pDokanInstance);
                 break;
             default:
                 break;
             }
-
-        } else {
-            logw(L"ReturnedLength %d\n", returnedLength);
+        }
+        else
+        {
+            logw(L"ReturnedLength (%d)", returnedLength);
         }
     }
 
-    CloseHandle(device);
+    CloseHandle(hDevice);
     _endthreadex(result);
     return result;
 }
-
-
 
 VOID
 SendEventInformation(
@@ -566,22 +573,27 @@ DispatchUnmount(
 
 
 // ask driver to release all pending IRP to prepare for Unmount.
-BOOL
-SendReleaseIRP(
-    LPCWSTR	DeviceName)
+BOOL SendReleaseIRP(LPCWSTR	DeviceName)
 {
-    ULONG	returnedLength;
-
+    ULONG returnedLength;
     logw(L"send release");
 
+    WCHAR rawDeviceName[MAX_PATH];
+    if (GetRawDeviceName(DeviceName, rawDeviceName, _countof(rawDeviceName)))
+    {
+        return FALSE;
+    }
+
     if (!SendToDevice(
-                GetRawDeviceName(DeviceName),
-                IOCTL_EVENT_RELEASE,
-                NULL,
-                0,
-                NULL,
-                0,
-                &returnedLength) ) {
+            rawDeviceName,
+            IOCTL_EVENT_RELEASE,
+            NULL,
+            0,
+            NULL,
+            0,
+            &returnedLength)
+            )
+    {
         
         logw(L"Failed to unmount device:%ws\n", DeviceName);
         return FALSE;

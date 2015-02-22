@@ -53,15 +53,21 @@ DokanResetTimeout(ULONG Timeout, PDOKAN_FILE_INFO FileInfo)
 
 	eventInfo->SerialNumber = eventContext->SerialNumber;
 	eventInfo->ResetTimeout.Timeout = Timeout;
+        
+    WCHAR rawDeviceName[MAX_PATH];
+    if (GetRawDeviceName(instance->DeviceName, rawDeviceName, _countof(rawDeviceName)))
+    {
+        return FALSE;
+    }
 
 	status = SendToDevice(
-				GetRawDeviceName(instance->DeviceName),
-				IOCTL_RESET_TIMEOUT,
-				eventInfo,
-				eventInfoSize,
-				NULL,
-				0,
-				&returnedLength);
+        rawDeviceName,
+        IOCTL_RESET_TIMEOUT,
+        eventInfo,
+        eventInfoSize,
+        NULL,
+        0,
+        &returnedLength);
 	free(eventInfo);
 	return status;
 }
@@ -77,15 +83,22 @@ DokanKeepAlive(
 //	ULONG	returnedLength;
 	BOOL	status;
 
+    WCHAR rawDeviceName[MAX_PATH];
+    if (GetRawDeviceName(DokanInstance->DeviceName, rawDeviceName, _countof(rawDeviceName)))
+    {
+        logw(L"Failed to get raw device name from <%s>", DokanInstance->DeviceName);
+        return ERROR_INVALID_PARAMETER;
+    }
+
 	device = CreateFile(
-				GetRawDeviceName(DokanInstance->DeviceName),
-				GENERIC_READ | GENERIC_WRITE,       // dwDesiredAccess
-				FILE_SHARE_READ | FILE_SHARE_WRITE, // dwShareMode
-				NULL,                               // lpSecurityAttributes
-				OPEN_EXISTING,                      // dwCreationDistribution
-				0,                                  // dwFlagsAndAttributes
-				NULL                                // hTemplateFile
-			);
+        rawDeviceName,
+        GENERIC_READ | GENERIC_WRITE,       // dwDesiredAccess
+        FILE_SHARE_READ | FILE_SHARE_WRITE, // dwShareMode
+        NULL,                               // lpSecurityAttributes
+        OPEN_EXISTING,                      // dwCreationDistribution
+        0,                                  // dwFlagsAndAttributes
+        NULL                                // hTemplateFile
+    );
 
 	while(device != INVALID_HANDLE_VALUE) {
 

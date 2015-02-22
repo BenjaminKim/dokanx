@@ -98,8 +98,7 @@ SendToDevice(
     ULONG	OutputLength,
     PULONG	ReturnedLength);
 
-LPCWSTR
-GetRawDeviceName(LPCWSTR	DeviceName);
+BOOL GetRawDeviceName(LPCWSTR pDeviceName, LPWSTR pRawDeviceName, size_t cchRawDeviceName);
 
 UINT __stdcall
 DokanLoop(
