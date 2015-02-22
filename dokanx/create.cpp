@@ -21,102 +21,166 @@ with this program. If not, see <http://www.gnu.org/licenses/>.
 #include "stdafx.h"
 #include "../dokani.h"
 #include "fileinfo.h"
+#include "../Common/Log/NtLogString.h"
+#include "../Common/Log/NdLog.h"
+
+VOID OnFileOpenSucceed(
+    __inout PEVENT_INFORMATION pEventInfo,
+    __in DWORD dwNtDisposition,
+    __in LONG status,
+    __in BOOL isDirectory
+    )
+{
+    pEventInfo->Status = STATUS_SUCCESS;
+    pEventInfo->Create.Information = FILE_OPENED;
+
+    if (dwNtDisposition == FILE_CREATE ||
+        dwNtDisposition == FILE_OPEN_IF ||
+        dwNtDisposition == FILE_OVERWRITE_IF)
+    {
+        if (status == ERROR_ALREADY_EXISTS || status == ERROR_FILE_EXISTS)
+        {
+            if (dwNtDisposition == FILE_OPEN_IF)
+            {
+                pEventInfo->Create.Information = FILE_OPENED;
+            }
+            else if (dwNtDisposition == FILE_OVERWRITE_IF)
+            {
+                pEventInfo->Create.Information = FILE_OVERWRITTEN;
+            }
+        }
+        else
+        {
+            pEventInfo->Create.Information = FILE_CREATED;
+        }
+    }
+
+    if ((dwNtDisposition == FILE_OVERWRITE_IF || dwNtDisposition == FILE_OVERWRITE) &&
+        pEventInfo->Create.Information != FILE_CREATED)
+    {
+        pEventInfo->Create.Information = FILE_OVERWRITTEN;
+    }
+
+    if (isDirectory)
+    {
+        pEventInfo->Create.Flags |= FILE_DIRECTORY_FILE;
+    }
+}
 
 VOID
 DispatchCreate(
-    HANDLE				Handle, // This handle is not for a file. It is for Dokan Device Driver(which is doing EVENT_WAIT).
-    PEVENT_CONTEXT		EventContext,
-    PDOKAN_INSTANCE		DokanInstance)
+    HANDLE hDevice, // This handle is not for a file. It is for Dokan Device Driver(which is doing EVENT_WAIT).
+    PEVENT_CONTEXT pEventContext,
+    PDOKAN_INSTANCE	pDokanInstance)
 {
+    logw(L"Start");
     static int eventId = 0;
-    ULONG					length	  = sizeof(EVENT_INFORMATION);
-    PEVENT_INFORMATION		eventInfo = (PEVENT_INFORMATION)malloc(length);
-    int						status;
-    DOKAN_FILE_INFO			fileInfo;
-    DWORD					disposition;
-    PDOKAN_OPEN_INFO		openInfo;
-    BOOL					directoryRequested = FALSE;
-    DWORD					options;
+    ULONG cbEventInformation = sizeof(EVENT_INFORMATION);
+    PEVENT_INFORMATION pEventInfo = (PEVENT_INFORMATION)malloc(cbEventInformation);
+    int	status = STATUS_INSUFFICIENT_RESOURCES;
+    DOKAN_FILE_INFO	fileInfo;
+    DWORD dwNtDisposition;
+    PDOKAN_OPEN_INFO pOpenInfo;
+    BOOL directoryRequested = FALSE;
+    DWORD options;
 
-    CheckFileName(EventContext->Create.FileName);
+    CheckFileName(pEventContext->Create.FileName);
 
-    RtlZeroMemory(eventInfo, length);
+    RtlZeroMemory(pEventInfo, cbEventInformation);
     RtlZeroMemory(&fileInfo, sizeof(DOKAN_FILE_INFO));
 
-    eventInfo->BufferLength = 0;
-    eventInfo->SerialNumber = EventContext->SerialNumber;
+    pEventInfo->BufferLength = 0;
+    pEventInfo->SerialNumber = pEventContext->SerialNumber;
 
-    fileInfo.ProcessId = EventContext->ProcessId;
-    fileInfo.DokanOptions = DokanInstance->DokanOptions;
+    fileInfo.ProcessId = pEventContext->ProcessId;
+    fileInfo.DokanOptions = pDokanInstance->DokanOptions;
 
     // DOKAN_OPEN_INFO is structure for a opened file
     // this will be freed by Close
-    openInfo = (PDOKAN_OPEN_INFO)malloc(sizeof(DOKAN_OPEN_INFO));
-    ZeroMemory(openInfo, sizeof(DOKAN_OPEN_INFO));
-    openInfo->OpenCount = 2;
-    openInfo->EventContext = EventContext;
-    openInfo->DokanInstance = DokanInstance;
-    fileInfo.DokanContext = (ULONG64)openInfo;
+    pOpenInfo = (PDOKAN_OPEN_INFO)malloc(sizeof(DOKAN_OPEN_INFO));
+    if (pOpenInfo == nullptr)
+    {
+        pEventInfo->Status = (ULONG)STATUS_INSUFFICIENT_RESOURCES;
+        SendEventInformation(hDevice, pEventInfo, cbEventInformation, nullptr);
+        return;
+    }
+    ZeroMemory(pOpenInfo, sizeof(DOKAN_OPEN_INFO));
+    pOpenInfo->OpenCount = 2;
+    pOpenInfo->EventContext = pEventContext;
+    pOpenInfo->DokanInstance = pDokanInstance;
+    fileInfo.DokanContext = (ULONG64)pOpenInfo;
 
     // pass it to driver and when the same handle is used get it back
-    eventInfo->Context = (ULONG64)openInfo;
+    pEventInfo->Context = (ULONG64)pOpenInfo;
 
     // The high 8 bits of this parameter correspond to the Disposition parameter
-    disposition = (EventContext->Create.CreateOptions >> 24) & 0x000000ff;
+    dwNtDisposition = (pEventContext->Create.CreateOptions >> 24) & 0x000000ff;
 
-    status = -1; // in case being not dispatched
-    
     // The low 24 bits of this member correspond to the CreateOptions parameter
-    options = EventContext->Create.CreateOptions & FILE_VALID_OPTION_FLAGS;
+    options = pEventContext->Create.CreateOptions & FILE_VALID_OPTION_FLAGS;
     //DbgPrint("Create.CreateOptions 0x%x\n", options);
 
     // to open directory
     // even if this flag is not specifed, 
     // there is a case to open a directory
-    if (options & FILE_DIRECTORY_FILE) {
-        //DbgPrint("FILE_DIRECTORY_FILE");
+    if (options & FILE_DIRECTORY_FILE)
+    {
         directoryRequested = TRUE;
     }
 
     // to open no directory file
     // event if this flag is not specified,
     // there is a case to open non directory file
-    if (options & FILE_NON_DIRECTORY_FILE) {
-        //DbgPrint("FILE_NON_DIRECTORY_FILE");
+    if (options & FILE_NON_DIRECTORY_FILE)
+    {
+        logw(L"FILE_NON_DIRECTORY_FILE");
     }
 
-    if (options & FILE_DELETE_ON_CLOSE) {
-        EventContext->Create.FileAttributes |= FILE_FLAG_DELETE_ON_CLOSE;
+    if (options & FILE_DELETE_ON_CLOSE)
+    {
+        pEventContext->Create.FileAttributes |= FILE_FLAG_DELETE_ON_CLOSE;
     }
 
     logw(L"###Create %04d", eventId);
-    //DbgPrint("### OpenInfo %X", openInfo);
-    openInfo->EventId = eventId++;
+    pOpenInfo->EventId = eventId++;
+
+    logw(L"Path<%s>, NtDisposition<%s>, FileAttributes<>",
+        pEventContext->Create.FileName,
+        GetNtCreateDispositionStr(dwNtDisposition)
+        );
 
     // make a directory or open
-    if (directoryRequested) {
+    if (directoryRequested)
+    {
         fileInfo.IsDirectory = TRUE;
 
-        if (disposition == FILE_CREATE || disposition == FILE_OPEN_IF) {
-            if (DokanInstance->DokanOperations->CreateDirectory) {
-                status = DokanInstance->DokanOperations->CreateDirectory(
-                            EventContext->Create.FileName, &fileInfo);
+        if (dwNtDisposition == FILE_CREATE || dwNtDisposition == FILE_OPEN_IF)
+        {
+            if (pDokanInstance->DokanOperations->CreateDirectory)
+            {
+                status = pDokanInstance->DokanOperations->CreateDirectory(pEventContext->Create.FileName, &fileInfo);
             }
-        } else if(disposition == FILE_OPEN) {
-            if (DokanInstance->DokanOperations->OpenDirectory) {
-                status = DokanInstance->DokanOperations->OpenDirectory(
-                            EventContext->Create.FileName, &fileInfo);
-            }
-        } else {
-            logw(L"### Create other disposition : %d", disposition);
         }
-    
-    // open a file
-    } else {
+        else if (dwNtDisposition == FILE_OPEN)
+        {
+            if (pDokanInstance->DokanOperations->OpenDirectory)
+            {
+                status = pDokanInstance->DokanOperations->OpenDirectory(pEventContext->Create.FileName, &fileInfo);
+            }
+        }
+        else
+        {
+            logw(L"### Create other disposition : %d", dwNtDisposition);
+        }
+    }
+    else
+    {
+        // open a file
         DWORD creationDisposition = OPEN_EXISTING;
         fileInfo.IsDirectory = FALSE;
-        logw(L"   CreateDisposition %0x08X", disposition);
-        switch(disposition) {
+        logw(L"   CreateDisposition %0x08X", dwNtDisposition);
+        switch (dwNtDisposition)
+        {
             case FILE_CREATE:
                 creationDisposition = CREATE_NEW;
                 break;
@@ -134,25 +198,25 @@ DispatchCreate(
                 break;
             default:
                 // TODO: should support FILE_SUPERSEDE ?
-                logw(L"### Create other disposition : %d", disposition);
+                logw(L"### Create other disposition : %d", dwNtDisposition);
                 break;
         }
         
-        if (DokanInstance->DokanOperations->CreateFile)
+        if (pDokanInstance->DokanOperations->CreateFile)
         {
-            status = DokanInstance->DokanOperations->CreateFile(
-                EventContext->Create.FileName,
-                EventContext->Create.DesiredAccess,
-                EventContext->Create.ShareAccess,
+            status = pDokanInstance->DokanOperations->CreateFile(
+                pEventContext->Create.FileName,
+                pEventContext->Create.DesiredAccess,
+                pEventContext->Create.ShareAccess,
                 creationDisposition,
-                EventContext->Create.FileAttributes,
+                pEventContext->Create.FileAttributes,
                 &fileInfo);
         }
     }
 
     // save the information about this access in DOKAN_OPEN_INFO
-    openInfo->IsDirectory = fileInfo.IsDirectory;
-    openInfo->UserContext = fileInfo.Context;
+    pOpenInfo->IsDirectory = fileInfo.IsDirectory;
+    pOpenInfo->UserContext = fileInfo.Context;
 
     // FILE_CREATED
     // FILE_DOES_NOT_EXIST
@@ -164,60 +228,41 @@ DispatchCreate(
     logw(L"CreateFile status = 0x%08X", status);
     if (status != STATUS_SUCCESS)
     {
-        if (EventContext->Flags & SL_OPEN_TARGET_DIRECTORY)
+        if (pEventContext->Flags & SL_OPEN_TARGET_DIRECTORY)
         {
             logw(L"SL_OPEN_TARGET_DIRECTORY spcefied");
         }
-        eventInfo->Create.Information = FILE_DOES_NOT_EXIST;
-        eventInfo->Status = status;
+        pEventInfo->Create.Information = FILE_DOES_NOT_EXIST;
+        pEventInfo->Status = status;
 
-        if (status == STATUS_OBJECT_NAME_NOT_FOUND && EventContext->Flags & SL_OPEN_TARGET_DIRECTORY)
+        if (status == STATUS_OBJECT_NAME_NOT_FOUND && pEventContext->Flags & SL_OPEN_TARGET_DIRECTORY)
         {
             logw(L"This case should be returned as SUCCESS");
-            eventInfo->Status = STATUS_SUCCESS;
+            pEventInfo->Status = STATUS_SUCCESS;
         }
 
         if (status == STATUS_OBJECT_NAME_COLLISION)
         {
-            eventInfo->Create.Information = FILE_EXISTS;
+            pEventInfo->Create.Information = FILE_EXISTS;
         }
 
-        if (eventInfo->Status != STATUS_SUCCESS)
+        if (pEventInfo->Status != STATUS_SUCCESS)
         {
             // Needs to free openInfo because Close is never called.
-            free(openInfo);
-            eventInfo->Context = 0;
+            free(pOpenInfo);
+            pEventInfo->Context = 0;
         }
-        // TODO: handling ERROR_ALREADY_EXISTS case
     }
     else
     {
-        eventInfo->Status = STATUS_SUCCESS;
-        eventInfo->Create.Information = FILE_OPENED;
-
-        if (disposition == FILE_CREATE ||
-            disposition == FILE_OPEN_IF ||
-            disposition == FILE_OVERWRITE_IF)
-        {
-            //if (status != ERROR_ALREADY_EXISTS) {
-            eventInfo->Create.Information = FILE_CREATED;
-            //}
-        }
-
-        // fixlater
-        if ((disposition == FILE_OVERWRITE_IF || disposition == FILE_OVERWRITE) &&
-            eventInfo->Create.Information != FILE_CREATED)
-        {	
-            eventInfo->Create.Information = FILE_OVERWRITTEN;
-        }
-
-        if (fileInfo.IsDirectory)
-        {
-            eventInfo->Create.Flags |= DOKAN_FILE_DIRECTORY;
-        }
+        //
+        // This is the case for opening file successfully.
+        // Depending on the disposition value which came from IRP,
+        // we should set the proper value to the Information field of Irp and return it to driver. 
+        //
+        OnFileOpenSucceed(pEventInfo, dwNtDisposition, status, fileInfo.IsDirectory);
     }
     
-    SendEventInformation(Handle, eventInfo, length, DokanInstance);
-    free(eventInfo);
-    return;
+    SendEventInformation(hDevice, pEventInfo, cbEventInformation, pDokanInstance);
+    free(pEventInfo);
 }
