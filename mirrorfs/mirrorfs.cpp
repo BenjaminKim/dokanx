@@ -1001,7 +1001,7 @@ int _tmain(int argc, _TCHAR* argv[])
     }
 
     PDOKAN_OPTIONS dokanOptions = (PDOKAN_OPTIONS)malloc(sizeof(DOKAN_OPTIONS));
-    if (dokanOperations == nullptr)
+    if (dokanOptions == nullptr)
     {
         free(dokanOperations);
         return EXIT_FAILURE;
