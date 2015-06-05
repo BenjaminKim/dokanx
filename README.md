@@ -44,6 +44,13 @@ You can easily *register* and *start* the Dokanx driver with the [osrloader](htt
 * Move `dokanx_win7.sys` to `%SystemRoot%\System32\drivers\dokanx.sys`.
 * Set this path in osrloader's `Driver Path` and write `dokanx` to `Display Name`
 * Click `Register Service` and `Start Service`.
+ 
+Alternatively, you can use `sc` command:
+
+`# install driver service and name it 'dokanx'`
+`sc create dokanx type=  kernel binPath= system32\drivers\dokanx_win7.sys`
+`# start dokanx service`
+`sc start dokanx`
 
 If there was no problem, you are ready to mount a volume.  
 Note that if you once do `Stop Service` then you can't restart service until you reboot. This may be `dokanx.sys`'s problem. (It is very hard to write device driver stopping code in Windows. I haven't found what is the problem in dokanx.sys code yet.)
