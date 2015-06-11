@@ -21,7 +21,10 @@ with this program. If not, see <http://www.gnu.org/licenses/>.
 #include "stdafx.h"
 #include <windows.h>
 #include <stdio.h>
+#include <ShlObj.h>
+#include <Dbt.h>
 #include "../dokani.h"
+#include "../Common/WinNT/Explorer.h"
 
 static BOOL
 DokanServiceCheck(
@@ -127,6 +130,8 @@ DokanMountControl(PDOKAN_CONTROL Control)
     DWORD pipeMode;
     DWORD error;
 
+	logw(L"Start");
+
     for (;;) {
         pipe = CreateFile(DOKAN_CONTROL_PIPE,  GENERIC_READ|GENERIC_WRITE,
                         0, NULL, OPEN_EXISTING, 0, NULL);
@@ -165,8 +170,10 @@ DokanMountControl(PDOKAN_CONTROL Control)
 
     CloseHandle(pipe);
     if(Control->Status != DOKAN_CONTROL_FAIL) {
+		logw(L"Control status is ok");
         return TRUE;
     } else {
+		logw(L"Control status failed %d\n", Control->Status);
         return FALSE;
     }
 }
@@ -235,22 +242,27 @@ DokanServiceDelete(
 
 BOOL DOKANAPI
 DokanUnmount(
-    WCHAR	DriveLetter)
+    WCHAR	DriveLetter,
+	ULONG	Options)
 {
-    WCHAR mountPoint[] = L"M:\\";
+    WCHAR mountPoint[] = L"M:";
     mountPoint[0] = DriveLetter;
-    return DokanRemoveMountPoint(mountPoint);
+    return DokanRemoveMountPoint(mountPoint, Options);
 }
 
 
 BOOL DOKANAPI
 DokanRemoveMountPoint(
-    LPCWSTR MountPoint)
+    LPCWSTR MountPoint,
+	ULONG Options)
 {
     DOKAN_CONTROL control;
     BOOL result;
 
-    ZeroMemory(&control, sizeof(DOKAN_CONTROL));
+	BOOL isImpersonateEnabled = Options & DOKAN_OPTION_LOCAL;
+
+	DOKAN_CONTROL_INIT(control);
+
     control.Type = DOKAN_CONTROL_UNMOUNT;
     wcscpy_s(control.MountPoint, sizeof(control.MountPoint) / sizeof(WCHAR), MountPoint);
 
@@ -260,27 +272,45 @@ DokanRemoveMountPoint(
     if (result) {
         logw(L"DokanControl recieved DeviceName:%ws\n", control.DeviceName);
         SendReleaseIRP(control.DeviceName);
+		if (isImpersonateEnabled){
+			InformWindowsOfDriveChange(MountPoint, false);
+		}
     } else {
         logw(L"DokanRemoveMountPoint failed");
     }
     return result;
 }
 
-
 BOOL
 DokanMount(
     LPCWSTR	MountPoint,
-    LPCWSTR	DeviceName)
+    LPCWSTR	DeviceName,
+	ULONG Options)
 {
     DOKAN_CONTROL control;
+	BOOL result;
 
-    ZeroMemory(&control, sizeof(DOKAN_CONTROL));
+	logw(L"Start");
+
+	DOKAN_CONTROL_INIT(control);
     control.Type = DOKAN_CONTROL_MOUNT;
+
+	BOOL isImpersonateEnabled = Options & DOKAN_OPTION_LOCAL;
+	if (isImpersonateEnabled){
+		logw(L"Impersonate user drive is enabled")
+		control.Option |= DOKAN_CONTROL_OPTION_LOCAL_CONTEXT;
+	}
 
     wcscpy_s(control.MountPoint, _countof(control.MountPoint), MountPoint);
     wcscpy_s(control.DeviceName, _countof(control.DeviceName), DeviceName);
 
-    return DokanMountControl(&control);
+    result = DokanMountControl(&control);
+
+	if (result && isImpersonateEnabled){
+		InformWindowsOfDriveChange(MountPoint, true);
+	}
+
+	return result;
 }
 
 

@@ -38,6 +38,8 @@ DispatchRead(
     
     sizeOfEventInfo = sizeof(EVENT_INFORMATION) - 8 + EventContext->Read.BufferLength;
 
+	logw(L"Start");
+
     CheckFileName(EventContext->Read.FileName);
 
     eventInfo = DispatchCommon(
@@ -67,8 +69,13 @@ DispatchRead(
         eventInfo->BufferLength = readLength;
         eventInfo->Read.CurrentByteOffset.QuadPart =
             EventContext->Read.ByteOffset.QuadPart + readLength;
+
+		if (readLength == 0){
+			eventInfo->Status = STATUS_END_OF_FILE;
+		}
     }
 
+	
     /*if (status < 0) {
         eventInfo->Status = STATUS_INVALID_PARAMETER;
     } else if(readLength == 0) {

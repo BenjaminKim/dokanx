@@ -42,6 +42,9 @@ DokanSetAllocationInformation(
     // adjusted to match the allocation size.
 
     if (DokanOperations->SetAllocationSize) {
+
+		logw(L"Call DokanOperations->SetAllocationSize");
+
         return DokanOperations->SetAllocationSize(
             EventContext->SetFile.FileName,
             allocInfo->AllocationSize.QuadPart,
@@ -49,6 +52,9 @@ DokanSetAllocationInformation(
     }
     // How can we check the current end-of-file position?
     if (allocInfo->AllocationSize.QuadPart == 0) {
+		
+		logw(L"Call DokanOperations->SetEndOfFile");
+
         return DokanOperations->SetEndOfFile(
             EventContext->SetFile.FileName,
             allocInfo->AllocationSize.QuadPart,
@@ -113,6 +119,8 @@ DokanSetDispositionInformation(
      PDOKAN_FILE_INFO	FileInfo,
      PDOKAN_OPERATIONS	DokanOperations)
 {
+	logw(L"Start");
+
     PFILE_DISPOSITION_INFORMATION dispositionInfo =
         (PFILE_DISPOSITION_INFORMATION)((PCHAR)EventContext + EventContext->SetFile.BufferOffset);
 
@@ -126,10 +134,16 @@ DokanSetDispositionInformation(
     }
 
     if (FileInfo->IsDirectory) {
+
+		logw(L"Call DokanOperations->DeleteDirectory")
+
         return DokanOperations->DeleteDirectory(
             EventContext->SetFile.FileName,
             FileInfo);
     } else {
+
+		logw(L"Call DokanOperations->DeleteFile")
+
         return DokanOperations->DeleteFile(
             EventContext->SetFile.FileName,
             FileInfo);
@@ -178,6 +192,8 @@ PEVENT_CONTEXT		EventContext,
      PDOKAN_FILE_INFO	FileInfo,
      PDOKAN_OPERATIONS	DokanOperations)
 {
+	logw(L"Start");
+
     PDOKAN_RENAME_INFORMATION renameInfo =
         (PDOKAN_RENAME_INFORMATION)((PCHAR)EventContext + EventContext->SetFile.BufferOffset);
 
@@ -199,6 +215,8 @@ PEVENT_CONTEXT		EventContext,
 
     if (!DokanOperations->MoveFile)
         return STATUS_NOT_IMPLEMENTED;
+
+	logw(L"Call DokanOperations->MoveFile");
 
     return DokanOperations->MoveFile(
         EventContext->SetFile.FileName,
@@ -239,6 +257,8 @@ DispatchSetInformation(
     NTSTATUS				status = STATUS_INVALID_PARAMETER;
     ULONG					sizeOfEventInfo = sizeof(EVENT_INFORMATION);
 
+
+	logw(L"Start");
 
     if (EventContext->SetFile.FileInformationClass == FileRenameInformation) {
         PDOKAN_RENAME_INFORMATION renameInfo =

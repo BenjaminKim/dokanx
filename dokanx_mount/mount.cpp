@@ -195,7 +195,7 @@ CreateDriveLetter(
         );
 
     if (device != INVALID_HANDLE_VALUE) {
-        logw(L"DokanControl Mount failed: %c: is alredy used\n", DriveLetter);
+        logw(L"DokanControl Mount failed: %c: is already used\n", DriveLetter);
         CloseHandle(device);
         return FALSE;
     }
@@ -265,6 +265,7 @@ DokanControlUnmount(
             logw(L"DokanControl DD_REMOVE_DEFINITION success");
             return TRUE;
         }
+
 
     } else if (length > 3 ) {
         return DeleteMountPoint(MountPoint);

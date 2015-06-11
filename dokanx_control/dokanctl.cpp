@@ -33,7 +33,8 @@ int ShowMountList()
 {
     logw(L"Start");
     DOKAN_CONTROL control;
-    ZeroMemory(&control, sizeof(DOKAN_CONTROL));
+
+    DOKAN_CONTROL_INIT(control);
 
     control.Type = DOKAN_CONTROL_LIST;
     control.Option = 0;
@@ -79,7 +80,9 @@ int Unmount(LPCWSTR	MountPoint, BOOL ForceUnmount)
     logw(L"Start");
     int status = 0;
     DOKAN_CONTROL control;
-    ZeroMemory(&control, sizeof(DOKAN_CONTROL));
+	ULONG Options;
+
+	DOKAN_CONTROL_INIT(control);
 
     if (wcslen(MountPoint) == 1 && L'0' <= MountPoint[0] && MountPoint[0] <= L'9') {
         control.Type = DOKAN_CONTROL_LIST;
@@ -87,7 +90,7 @@ int Unmount(LPCWSTR	MountPoint, BOOL ForceUnmount)
         DokanMountControl(&control);
 
         if (control.Status == DOKAN_CONTROL_SUCCESS) {
-            status = DokanRemoveMountPoint(control.MountPoint);
+            status = DokanRemoveMountPoint(control.MountPoint, Options);
         } else {
             fwprintf(stderr, L"Mount entry %d not found\n", control.Option);
             status = -1;
@@ -107,7 +110,7 @@ int Unmount(LPCWSTR	MountPoint, BOOL ForceUnmount)
         }
 
     } else {
-        status = DokanRemoveMountPoint(MountPoint);
+        status = DokanRemoveMountPoint(MountPoint, Options);
     }
 
     fwprintf(stderr, L"Unmount status = %d\n", status);

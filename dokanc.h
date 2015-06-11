@@ -45,6 +45,8 @@ extern "C" {
 
 #define DOKAN_CONTROL_OPTION_FORCE_UNMOUNT 1
 
+#define DOKAN_CONTROL_OPTION_LOCAL_CONTEXT 1024
+
 #define DOKAN_CONTROL_SUCCESS	1
 #define DOKAN_CONTROL_FAIL		0
 
@@ -68,8 +70,15 @@ typedef struct _DOKAN_CONTROL {
 	WCHAR	DeviceName[64];
 	ULONG	Option;
 	ULONG	Status;
+	DWORD   SessionId;
 
 } DOKAN_CONTROL, *PDOKAN_CONTROL;
+
+#define DOKAN_CONTROL_INIT(c) \
+	do {\
+		ZeroMemory(&c, sizeof(DOKAN_CONTROL));\
+		ProcessIdToSessionId(GetCurrentProcessId(),&c.SessionId);\
+		} while(0)
 
 BOOL DOKANAPI
 DokanServiceInstall(

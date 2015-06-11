@@ -51,7 +51,7 @@ int DOKAN_CALLBACK DokanGetVolumeInformation(
     *MaximumComponentLength = 256;
     *FileSystemFlags = FILE_CASE_SENSITIVE_SEARCH | 
                         FILE_CASE_PRESERVED_NAMES | 
-                        FILE_SUPPORTS_REMOTE_STORAGE |
+						FILE_SUPPORTS_REMOTE_STORAGE |
                         FILE_UNICODE_ON_DISK;
 
     wcscpy_s(FileSystemNameBuffer, FileSystemNameSize / sizeof(WCHAR), L"Dokan");
@@ -305,6 +305,8 @@ DispatchQueryVolumeInformation(
 
     RtlZeroMemory(eventInfo, sizeOfEventInfo);
     RtlZeroMemory(&fileInfo, sizeof(DOKAN_FILE_INFO));
+
+	logw(L"Start");
 
     // There is no Context because file is not opened
     // so DispatchCommon is not used here

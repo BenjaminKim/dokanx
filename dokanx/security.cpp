@@ -36,6 +36,9 @@ DispatchQuerySecurity(
     ULONG	lengthNeeded = 0;
 
     eventInfoLength = sizeof(EVENT_INFORMATION) - 8 + EventContext->Security.BufferLength;
+	
+	logw(L"Start");
+
     CheckFileName(EventContext->Security.FileName);
 
     eventInfo = DispatchCommon(EventContext, eventInfoLength, DokanInstance, &fileInfo, &openInfo);
@@ -77,6 +80,9 @@ DispatchSetSecurity(
     PSECURITY_DESCRIPTOR	securityDescriptor;
     
     eventInfoLength = sizeof(EVENT_INFORMATION);
+
+	logw(L"Start");
+
     CheckFileName(EventContext->SetSecurity.FileName);
 
     eventInfo = DispatchCommon(EventContext, eventInfoLength, DokanInstance, &fileInfo, &openInfo);

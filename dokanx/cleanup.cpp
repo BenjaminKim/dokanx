@@ -34,6 +34,8 @@ DispatchCleanup(
 	PDOKAN_OPEN_INFO		openInfo;
 	ULONG					sizeOfEventInfo = sizeof(EVENT_INFORMATION);
 
+	logw(L"Start");
+
 	CheckFileName(EventContext->Cleanup.FileName);
 
 	eventInfo = DispatchCommon(
@@ -48,6 +50,25 @@ DispatchCleanup(
 		DokanInstance->DokanOperations->Cleanup(
 			EventContext->Cleanup.FileName,
 			&fileInfo);
+	}
+
+	//windows 8 doesn't use filedispositioninformation for delete
+	if (EventContext->FileFlags & DOKAN_DELETE_ON_CLOSE){
+
+		logw(L"DOKAN_DELETE_ON_CLOSE is there so execute Delete");
+		
+		if (&fileInfo.IsDirectory == reinterpret_cast<UCHAR*>("1")) {
+			if (DokanInstance->DokanOperations->DeleteDirectory){
+				logw(L"Call DokanInstance->DokanOperations->DeleteDirectory");
+				DokanInstance->DokanOperations->DeleteDirectory(EventContext->Cleanup.FileName, &fileInfo);
+			}
+		}
+		else {
+			if (DokanInstance->DokanOperations->DeleteFile){
+				logw(L"Call DokanInstance->DokanOperations->DeleteFile");
+				DokanInstance->DokanOperations->DeleteFile(EventContext->Cleanup.FileName, &fileInfo);
+			}
+		}
 	}
 
 	openInfo->UserContext = fileInfo.Context;

@@ -35,6 +35,8 @@ DispatchFlush(
 	PDOKAN_OPEN_INFO	openInfo;
 	int status;
 
+	logw(L"Start");
+
 	CheckFileName(EventContext->Flush.FileName);
 
 	eventInfo = DispatchCommon(

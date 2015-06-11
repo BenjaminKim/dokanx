@@ -36,6 +36,8 @@ DispatchClose(
 
 	UNREFERENCED_PARAMETER(Handle);
 
+	logw(L"Start");
+
 	CheckFileName(EventContext->Close.FileName);
 
 	eventInfo = DispatchCommon(
@@ -46,6 +48,9 @@ DispatchClose(
 	logw(L"###Close %04d", openInfo != NULL ? openInfo->EventId : -1);
 
 	if (DokanInstance->DokanOperations->CloseFile) {
+
+		logw(L"Call DokanInstance->DokanOperations->CloseFile")
+
 		// ignore return value
 		DokanInstance->DokanOperations->CloseFile(
 			EventContext->Close.FileName, &fileInfo);

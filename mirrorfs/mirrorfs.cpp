@@ -1001,9 +1001,9 @@ int _tmain(int argc, _TCHAR* argv[])
     }
 
     PDOKAN_OPTIONS dokanOptions = (PDOKAN_OPTIONS)malloc(sizeof(DOKAN_OPTIONS));
-    if (dokanOptions == nullptr)
+	if (dokanOptions == nullptr)
     {
-        free(dokanOperations);
+		free(dokanOperations);
         return EXIT_FAILURE;
     }
 
@@ -1015,6 +1015,7 @@ int _tmain(int argc, _TCHAR* argv[])
             "  /d (enable debug output)\n"
             "  /s (use stderr for output)\n"
             "  /n (use network drive)\n"
+			"  /i (impersonate logged-in user)\n"
             "  /m (use removable drive)");
         return EXIT_FAILURE;
     }
@@ -1054,6 +1055,9 @@ int _tmain(int argc, _TCHAR* argv[])
         case L'm':
             dokanOptions->Options |= DOKAN_OPTION_REMOVABLE;
             break;
+		case L'i':
+			dokanOptions->Options |= DOKAN_OPTION_LOCAL;
+			break;
         default:
             fwprintf(stderr, L"unknown command: %s", argv[command]);
             free(dokanOperations);

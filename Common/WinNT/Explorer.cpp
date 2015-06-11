@@ -214,6 +214,50 @@ void MarkShortcutRunAs(const std::wstring& sShortcut)
 	CoUninitialize();
 }
 
+void InformWindowsOfDriveChange(LPCWSTR MountPoint, bool bAddNotRemove)
+{
+	logw(L"Start");
+
+	ULONG length = wcslen(MountPoint);
+	if (length == 0){
+		logw(L"MountPoint not specified, so not able to notify explorer");
+		return;
+	}
+
+	if (length > 1 && MountPoint[1] != L':'){
+		logw(L"MountPoint is not a drive");
+		return;
+	}
+
+	logw(L"Notify explorer about the change of the drive %s\n", MountPoint);
+
+	DWORD recipients = BSM_ALLDESKTOPS | BSM_APPLICATIONS;
+	DEV_BROADCAST_VOLUME msg;
+	ZeroMemory(&msg, sizeof(msg));
+	msg.dbcv_size = sizeof(msg);
+	msg.dbcv_devicetype = DBT_DEVTYP_VOLUME;
+	msg.dbcv_unitmask = 1 << (MountPoint[0] - 'A');
+	logw(L"unit mask is %d\n", (int)msg.dbcv_unitmask);
+	WPARAM messageType;
+
+	if (bAddNotRemove){
+		messageType = DBT_DEVICEARRIVAL;
+		logw(L"Drive was created");
+	}
+	else{
+		messageType = DBT_DEVICEREMOVECOMPLETE;
+		logw(L"Drive was removed");
+	}
+
+	long result = BroadcastSystemMessage(0, &recipients, WM_DEVICECHANGE, messageType, (LPARAM)&msg);
+	if (result <= 0){
+		logw(L"Notify failed with result code %d\n", result);
+	}
+	else{
+		logw(L"Notification done successfully");
+	}
+}
+
 void BroadcastDeviceChange(WPARAM message, int nDosDriveNo, DWORD driveMap)
 {
 	DEV_BROADCAST_VOLUME dbv;
