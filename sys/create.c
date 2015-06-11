@@ -507,6 +507,15 @@ Return Value:
             __leave;
         }
 
+		//remember FILE_DELETE_ON_CLOSE so than the file can be deleted in close for windows 8
+		if (irpSp->Parameters.Create.Options & FILE_DELETE_ON_CLOSE){
+			fcb->Flags |= DOKAN_DELETE_ON_CLOSE;
+			DDbgPrint("  FILE_DELETE_ON_CLOSE is set so remember for delete in cleanup");
+		}
+		else{
+			fcb->Flags &= ~DOKAN_DELETE_ON_CLOSE;
+		}
+
         fileObject->FsContext = &fcb->AdvancedFCBHeader;
         fileObject->FsContext2 = ccb;
         fileObject->PrivateCacheMap = NULL;
@@ -641,7 +650,7 @@ DokanCompleteCreate(
             }
         }
     } else {
-        //DDbgPrint("   IRP_MJ_CREATE failed. Free CCB:%X\n", ccb);
+        DDbgPrint("   IRP_MJ_CREATE failed. Free CCB:%X\n", ccb);
         DokanFreeCCB(ccb);
         DokanFreeFCB(fcb);
     }

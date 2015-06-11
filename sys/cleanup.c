@@ -105,6 +105,7 @@ Return Value:
 
 		eventContext->Context = ccb->UserContext;
 		//DDbgPrint("   get Context %X\n", (ULONG)ccb->UserContext);
+		eventContext->FileFlags |= fcb->Flags;
 
 		// copy the filename to EventContext from ccb
 		eventContext->Cleanup.FileNameLength = fcb->FileName.Length;
