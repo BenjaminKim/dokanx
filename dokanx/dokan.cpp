@@ -579,8 +579,9 @@ BOOL SendReleaseIRP(LPCWSTR	DeviceName)
     logw(L"send release");
 
     WCHAR rawDeviceName[MAX_PATH];
-    if (GetRawDeviceName(DeviceName, rawDeviceName, _countof(rawDeviceName)))
+    if (!GetRawDeviceName(DeviceName, rawDeviceName, _countof(rawDeviceName)))
     {
+        logw(L"Failed to get raw device name from <%s>", DeviceName);
         return FALSE;
     }
 

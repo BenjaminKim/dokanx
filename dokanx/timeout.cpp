@@ -55,8 +55,9 @@ DokanResetTimeout(ULONG Timeout, PDOKAN_FILE_INFO FileInfo)
 	eventInfo->ResetTimeout.Timeout = Timeout;
         
     WCHAR rawDeviceName[MAX_PATH];
-    if (GetRawDeviceName(instance->DeviceName, rawDeviceName, _countof(rawDeviceName)))
+    if (!GetRawDeviceName(instance->DeviceName, rawDeviceName, _countof(rawDeviceName)))
     {
+        logw(L"Failed to get raw device name from <%s>", instance->DeviceName);
         return FALSE;
     }
 
@@ -84,7 +85,7 @@ DokanKeepAlive(
 	BOOL	status;
 
     WCHAR rawDeviceName[MAX_PATH];
-    if (GetRawDeviceName(DokanInstance->DeviceName, rawDeviceName, _countof(rawDeviceName)))
+    if (!GetRawDeviceName(DokanInstance->DeviceName, rawDeviceName, _countof(rawDeviceName)))
     {
         logw(L"Failed to get raw device name from <%s>", DokanInstance->DeviceName);
         return ERROR_INVALID_PARAMETER;

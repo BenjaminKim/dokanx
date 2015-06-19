@@ -68,7 +68,7 @@ DokanOpenRequestorToken(PDOKAN_FILE_INFO FileInfo)
 	eventInfo->SerialNumber = eventContext->SerialNumber;
 
     WCHAR rawDeviceName[MAX_PATH];
-    if (GetRawDeviceName(instance->DeviceName, rawDeviceName, _countof(rawDeviceName)))
+    if (!GetRawDeviceName(instance->DeviceName, rawDeviceName, _countof(rawDeviceName)))
     {
         logw(L"Failed to get raw device name from <%s>", instance->DeviceName);
         return INVALID_HANDLE_VALUE;
