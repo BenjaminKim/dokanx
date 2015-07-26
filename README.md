@@ -1,4 +1,5 @@
 # DokanX
+[![PayPayl donate button](https://img.shields.io/badge/paypal-donate-yellow.svg)](https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=MGCVHFBUUMSN6&lc=US&item_name=Support%20dokanx&currency_code=USD&bn=PP%2dDonationsBF%3abtn_donateCC_LG%2egif%3aNonHosted "Donate once-off to this project using Paypal")
 
 ## Dokanx is a Fork of Dokan 0.6.0
 Because the original Dokan is no longer maintained, I have decided to fork it.   
