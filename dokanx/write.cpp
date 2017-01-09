@@ -70,8 +70,9 @@ DispatchWrite(
     BOOL					bufferAllocated = FALSE;
     ULONG					sizeOfEventInfo = sizeof(EVENT_INFORMATION);
 
-    eventInfo = DispatchCommon(
-        EventContext, sizeOfEventInfo, DokanInstance, &fileInfo, &openInfo);
+	logw(L"Start");
+
+    eventInfo = DispatchCommon(EventContext, sizeOfEventInfo, DokanInstance, &fileInfo, &openInfo);
 
     // Since driver requested bigger memory,
     // allocate enough memory and send it to driver
@@ -88,7 +89,10 @@ DispatchWrite(
     logw(L"###WriteFile %04d", openInfo != NULL ? openInfo->EventId : -1);
 
     if (DokanInstance->DokanOperations->WriteFile) {
-        status = DokanInstance->DokanOperations->WriteFile(
+		
+			logw(L"Call DokanInstance->DokanOperations->WriteFile")
+        
+			status = DokanInstance->DokanOperations->WriteFile(
                         EventContext->Write.FileName,
                         (PCHAR)EventContext + EventContext->Write.BufferOffset,
                         EventContext->Write.BufferLength,
@@ -96,6 +100,7 @@ DispatchWrite(
                         EventContext->Write.ByteOffset.QuadPart,
                         &fileInfo);
     } else {
+		logw(L"No DokanInstance->DokanOperations->WriteFile specified")
         status = -1;
     }
 

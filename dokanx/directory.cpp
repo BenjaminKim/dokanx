@@ -442,6 +442,8 @@ DispatchDirectoryInformation(
 
     BOOLEAN				patternCheck = TRUE;
 
+	logw(L"Start");
+
     CheckFileName(EventContext->Directory.DirectoryName);
 
     eventInfo = DispatchCommon(

@@ -261,6 +261,8 @@ DispatchQueryInformation(
 
     sizeOfEventInfo = sizeof(EVENT_INFORMATION) - 8 + EventContext->File.BufferLength;
 
+	logw(L"Start");
+
     CheckFileName(EventContext->File.FileName);
 
     ZeroMemory(&byHandleFileInfo, sizeof(BY_HANDLE_FILE_INFORMATION));

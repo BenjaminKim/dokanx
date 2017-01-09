@@ -35,6 +35,8 @@ DispatchLock(
 	PDOKAN_OPEN_INFO	openInfo;
 	int status;
 
+	logw(L"Start");
+
 	CheckFileName(EventContext->Lock.FileName);
 
 	eventInfo = DispatchCommon(

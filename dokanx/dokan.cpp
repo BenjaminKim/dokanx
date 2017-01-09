@@ -160,9 +160,10 @@ DokanMain(PDOKAN_OPTIONS DokanOptions, PDOKAN_OPERATIONS DokanOperations)
             return error;
         }
         useMountPoint = TRUE;
-    } else if (!IsValidDriveLetter((WCHAR)DokanOptions->Version)) {
+	}
+	else if (!IsValidDriveLetter((WCHAR)DokanOptions->MountPoint)) {
         // Older versions use the first 2 bytes of DokanOptions struct as DriveLetter.
-        logw(L"Dokan Error: bad drive letter %wc\n", (WCHAR)DokanOptions->Version);
+        logw(L"Dokan Error: bad drive letter %wc\n", (WCHAR)DokanOptions->MountPoint);
         return DOKAN_DRIVE_LETTER_ERROR;
     }
 
@@ -192,7 +193,7 @@ DokanMain(PDOKAN_OPTIONS DokanOptions, PDOKAN_OPERATIONS DokanOperations)
                 DokanOptions->MountPoint);
     } else {
         // Older versions use the first 2 bytes of DokanOptions struct as DriveLetter.
-        instance->MountPoint[0] = (WCHAR)DokanOptions->Version;
+        instance->MountPoint[0] = (WCHAR)DokanOptions->MountPoint;
         instance->MountPoint[1] = L':';
         instance->MountPoint[2] = L'\\';
     }
@@ -202,7 +203,7 @@ DokanMain(PDOKAN_OPTIONS DokanOptions, PDOKAN_OPERATIONS DokanOperations)
         return DOKAN_START_ERROR;
     }
 
-    if (!DokanMount(instance->MountPoint, instance->DeviceName)) {
+    if (!DokanMount(instance->MountPoint, instance->DeviceName, instance->DokanOptions->Options)) {
         logw(
             L"Dokan Error: DefineDosDevice Failed<%s><%s>",
             instance->MountPoint,
@@ -752,7 +753,7 @@ BOOL WINAPI DllMain(
                     PDOKAN_INSTANCE instance =
                         CONTAINING_RECORD(entry, DOKAN_INSTANCE, ListEntry);
                     
-                    DokanRemoveMountPoint(instance->MountPoint);
+                    DokanRemoveMountPoint(instance->MountPoint, instance->DokanOptions->Options);
                     free(instance);
                 }
 

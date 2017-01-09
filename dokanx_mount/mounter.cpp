@@ -26,8 +26,12 @@ THE SOFTWARE.
 #include <stdio.h>
 #include <stdlib.h>
 #include <sddl.h>
+#include <WtsApi32.h> 
 #include "mount.h"
 #include "../public.h"
+#include "../Common/WinNT/Explorer.h"
+
+#pragma comment(lib, "WtsApi32.lib")
 
 static HANDLE                g_EventControl = NULL;
 static SERVICE_STATUS        g_ServiceStatus;
@@ -158,12 +162,41 @@ DokanControlList(PDOKAN_CONTROL Control)
     }
     LeaveCriticalSection(&g_CriticalSection);
 }
+
+static BOOL ImpersonateUserBySession(DWORD dwSessionId, PHANDLE phToken){
+	
+	logw(L"Start");
+
+	logw(L"WTSQueryUserToken:%d", dwSessionId);
+
+	if (!WTSQueryUserToken(dwSessionId, phToken)){
+
+		logw(L"WTSQueryUserToken for session %d failed:%d", dwSessionId, GetLastError());
+
+		return FALSE;
+	}
+
+	if (!ImpersonateLoggedOnUser(*phToken)){
+
+		logw(L"ImpersonateLoggedOnUser for token %d failed:%d", *phToken, GetLastError());
+		CloseHandle(*phToken);
+		return FALSE;
+	}
+
+	logw(L"Impersonation successfully done");
+
+	return TRUE;
+
+}
+
 static VOID DokanControl(PDOKAN_CONTROL Control)
 {
     logw(L"Start");
     PMOUNT_ENTRY	mountEntry;
     ULONG	index = 0;
     DWORD written = 0;
+	BOOL impersonate;
+	HANDLE token;
 
     Control->Status = DOKAN_CONTROL_FAIL;
 
@@ -173,12 +206,26 @@ static VOID DokanControl(PDOKAN_CONTROL Control)
 
         logw(L"DokanControl Mount");
 
+		impersonate = Control->Option & DOKAN_CONTROL_OPTION_LOCAL_CONTEXT;
+
+		if (impersonate){
+			logw(L"Impersonate is enabled");
+			if (!ImpersonateUserBySession(Control->SessionId, &token))
+				break;
+		}
+
         if (DokanControlMount(Control->MountPoint, Control->DeviceName)) {
             Control->Status = DOKAN_CONTROL_SUCCESS;
             InsertMountEntry(Control);
         } else {
             Control->Status = DOKAN_CONTROL_FAIL;
         }
+
+		if (impersonate){
+			RevertToSelf();
+			CloseHandle(token);
+		}
+
         break;
 
     case DOKAN_CONTROL_UNMOUNT:
@@ -196,6 +243,13 @@ static VOID DokanControl(PDOKAN_CONTROL Control)
             break;	
         }
 
+		impersonate = mountEntry->MountControl.Option & DOKAN_CONTROL_OPTION_LOCAL_CONTEXT;
+
+		if (impersonate){
+			if (!ImpersonateUserBySession(Control->SessionId, &token))
+				break;
+		}
+
         if (DokanControlUnmount(mountEntry->MountControl.MountPoint)) {
             Control->Status = DOKAN_CONTROL_SUCCESS;
             if (wcslen(Control->DeviceName) == 0) {
@@ -207,6 +261,11 @@ static VOID DokanControl(PDOKAN_CONTROL Control)
             mountEntry->MountControl.Status = DOKAN_CONTROL_FAIL;
             Control->Status = DOKAN_CONTROL_FAIL;
         }
+
+		if (impersonate){
+			RevertToSelf();
+			CloseHandle(token);
+		}
 
         break;
 
@@ -305,7 +364,7 @@ static VOID WINAPI ServiceMain(DWORD dwArgc, LPTSTR *lpszArgv)
     InitializeCriticalSectionAndSpinCount(&g_CriticalSection, 4000);
     InitializeListHead(&g_MountList);
 
-    g_StatusHandle = RegisterServiceCtrlHandlerEx(L"DokanMounter", HandlerEx, NULL);
+    g_StatusHandle = RegisterServiceCtrlHandlerEx(DOKAN_MOUNTER_SERVICE, HandlerEx, NULL);
 
     // extend completion time
     g_ServiceStatus.dwServiceType				= SERVICE_WIN32_OWN_PROCESS;
@@ -406,8 +465,15 @@ static VOID WINAPI ServiceMain(DWORD dwArgc, LPTSTR *lpszArgv)
                 }
             }
 
+			FlushFileBuffers(pipe);
+			DisconnectNamedPipe(pipe);
+
         } else if (eventNo == 2) {
             logw(L"DokanMounter: stop mounter service");
+			
+			FlushFileBuffers(pipe);
+			DisconnectNamedPipe(pipe);
+
             g_ServiceStatus.dwWaitHint     = 0;
             g_ServiceStatus.dwCheckPoint   = 0;
             g_ServiceStatus.dwCurrentState = SERVICE_STOPPED;
@@ -440,7 +506,7 @@ int WINAPI WinMain(
 {
     logw(L"Start");
     SERVICE_TABLE_ENTRY serviceTable[] = {
-        {L"DokanMounter", ServiceMain}, {NULL, NULL}
+        {DOKAN_MOUNTER_SERVICE, ServiceMain}, {NULL, NULL}
     };
 
     StartServiceCtrlDispatcher(serviceTable);

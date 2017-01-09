@@ -50,6 +50,7 @@ extern "C" {
 #define DOKAN_OPTION_KEEP_ALIVE	8 // use auto unmount
 #define DOKAN_OPTION_NETWORK	16 // use network drive, you need to install Dokan network provider.
 #define DOKAN_OPTION_REMOVABLE	32 // use removable drive
+#define DOKAN_OPTION_LOCAL      2048 //make drive visible only to local user
 
 typedef struct _DOKAN_OPTIONS {
     USHORT	Version; // Supported Dokan Version, ex. "530" (Dokan ver 0.5.3)
@@ -303,12 +304,13 @@ DokanMain(
 
 BOOL DOKANAPI
 DokanUnmount(
-    WCHAR	DriveLetter);
+    WCHAR	DriveLetter,
+	ULONG Options);
 
 BOOL DOKANAPI
 DokanRemoveMountPoint(
-    LPCWSTR MountPoint);
-
+    LPCWSTR MountPoint,
+	ULONG Options);
 
 // DokanIsNameInExpression
 //   check whether Name can match Expression

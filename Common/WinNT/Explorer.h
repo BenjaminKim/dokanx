@@ -45,3 +45,4 @@ bool SetVolumeIcon(
 bool IsRecycleBin(const std::wstring& path);
 void MarkShortcutRunAs(const std::wstring& sShortcut);
 void BroadcastDeviceChange(WPARAM message, int nDosDriveNo, DWORD driveMap);
+void InformWindowsOfDriveChange(LPCWSTR MountPoint,bool bAddNotRemove);
